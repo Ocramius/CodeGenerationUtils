@@ -17,6 +17,14 @@ reached at least version `1.0.0`.
 | ----- | -------- | ------- | ------------- | --------- | ------------ |
 |[![Build Status](https://travis-ci.org/Ocramius/CodeGenerationUtils.png?branch=master)](https://travis-ci.org/Ocramius/CodeGenerationUtils) [![Coverage Status](https://coveralls.io/repos/Ocramius/CodeGenerationUtils/badge.png?branch=master)](https://coveralls.io/r/Ocramius/CodeGenerationUtils)|[![Latest Stable Version](https://poser.pugx.org/ocramius/code-generator-utils/v/stable.png)](https://packagist.org/packages/ocramius/code-generator-utils) [![Latest Unstable Version](https://poser.pugx.org/ocramius/code-generator-utils/v/unstable.png)](https://packagist.org/packages/ocramius/code-generator-utils)|[![Total Downloads](https://poser.pugx.org/ocramius/code-generator-utils/downloads.png)](https://packagist.org/packages/ocramius/code-generator-utils)|[![Dependency Status](https://www.versioneye.com/package/php--ocramius--code-generator-utils/badge.png)](https://www.versioneye.com/package/php--ocramius--code-generator-utils)|
 
+## Installation
+
+Supported installation method is via composer:
+
+```sh
+$ php composer.phar require ocramius/code-generator-utils:0.1.*
+```
+
 ## Provided components
 
 The provided components are generally related with code generation and related problems.
