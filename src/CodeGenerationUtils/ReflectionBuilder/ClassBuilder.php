@@ -202,8 +202,7 @@ class ClassBuilder extends PHPParser_BuilderAbstract
         }
 
         if ($reflectionParameter->isDefaultValueAvailable()) {
-            if (
-                method_exists($reflectionParameter, 'isDefaultValueConstant')
+            if (method_exists($reflectionParameter, 'isDefaultValueConstant')
                 && $reflectionParameter->isDefaultValueConstant()
             ) {
                 $parameterBuilder->setDefault(
