@@ -11,7 +11,7 @@
     backupGlobals="false"
     syntaxCheck="true"
 >
-    <testsuite name="GeneratedHydrator tests">
+    <testsuite name="CodeGenerationUtils tests">
         <directory>./tests/GeneratedHydratorTest</directory>
         <directory>./tests/CodeGenerationUtilsTest</directory>
     </testsuite>

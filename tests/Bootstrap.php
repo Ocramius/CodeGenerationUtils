@@ -33,7 +33,6 @@ if (! isset($loader)) {
 }
 
 /* @var $loader \Composer\Autoload\ClassLoader */
-$loader->add('GeneratedHydratorTest\\', __DIR__);
-$loader->add('GeneratedHydratorTestAsset\\', __DIR__);
+$loader->add('CodeGenerationUtilsTest\\', __DIR__);
 
 unset($files, $file, $loader);

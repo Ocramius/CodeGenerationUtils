@@ -1,16 +1,16 @@
 {
-    "name":              "ocramius/generated-hydrator",
-    "description":       "An Object Hydrator that allows very fast array to object to array conversion",
+    "name":              "ocramius/code-generator-utils",
+    "description":       "A set of code generator utilities built on top of PHP-Parsers that ease its use when combined with Reflection",
     "type":              "library",
     "license":           "MIT",
-    "homepage":          "https://github.com/Ocramius/GeneratedHydrator",
+    "homepage":          "https://github.com/Ocramius/CodeGenerationUtils",
     "minimum-stability": "dev",
     "keywords":          [
-        "hydrator",
-        "performance",
-        "array conversion",
-        "object conversion",
-        "serializer"
+        "reflection",
+        "code generation",
+        "php code",
+        "parser",
+        "compiler"
     ],
     "authors": [
         {
@@ -20,8 +20,7 @@
         }
     ],
     "require": {
-        "php":                       ">=5.4",
-        "zendframework/zend-stdlib": "2.*",
+        "php":                       ">=5.3.3",
         "nikic/php-parser":          "0.9.*"
     },
     "require-dev": {
@@ -32,7 +31,6 @@
     },
     "autoload": {
         "psr-0": {
-            "GeneratedHydrator\\": "src",
             "CodeGenerationUtils\\": "src"
         }
     },

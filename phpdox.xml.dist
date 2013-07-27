@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdox xmlns="http://phpdox.de/config" silent="false">
     <project
-        name="GeneratedHydrator"
+        name="CodeGenerationUtils"
         source="src"
         workdir="build/phpdox"
     >

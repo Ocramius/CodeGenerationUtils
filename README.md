@@ -1,150 +1,63 @@
-# Generated Hydrator
+# Code Generation Utils for PHP-Parser
 
-GeneratedHydrator is a library about high performance transition of data from arrays to objects and from objects
-to arrays.
+Code Generation Utils is a small library that is not yet intended for general use.
+
+It is a small project that aims at collecting common solutions to code generation problems
+that I often face, and for now it doesn't have a really solid structure.
+
+I built it to workaround limitations that I often faced while working
+with [`Zend\Code`](https://github.com/zendframework/zf2/tree/master/library/Zend/Code),
+and it is mainly based on the logic of [PHP-Parser](https://github.com/nikic/PHP-Parser).
+
+It will be stabilized together with [GeneratedHydrator](https://github.com/Ocramius/GeneratedHydrator)
+and [ProxyManager](https://github.com/Ocramius/ProxyManager) when these two both have
+reached at least version `1.0.0`.
 
 | Tests | Releases | Downloads | Dependencies |
 | ----- | -------- | ------- | ------------- | --------- | ------------ |
-|[![Build Status](https://travis-ci.org/Ocramius/GeneratedHydrator.png?branch=master)](https://travis-ci.org/Ocramius/GeneratedHydrator) [![Coverage Status](https://coveralls.io/repos/Ocramius/GeneratedHydrator/badge.png?branch=master)](https://coveralls.io/r/Ocramius/GeneratedHydrator)|[![Latest Stable Version](https://poser.pugx.org/ocramius/generated-hydrator/v/stable.png)](https://packagist.org/packages/ocramius/generated-hydrator) [![Latest Unstable Version](https://poser.pugx.org/ocramius/generated-hydrator/v/unstable.png)](https://packagist.org/packages/ocramius/generated-hydrator)|[![Total Downloads](https://poser.pugx.org/ocramius/generated-hydrator/downloads.png)](https://packagist.org/packages/ocramius/generated-hydrator)|[![Dependency Status](https://www.versioneye.com/package/php--ocramius--generated-hydrator/badge.png)](https://www.versioneye.com/package/php--ocramius--generated-hydrator)|
+|[![Build Status](https://travis-ci.org/Ocramius/CodeGenerationUtils.png?branch=master)](https://travis-ci.org/Ocramius/CodeGenerationUtils) [![Coverage Status](https://coveralls.io/repos/Ocramius/CodeGenerationUtils/badge.png?branch=master)](https://coveralls.io/r/Ocramius/CodeGenerationUtils)|[![Latest Stable Version](https://poser.pugx.org/ocramius/code-generation-utils/v/stable.png)](https://packagist.org/packages/ocramius/code-generation-utils) [![Latest Unstable Version](https://poser.pugx.org/ocramius/code-generation-utils/v/unstable.png)](https://packagist.org/packages/ocramius/code-generation-utils)|[![Total Downloads](https://poser.pugx.org/ocramius/code-generation-utils/downloads.png)](https://packagist.org/packages/ocramius/code-generation-utils)|[![Dependency Status](https://www.versioneye.com/package/php--ocramius--code-generation-utils/badge.png)](https://www.versioneye.com/package/php--ocramius--code-generation-utils)|
 
-## What does this thing do?
+## Provided components
 
-A [hydrator](http://framework.zend.com/manual/2.1/en/modules/zend.stdlib.hydrator.html) is an object capable of
-extracting data from other objects, or filling them with data.
+The provided components are generally related with code generation and related problems.
 
-A hydrator performs following operations:
+#### `CodeGenerationUtils\Autoloader`
 
- * Convert `Object` to `array`
- * Put data from an `array` into an `Object`
+This is a small callback-based autoloader component - it should be used when trying to autoload
+generated classes.
 
-GeneratedHydrator uses proxying to instantiate very fast hydrators, since this will allow access to protected properties
-of the object to be handled by the hydrator.
+#### `CodeGenerationUtils\FileLocator`
 
-Also, a hydrator of GeneratedHydrator implements `Zend\Stdlib\Hydrator\HydratorInterface`.
+The FileLocator basically represents a map of generated class names to files where those classes
+should be read from or written to. This component can be useful for non-PSR-0-compliant generated code.
 
-## Usage
+#### `CodeGenerationUtils\GeneratorStrategy`
 
-Here's an example of how you can create and use a hydrator created by GeneratedHydrator:
+Provides logic to serialize a PHP-Parser AST to a class. Current strategies allow to:
 
-```php
-<?php
+ * Serialize an AST to a string
+ * Serialize an AST to a string and evaluate it (via `eval()`) at runtime
+ * Serialize an AST to a string and save it to a file (via `CodeGenerationUtils\FileLocator`)
 
-use GeneratedHydrator\Configuration;
+#### `CodeGenerationUtils\Inflector`
 
-require_once __DIR__ . '/vendor/autoload.php';
+Provides various utilities to:
 
-class Example
-{
-    public    $foo = 1;
-    protected $bar = 2;
-    protected $baz = 3;
-}
+ * Convert a generated code's [FQCN](http://php.net/manual/en/language.namespaces.rules.php)
+   to the FQCN of the class from which it was generated
+ * Generate the FQCN of a generated class given an original class name and some arbitrary
+   parameters to be encoded (allows multiple generated classes per origin class)
+ * Generate unique valid identifier names
 
-$config        = new Configuration('Example');
-$hydratorClass = $config->createFactory()->getHydratorClass();
-$hydrator      = new $hydratorClass();
-$object        = new Example();
+#### `CodeGenerationUtils\ReflectionBuilder`
 
-var_dump($hydrator->extract($object)); // array('foo' => 1, 'bar' => 2, 'baz' => 3)
-$hydrator->hydrate(
-    array('foo' => 4, 'bar' => 5, 'baz' => 6),
-    $object
-);
-var_dump($hydrator->extract($object)); // array('foo' => 4, 'bar' => 5, 'baz' => 6)
-```
+Very rudimentary converter that builds PHP-Parser AST nodes from Reflection objects (still WIP)
 
-## Performance comparison
+#### `CodeGenerationUtils\Visitor`
 
-A hydrator generated by GeneratedHydrator is very, very, very fast.
-Here's the performance of the various hydrators of `Zend\Stdlib\Hydrator` compared to a hydrator built
-by GeneratedHydrator:
-
-```php
-<?php
-require_once __DIR__ . '/vendor/autoload.php';
-
-$iterations = 10000;
-
-class Example
-{
-    public $foo;
-    public $bar;
-    public $baz;
-    public function setFoo($foo) { $this->foo = $foo; }
-    public function setBar($bar) { $this->bar = $bar; }
-    public function setBaz($baz) { $this->baz = $baz; }
-    public function getFoo() { return $this->foo; }
-    public function getBar() { return $this->bar; }
-    public function getBaz() { return $this->baz; }
-    public function exchangeArray($data) {
-        $this->foo = $data['foo']; $this->bar = $data['bar']; $this->baz = $data['baz'];
-    }
-    public function getArrayCopy() {
-        return array('foo' => $this->foo, 'bar' => $this->bar, 'baz' => $this->baz);
-    }
-}
-
-$object        = new Example();
-$data          = array('foo' => 1, 'bar' => 2, 'baz' => 3);
-$config        = new GeneratedHydrator\Configuration('Example');
-$hydratorClass = $config->createFactory()->getHydratorClass();
-$hydrators     = array(
-    new $hydratorClass(),
-    new Zend\Stdlib\Hydrator\ClassMethods(),
-    new Zend\Stdlib\Hydrator\Reflection(),
-    new Zend\Stdlib\Hydrator\ArraySerializable(),
-);
-
-foreach ($hydrators as $hydrator) {
-    $start = microtime(true);
-
-    for ($i = 0; $i < $iterations; $i += 1) {
-        $hydrator->hydrate($data, $object);
-        $hydrator->extract($object);
-    }
-
-    var_dump(microtime(true) - $start);
-}
-```
-
-This will produce something like following:
-
-```php
-0.028156042098999s
-2.606673002243s
-0.56710886955261s
-0.60278487205505s
-```
-
-As you can see, the generated hydrator is 20 times faster than `Zend\Stdlib\Hydrator\Reflection`
-and `Zend\Stdlib\Hydrator\ArraySerializable`, and more than 90 times faster than
-`Zend\Stdlib\Hydrator\ClassMethods`.
-
-## Limitations
-
-As of current implementation, GeneratedHydrator will not distinguish between properties from following
-example:
-
-```php
-class Foo
-{
-    private $bar;
-}
-
-class Bar extends Foo
-{
-    private $bar;
-}
-
-class Baz extends Foo
-{
-    private $bar;
-}
-```
-
-This will be solved in milestone [1.1.0](https://github.com/Ocramius/GeneratedHydrator/issues?milestone=3)
+Various visitors used to manipulate classes, methods and properties in a given PHP-Parser AST
 
 ## Contributing
 
-Please read the [CONTRIBUTING.md](https://github.com/Ocramius/GeneratedHydrator/blob/master/CONTRIBUTING.md) contents
+Please read the [CONTRIBUTING.md](https://github.com/Ocramius/CodeGenerationUtils/blob/master/CONTRIBUTING.md) contents
 if you wish to help out!
