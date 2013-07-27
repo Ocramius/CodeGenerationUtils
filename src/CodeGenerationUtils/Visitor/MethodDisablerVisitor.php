@@ -46,7 +46,7 @@ class MethodDisablerVisitor extends PHPParser_NodeVisitorAbstract
      *                         type {@see \PHPParser_Node} and returns null|true|false to
      *                         respectively ignore, remove or replace it.
      */
-    public function __construct(callable $filter)
+    public function __construct($filter)
     {
         $this->filter = $filter;
     }
