@@ -19,6 +19,7 @@
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\ReflectionBuilder\ClassBuilder;
+use CodeGenerationUtilsTest\ReflectionBuilder\ClassWithDefaultValueIsConstantMethod;
 use PHPParser_Node_Stmt_ClassMethod;
 use PHPUnit_Framework_TestCase;
 use ReflectionClass;
@@ -67,5 +68,35 @@ class ClassBuilderTest extends PHPUnit_Framework_TestCase
         $thisMethod = reset($methods);
 
         $this->assertSame($currentMethod, $thisMethod->name);
+    }
+
+    /**
+     * Check the isDefaultValueConstant edge case.
+     */
+    public function testBuildWithDefaultValueConstantParameter()
+    {
+        $classBuilder = new ClassBuilder();
+        $testClass    = new ClassWithDefaultValueIsConstantMethod();
+        $ast          = $classBuilder->fromReflection(new ReflectionClass($testClass));
+
+        /* @var $namespace \PHPParser_Node_Stmt_Namespace */
+        $namespace = $ast[0];
+        $class     = $namespace->stmts[0];
+        $method    = 'defaultValueIsConstant';
+
+        /* @var $methods PHPParser_Node_Stmt_ClassMethod[] */
+        $methods = array_filter(
+            $class->stmts,
+            function ($node) use ($method) {
+                return ($node instanceof PHPParser_Node_Stmt_ClassMethod && $node->name === $method);
+            }
+        );
+
+        $this->assertCount(1, $methods);
+
+        /* @var $thisMethod PHPParser_Node_Stmt_ClassMethod */
+        $thisMethod = reset($methods);
+
+        $this->assertSame($method, $thisMethod->name);
     }
 }

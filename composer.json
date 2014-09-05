@@ -34,6 +34,11 @@
             "CodeGenerationUtils\\": "src"
         }
     },
+    "autoload-dev": {
+        "psr-0": {
+            "CodeGenerationUtilsTests\\": "tests"
+        }
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
