@@ -206,7 +206,9 @@ class ClassBuilder extends PHPParser_BuilderAbstract
                 && $reflectionParameter->isDefaultValueConstant()
             ) {
                 $parameterBuilder->setDefault(
-                    new PHPParser_Node_Expr_ConstFetch($reflectionParameter->getDefaultValueConstantName())
+                    new PHPParser_Node_Expr_ConstFetch(
+                        new PHPParser_Node_Name($reflectionParameter->getDefaultValueConstantName())
+                    )
                 );
             } else {
                 $parameterBuilder->setDefault($reflectionParameter->getDefaultValue());
