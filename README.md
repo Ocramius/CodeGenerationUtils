@@ -22,7 +22,7 @@ reached at least version `1.0.0`.
 Supported installation method is via composer:
 
 ```sh
-$ php composer.phar require ocramius/code-generator-utils:0.2.*
+$ php composer.phar require ocramius/code-generator-utils:0.3.*
 ```
 
 ## Provided components
