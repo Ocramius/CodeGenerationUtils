@@ -19,11 +19,11 @@
 namespace CodeGenerationUtils\Visitor;
 
 use CodeGenerationUtils\Visitor\Exception\UnexpectedValueException;
-use PHPParser_Node;
-use PHPParser_Node_Stmt_Class;
-use PHPParser_Node_Stmt_Namespace;
-use PHPParser_NodeVisitorAbstract;
-use PHPParser_Parser;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\NodeVisitorAbstract;
+use PhpParser\Parser;
 
 /**
  * Resolves the FQCN of the class included in the AST.
@@ -32,15 +32,15 @@ use PHPParser_Parser;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class ClassFQCNResolverVisitor extends PHPParser_NodeVisitorAbstract
+class ClassFQCNResolverVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var PHPParser_Node_Stmt_Namespace|null
+     * @var PhpParser\Node\Stmt\Namespace_|null
      */
     private $namespace;
 
     /**
-     * @var PHPParser_Node_Stmt_Class|null
+     * @var PhpParser\Node\Stmt\Class_|null
      */
     private $class;
 
@@ -56,13 +56,13 @@ class ClassFQCNResolverVisitor extends PHPParser_NodeVisitorAbstract
     }
 
     /**
-     * @param PHPParser_Node $node
+     * @param PhpParser\Node $node
      *
      * @throws Exception\UnexpectedValueException if more than one class is found
      */
-    public function enterNode(PHPParser_Node $node)
+    public function enterNode(Node $node)
     {
-        if ($node instanceof PHPParser_Node_Stmt_Namespace) {
+        if ($node instanceof Namespace_) {
             if ($this->namespace) {
                 throw new UnexpectedValueException('Multiple nested namespaces discovered (invalid AST?)');
             }
@@ -70,7 +70,7 @@ class ClassFQCNResolverVisitor extends PHPParser_NodeVisitorAbstract
             $this->namespace = $node;
         }
 
-        if ($node instanceof PHPParser_Node_Stmt_Class) {
+        if ($node instanceof Class_) {
             if ($this->class) {
                 throw new UnexpectedValueException('Multiple classes discovered');
             }

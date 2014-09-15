@@ -18,12 +18,14 @@
 
 namespace CodeGenerationUtils\Visitor;
 
-use PHPParser_Node;
-use PHPParser_Node_Expr_New;
-use PHPParser_Node_Name_FullyQualified;
-use PHPParser_Node_Stmt_ClassMethod;
-use PHPParser_Node_Stmt_Throw;
-use PHPParser_NodeVisitorAbstract;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Throw_;
+use PhpParser\NodeVisitorAbstract;
 
 /**
  * Disables class methods matching a given filter by replacing their body so that
@@ -32,7 +34,7 @@ use PHPParser_NodeVisitorAbstract;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class MethodDisablerVisitor extends PHPParser_NodeVisitorAbstract
+class MethodDisablerVisitor extends NodeVisitorAbstract
 {
     /**
      * @var callable
@@ -43,7 +45,7 @@ class MethodDisablerVisitor extends PHPParser_NodeVisitorAbstract
      * Constructor.
      *
      * @param callable $filter a filter method that accepts a single parameter of
-     *                         type {@see \PHPParser_Node} and returns null|true|false to
+     *                         type {@see \PhpParser\Node} and returns null|true|false to
      *                         respectively ignore, remove or replace it.
      */
     public function __construct($filter)
@@ -54,15 +56,15 @@ class MethodDisablerVisitor extends PHPParser_NodeVisitorAbstract
     /**
      * Replaces the given node if it is a class method and matches according to the given callback
      *
-     * @param PHPParser_Node $node
+     * @param PhpParser\Node $node
      *
-     * @return bool|null|PHPParser_Node_Stmt_ClassMethod
+     * @return bool|null|PhpParser\Node\Stmt\ClassMethod
      */
-    public function leaveNode(PHPParser_Node $node)
+    public function leaveNode(Node $node)
     {
         $filter = $this->filter;
 
-        if (! $node instanceof PHPParser_Node_Stmt_ClassMethod || null === ($filterResult = $filter($node))) {
+        if (! $node instanceof ClassMethod || null === ($filterResult = $filter($node))) {
             return null;
         }
 
@@ -71,10 +73,10 @@ class MethodDisablerVisitor extends PHPParser_NodeVisitorAbstract
         }
 
         $node->stmts = array(
-            new PHPParser_Node_Stmt_Throw(
-                new PHPParser_Node_Expr_New(
-                    new PHPParser_Node_Name_FullyQualified('BadMethodCallException'),
-                    array(new \PHPParser_Node_Arg(new \PHPParser_Node_Scalar_String('Method is disabled')))
+            new Throw_(
+                new New_(
+                    new FullyQualified('BadMethodCallException'),
+                    array(new Arg(new String('Method is disabled')))
                 )
             )
         );

@@ -19,10 +19,10 @@
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\MethodDisablerVisitor;
-use PHPParser_Node_Name;
-use PHPParser_Node_Stmt_Class;
-use PHPParser_Node_Stmt_ClassMethod;
-use PHPParser_Node_Stmt_Namespace;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -37,7 +37,7 @@ class MethodDisablerVisitorTest extends PHPUnit_Framework_TestCase
 {
     public function testDisablesMethod()
     {
-        $method = new PHPParser_Node_Stmt_ClassMethod('test');
+        $method = new ClassMethod('test');
         $filter = $this->getMock('stdClass', array('__invoke'));
 
         $filter->expects($this->once())->method('__invoke')->with($method)->will($this->returnValue(true));
@@ -45,12 +45,12 @@ class MethodDisablerVisitorTest extends PHPUnit_Framework_TestCase
         $visitor = new MethodDisablerVisitor($filter);
 
         $this->assertSame($method, $visitor->leaveNode($method));
-        $this->assertInstanceOf('PHPParser_Node_Stmt_Throw', reset($method->stmts));
+        $this->assertInstanceOf('PhpParser\Node\Stmt\Throw_', reset($method->stmts));
     }
 
     public function testSkipsOnFailedFiltering()
     {
-        $method = new PHPParser_Node_Stmt_ClassMethod('test');
+        $method = new ClassMethod('test');
         $filter = $this->getMock('stdClass', array('__invoke'));
 
         $filter->expects($this->once())->method('__invoke')->with($method)->will($this->returnValue(false));
@@ -62,7 +62,7 @@ class MethodDisablerVisitorTest extends PHPUnit_Framework_TestCase
 
     public function testSkipsOnIgnoreFiltering()
     {
-        $method = new PHPParser_Node_Stmt_ClassMethod('test');
+        $method = new ClassMethod('test');
         $filter = $this->getMock('stdClass', array('__invoke'));
 
         $filter->expects($this->once())->method('__invoke')->with($method)->will($this->returnValue(null));
@@ -74,7 +74,7 @@ class MethodDisablerVisitorTest extends PHPUnit_Framework_TestCase
 
     public function testSkipsOnNodeTypeMismatch()
     {
-        $class  = new PHPParser_Node_Stmt_Class('test');
+        $class  = new Class_('test');
         $filter = $this->getMock('stdClass', array('__invoke'));
 
         $filter->expects($this->never())->method('__invoke');

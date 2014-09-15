@@ -20,9 +20,9 @@ namespace CodeGenerationUtilsTest\GeneratorStrategy;
 
 use CodeGenerationUtils\GeneratorStrategy\FileWriterGeneratorStrategy;
 use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
-use PHPParser_Node_Name;
-use PHPParser_Node_Stmt_Class;
-use PHPParser_Node_Stmt_Namespace;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -51,8 +51,8 @@ class FileWriterGeneratorStrategyTest extends PHPUnit_Framework_TestCase
             ->with($fqcn)
             ->will($this->returnValue($tmpFile));
 
-        $class     = new PHPParser_Node_Stmt_Class($className);
-        $namespace = new PHPParser_Node_Stmt_Namespace(new PHPParser_Node_Name('Foo'), array($class));
+        $class     = new Class_($className);
+        $namespace = new Namespace_(new Name('Foo'), array($class));
         $body      = $generator->generate(array($namespace));
 
         $this->assertGreaterThan(0, strpos($body, $className));

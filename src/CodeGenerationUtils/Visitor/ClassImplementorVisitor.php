@@ -18,11 +18,11 @@
 
 namespace CodeGenerationUtils\Visitor;
 
-use PHPParser_Node;
-use PHPParser_Node_Name_FullyQualified;
-use PHPParser_Node_Stmt_Class;
-use PHPParser_Node_Stmt_Namespace;
-use PHPParser_NodeVisitorAbstract;
+use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\NodeVisitorAbstract;
 
 /**
  * Implements the given interfaces on the given class name within the AST
@@ -30,17 +30,17 @@ use PHPParser_NodeVisitorAbstract;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class ClassImplementorVisitor extends PHPParser_NodeVisitorAbstract
+class ClassImplementorVisitor extends NodeVisitorAbstract
 {
     private $matchedClassFQCN;
 
     /**
-     * @var \PHPParser_Node_Name[]
+     * @var \PhpParser\Node\Name[]
      */
     private $interfaces;
 
     /**
-     * @var PHPParser_Node_Stmt_Namespace|null
+     * @var PhpParser\Node\Stmt\Namespace_|null
      */
     private $currentNamespace;
 
@@ -53,7 +53,7 @@ class ClassImplementorVisitor extends PHPParser_NodeVisitorAbstract
         $this->matchedClassFQCN = (string) $matchedClassFQCN;
         $this->interfaces       = array_map(
             function ($interfaceName) {
-                return new PHPParser_Node_Name_FullyQualified($interfaceName);
+                return new FullyQualified($interfaceName);
             },
             $interfaces
         );
@@ -70,13 +70,13 @@ class ClassImplementorVisitor extends PHPParser_NodeVisitorAbstract
     }
 
     /**
-     * @param PHPParser_Node $node
+     * @param PhpParser\Node $node
      *
-     * @return PHPParser_Node_Stmt_Namespace|void
+     * @return PhpParser\Node\Stmt\Namespace_|void
      */
-    public function enterNode(PHPParser_Node $node)
+    public function enterNode(Node $node)
     {
-        if ($node instanceof PHPParser_Node_Stmt_Namespace) {
+        if ($node instanceof Namespace_) {
             $this->currentNamespace = $node;
 
             return $node;
@@ -87,19 +87,19 @@ class ClassImplementorVisitor extends PHPParser_NodeVisitorAbstract
      * Replaces class nodes with nodes implementing the given interfaces. Implemented interfaces are replaced,
      * not added.
      *
-     * @param PHPParser_Node $node
+     * @param PhpParser\Node $node
      *
      * @todo can be abstracted away into a visitor that allows to modify the matched node via a callback
      *
-     * @return PHPParser_Node_Stmt_Class|void
+     * @return PhpParser\Node\Stmt\Class_|void
      */
-    public function leaveNode(PHPParser_Node $node)
+    public function leaveNode(Node $node)
     {
-        if ($node instanceof PHPParser_Node_Stmt_Namespace) {
+        if ($node instanceof Namespace_) {
             $this->currentNamespace = null;
         }
 
-        if ($node instanceof PHPParser_Node_Stmt_Class) {
+        if ($node instanceof Class_) {
             $namespace = ($this->currentNamespace && is_array($this->currentNamespace->name->parts))
                 ? implode('\\', $this->currentNamespace->name->parts)
                 : '';

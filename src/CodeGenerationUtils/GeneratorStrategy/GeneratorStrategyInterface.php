@@ -29,7 +29,7 @@ interface GeneratorStrategyInterface
     /**
      * Generate the provided AST as a class
      *
-     * @param \PHPParser_Node[] $ast
+     * @param \PhpParser\Node[] $ast
      *
      * @return string the class body
      */

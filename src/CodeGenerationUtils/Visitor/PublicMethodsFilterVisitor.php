@@ -18,9 +18,9 @@
 
 namespace CodeGenerationUtils\Visitor;
 
-use PHPParser_Node;
-use PHPParser_Node_Stmt_ClassMethod;
-use PHPParser_NodeVisitorAbstract;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\NodeVisitorAbstract;
 
 /**
  * Removes all non-public class methods
@@ -28,17 +28,17 @@ use PHPParser_NodeVisitorAbstract;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class PublicMethodsFilterVisitor extends PHPParser_NodeVisitorAbstract
+class PublicMethodsFilterVisitor extends NodeVisitorAbstract
 {
     /**
      * Removes the node if it is a non-public method
      *
-     * @param PHPParser_Node $node
+     * @param PhpParser\Node $node
      *
      * @return bool|null
      */
-    public function leaveNode(PHPParser_Node $node)
+    public function leaveNode(Node $node)
     {
-        return ($node instanceof PHPParser_Node_Stmt_ClassMethod && ! $node->isPublic()) ? false : null;
+        return ($node instanceof ClassMethod && ! $node->isPublic()) ? false : null;
     }
 }

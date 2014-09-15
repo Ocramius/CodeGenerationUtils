@@ -20,7 +20,7 @@ namespace CodeGenerationUtilsTest\GeneratorStrategy;
 
 use CodeGenerationUtils\GeneratorStrategy\BaseGeneratorStrategy;
 use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
-use PHPParser_Node_Stmt_Class;
+use PhpParser\Node\Stmt\Class_;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -38,7 +38,7 @@ class BaseGeneratorStrategyTest extends PHPUnit_Framework_TestCase
     {
         $strategy       = new BaseGeneratorStrategy();
         $className      = UniqueIdentifierGenerator::getIdentifier('Foo');
-        $generated      = $strategy->generate(array(new PHPParser_Node_Stmt_Class($className)));
+        $generated      = $strategy->generate(array(new Class_($className)));
 
         $this->assertGreaterThan(0, strpos($generated, $className));
     }
@@ -51,7 +51,7 @@ class BaseGeneratorStrategyTest extends PHPUnit_Framework_TestCase
     {
         $strategy = new BaseGeneratorStrategy();
 
-        $prettyPrinter = $this->getMock('PHPParser_PrettyPrinterAbstract');
+        $prettyPrinter = $this->getMock('PhpParser\PrettyPrinterAbstract');
 
         $prettyPrinter
             ->expects($this->once())

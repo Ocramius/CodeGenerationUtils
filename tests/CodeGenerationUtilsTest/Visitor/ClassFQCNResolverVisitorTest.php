@@ -20,9 +20,9 @@ namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\ClassClonerVisitor;
 use CodeGenerationUtils\Visitor\ClassFQCNResolverVisitor;
-use PHPParser_Node_Name;
-use PHPParser_Node_Stmt_Class;
-use PHPParser_Node_Stmt_Namespace;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit_Framework_TestCase;
 use ReflectionClass;
 
@@ -51,7 +51,7 @@ class ClassFQCNResolverVisitorTest extends PHPUnit_Framework_TestCase
 
     public function testDiscoversSimpleClass()
     {
-        $class = new PHPParser_Node_Stmt_Class('Foo');
+        $class = new Class_('Foo');
 
         $this->visitor->beforeTraverse(array($class));
         $this->visitor->enterNode($class);
@@ -62,8 +62,8 @@ class ClassFQCNResolverVisitorTest extends PHPUnit_Framework_TestCase
 
     public function testDiscoversNamespacedClass()
     {
-        $namespace = new PHPParser_Node_Stmt_Namespace(new PHPParser_Node_Name(array('Bar', 'Baz')));
-        $class     = new PHPParser_Node_Stmt_Class('Foo');
+        $namespace = new Namespace_(new Name(array('Bar', 'Baz')));
+        $class     = new Class_('Foo');
 
         $namespace->stmts = array($class);
 
@@ -77,8 +77,8 @@ class ClassFQCNResolverVisitorTest extends PHPUnit_Framework_TestCase
 
     public function testThrowsExceptionOnMultipleClasses()
     {
-        $class1 = new PHPParser_Node_Stmt_Class('Foo');
-        $class2 = new PHPParser_Node_Stmt_Class('Bar');
+        $class1 = new Class_('Foo');
+        $class2 = new Class_('Bar');
 
         $this->visitor->beforeTraverse(array($class1, $class2));
 
@@ -91,8 +91,8 @@ class ClassFQCNResolverVisitorTest extends PHPUnit_Framework_TestCase
 
     public function testThrowsExceptionOnMultipleNamespaces()
     {
-        $namespace1 = new PHPParser_Node_Stmt_Namespace(new PHPParser_Node_Name('Foo'));
-        $namespace2 = new PHPParser_Node_Stmt_Namespace(new PHPParser_Node_Name('Bar'));
+        $namespace1 = new Namespace_(new Name('Foo'));
+        $namespace2 = new Namespace_(new Name('Bar'));
 
         $this->visitor->beforeTraverse(array($namespace1, $namespace2));
 

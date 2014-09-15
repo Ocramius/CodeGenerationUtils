@@ -40,17 +40,17 @@ class ClassClonerVisitorTest extends PHPUnit_Framework_TestCase
 
         $nodes = $visitor->beforeTraverse(array());
 
-        $this->assertInstanceOf('PHPParser_Node_Stmt_Namespace', $nodes[0]);
+        $this->assertInstanceOf('PhpParser\Node\Stmt\Namespace_', $nodes[0]);
 
-        /* @var $node \PHPParser_Node_Stmt_Namespace */
+        /* @var $node \PhpParser\Node\Stmt\Namespace_ */
         $node = $nodes[0];
 
         $this->assertSame(__NAMESPACE__, implode('\\', $node->name->parts));
 
-        /* @var $class \PHPParser_Node_Stmt_Class */
+        /* @var $class \PhpParser\Node\Stmt\Class_ */
         $class = end($node->stmts);
 
-        $this->assertInstanceOf('PHPParser_Node_Stmt_Class', $class);
+        $this->assertInstanceOf('PhpParser\Node\Stmt\Class_', $class);
         $this->assertSame('ClassClonerVisitorTest', $class->name);
     }
 

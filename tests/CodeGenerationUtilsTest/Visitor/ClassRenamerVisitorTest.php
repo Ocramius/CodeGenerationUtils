@@ -19,9 +19,9 @@
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\ClassRenamerVisitor;
-use PHPParser_Node_Name;
-use PHPParser_Node_Stmt_Class;
-use PHPParser_Node_Stmt_Namespace;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit_Framework_TestCase;
 use ReflectionClass;
 
@@ -38,9 +38,9 @@ class ClassRenamerVisitorTest extends PHPUnit_Framework_TestCase
     public function testRenamesNodesOnMatchingClass()
     {
         $visitor   = new ClassRenamerVisitor(new ReflectionClass(__CLASS__), 'Foo\\Bar\\Baz');
-        $class     = new PHPParser_Node_Stmt_Class('ClassRenamerVisitorTest');
-        $namespace = new PHPParser_Node_Stmt_Namespace(
-            new PHPParser_Node_Name(array('CodeGenerationUtilsTest', 'Visitor'))
+        $class     = new Class_('ClassRenamerVisitorTest');
+        $namespace = new Namespace_(
+            new Name(array('CodeGenerationUtilsTest', 'Visitor'))
         );
 
         $visitor->beforeTraverse(array());
@@ -57,9 +57,9 @@ class ClassRenamerVisitorTest extends PHPUnit_Framework_TestCase
     public function testIgnoresNodesOnNonMatchingClass()
     {
         $visitor   = new ClassRenamerVisitor(new ReflectionClass(__CLASS__), 'Foo\\Bar\\Baz');
-        $class     = new PHPParser_Node_Stmt_Class('Wrong');
-        $namespace = new PHPParser_Node_Stmt_Namespace(
-            new PHPParser_Node_Name(array('CodeGenerationUtilsTest', 'Visitor'))
+        $class     = new Class_('Wrong');
+        $namespace = new Namespace_(
+            new Name(array('CodeGenerationUtilsTest', 'Visitor'))
         );
 
         $visitor->beforeTraverse(array());
@@ -75,9 +75,9 @@ class ClassRenamerVisitorTest extends PHPUnit_Framework_TestCase
     public function testIgnoresNodesOnNonMatchingNamespace()
     {
         $visitor   = new ClassRenamerVisitor(new ReflectionClass(__CLASS__), 'Foo\\Bar\\Baz');
-        $class     = new PHPParser_Node_Stmt_Class('ClassRenamerVisitorTest');
-        $namespace = new PHPParser_Node_Stmt_Namespace(
-            new PHPParser_Node_Name(array('Wrong', 'Namespace', 'Here'))
+        $class     = new Class_('ClassRenamerVisitorTest');
+        $namespace = new Namespace_(
+            new Name(array('Wrong', 'Namespace', 'Here'))
         );
 
         $visitor->beforeTraverse(array());
@@ -93,7 +93,7 @@ class ClassRenamerVisitorTest extends PHPUnit_Framework_TestCase
     public function testMatchOnEmptyNamespace()
     {
         $visitor   = new ClassRenamerVisitor(new ReflectionClass('stdClass'), 'Baz');
-        $class     = new PHPParser_Node_Stmt_Class('stdClass');
+        $class     = new Class_('stdClass');
 
         $visitor->beforeTraverse(array());
         $this->assertNull($visitor->enterNode($class));
@@ -105,9 +105,9 @@ class ClassRenamerVisitorTest extends PHPUnit_Framework_TestCase
     public function testUnwrapsNamespacedClassCorrectly()
     {
         $visitor   = new ClassRenamerVisitor(new ReflectionClass(__CLASS__), 'Baz');
-        $class     = new PHPParser_Node_Stmt_Class('ClassRenamerVisitorTest');
-        $namespace = new PHPParser_Node_Stmt_Namespace(
-            new PHPParser_Node_Name(array('CodeGenerationUtilsTest', 'Visitor'))
+        $class     = new Class_('ClassRenamerVisitorTest');
+        $namespace = new Namespace_(
+            new Name(array('CodeGenerationUtilsTest', 'Visitor'))
         );
 
         $visitor->beforeTraverse(array());
@@ -122,13 +122,13 @@ class ClassRenamerVisitorTest extends PHPUnit_Framework_TestCase
     public function testWrapsGlobalClassCorrectly()
     {
         $visitor   = new ClassRenamerVisitor(new ReflectionClass('stdClass'), 'Foo\\Bar');
-        $class     = new PHPParser_Node_Stmt_Class('stdClass');
+        $class     = new Class_('stdClass');
 
         $visitor->beforeTraverse(array());
         $this->assertNull($visitor->enterNode($class));
         $namespace = $visitor->leaveNode($class);
 
-        $this->assertInstanceOf('PHPParser_Node_Stmt_Namespace', $namespace);
+        $this->assertInstanceOf('PhpParser\Node\Stmt\Namespace_', $namespace);
         $this->assertSame('Foo', $namespace->name->toString());
         $this->assertSame(array($class), $namespace->stmts);
     }
@@ -136,9 +136,9 @@ class ClassRenamerVisitorTest extends PHPUnit_Framework_TestCase
     public function testMismatchOnEmptyNamespace()
     {
         $visitor   = new ClassRenamerVisitor(new ReflectionClass('stdClass'), 'Baz');
-        $class     = new PHPParser_Node_Stmt_Class('stdClass');
-        $namespace = new PHPParser_Node_Stmt_Namespace(
-            new PHPParser_Node_Name(array('Wrong', 'Namespace', 'Here'))
+        $class     = new Class_('stdClass');
+        $namespace = new Namespace_(
+            new Name(array('Wrong', 'Namespace', 'Here'))
         );
 
         $visitor->beforeTraverse(array());
