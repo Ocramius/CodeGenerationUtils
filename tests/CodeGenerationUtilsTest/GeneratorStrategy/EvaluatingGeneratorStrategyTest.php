@@ -20,7 +20,7 @@ namespace CodeGenerationUtilsTest\GeneratorStrategy;
 
 use CodeGenerationUtils\GeneratorStrategy\EvaluatingGeneratorStrategy;
 use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
-use PHPParser_Node_Stmt_Class;
+use PhpParser\Node\Stmt\Class_;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -39,7 +39,7 @@ class EvaluatingGeneratorStrategyTest extends PHPUnit_Framework_TestCase
     {
         $strategy       = new EvaluatingGeneratorStrategy();
         $className      = UniqueIdentifierGenerator::getIdentifier('Foo');
-        $generated      = $strategy->generate(array(new PHPParser_Node_Stmt_Class($className)));
+        $generated      = $strategy->generate(array(new Class_($className)));
 
         $this->assertGreaterThan(0, strpos($generated, $className));
         $this->assertTrue(class_exists($className, false));
@@ -57,7 +57,7 @@ class EvaluatingGeneratorStrategyTest extends PHPUnit_Framework_TestCase
 
         $strategy       = new EvaluatingGeneratorStrategy();
         $className      = 'Foo' . uniqid();
-        $generated      = $strategy->generate(array(new PHPParser_Node_Stmt_Class($className)));
+        $generated      = $strategy->generate(array(new Class_($className)));
 
         $this->assertGreaterThan(0, strpos($generated, $className));
         $this->assertTrue(class_exists($className, false));

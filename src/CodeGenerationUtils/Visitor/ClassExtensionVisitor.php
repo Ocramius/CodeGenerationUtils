@@ -18,11 +18,11 @@
 
 namespace CodeGenerationUtils\Visitor;
 
-use PHPParser_Node;
-use PHPParser_Node_Name_FullyQualified;
-use PHPParser_Node_Stmt_Class;
-use PHPParser_Node_Stmt_Namespace;
-use PHPParser_NodeVisitorAbstract;
+use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\NodeVisitorAbstract;
 
 /**
  * Visitor that extends the matched class in the visited AST from another given class
@@ -30,7 +30,7 @@ use PHPParser_NodeVisitorAbstract;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class ClassExtensionVisitor extends PHPParser_NodeVisitorAbstract
+class ClassExtensionVisitor extends NodeVisitorAbstract
 {
     /**
      * @var string
@@ -43,7 +43,7 @@ class ClassExtensionVisitor extends PHPParser_NodeVisitorAbstract
     private $newParentClassFQCN;
 
     /**
-     * @var \PHPParser_Node_Stmt_Namespace|null
+     * @var \PhpParser\Node\Stmt\Namespace_|null
      */
     private $currentNamespace;
 
@@ -70,13 +70,13 @@ class ClassExtensionVisitor extends PHPParser_NodeVisitorAbstract
     }
 
     /**
-     * @param PHPParser_Node $node
+     * @param PhpParser\Node $node
      *
-     * @return PHPParser_Node_Stmt_Namespace|null
+     * @return PhpParser\Node\Stmt\Namespace_|null
      */
-    public function enterNode(PHPParser_Node $node)
+    public function enterNode(Node $node)
     {
-        if ($node instanceof PHPParser_Node_Stmt_Namespace) {
+        if ($node instanceof Namespace_) {
             $this->currentNamespace = $node;
 
             return $node;
@@ -91,23 +91,23 @@ class ClassExtensionVisitor extends PHPParser_NodeVisitorAbstract
      *
      * @todo can be abstracted away into a visitor that allows to modify the node via a callback
      *
-     * @param PHPParser_Node $node
+     * @param PhpParser\Node $node
      *
-     * @return PHPParser_Node_Stmt_Class|void
+     * @return PhpParser\Node\Stmt\Class_|void
      */
-    public function leaveNode(PHPParser_Node $node)
+    public function leaveNode(Node $node)
     {
-        if ($node instanceof PHPParser_Node_Stmt_Namespace) {
+        if ($node instanceof Namespace_) {
             $this->currentNamespace = null;
         }
 
-        if ($node instanceof PHPParser_Node_Stmt_Class) {
+        if ($node instanceof Class_) {
             $namespace = ($this->currentNamespace && is_array($this->currentNamespace->name->parts))
                 ? implode('\\', $this->currentNamespace->name->parts)
                 : '';
 
             if (trim($namespace . '\\' . $node->name, '\\') === $this->matchedClassFQCN) {
-                $node->extends = new PHPParser_Node_Name_FullyQualified($this->newParentClassFQCN);
+                $node->extends = new FullyQualified($this->newParentClassFQCN);
             }
 
             return $node;

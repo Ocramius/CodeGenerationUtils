@@ -18,8 +18,8 @@
 
 namespace CodeGenerationUtils\GeneratorStrategy;
 
-use PHPParser_PrettyPrinter_Default;
-use PHPParser_PrettyPrinterAbstract;
+use PhpParser\PrettyPrinter\Standard;
+use PhpParser\PrettyPrinterAbstract;
 
 /**
  * Generator strategy that generates the class body
@@ -30,7 +30,7 @@ use PHPParser_PrettyPrinterAbstract;
 class BaseGeneratorStrategy implements GeneratorStrategyInterface
 {
     /**
-     * @var \PHPParser_PrettyPrinterAbstract|null
+     * @var \PhpParser\PrettyPrinterAbstract|null
      */
     private $prettyPrinter;
 
@@ -43,18 +43,18 @@ class BaseGeneratorStrategy implements GeneratorStrategyInterface
     }
 
     /**
-     * @param PHPParser_PrettyPrinterAbstract $prettyPrinter
+     * @param PhpParser\PrettyPrinterAbstract $prettyPrinter
      */
-    public function setPrettyPrinter(PHPParser_PrettyPrinterAbstract $prettyPrinter)
+    public function setPrettyPrinter(PrettyPrinterAbstract $prettyPrinter)
     {
         $this->prettyPrinter = $prettyPrinter;
     }
 
     /**
-     * @return PHPParser_PrettyPrinterAbstract
+     * @return PhpParser\PrettyPrinterAbstract
      */
     protected function getPrettyPrinter()
     {
-        return $this->prettyPrinter ?: $this->prettyPrinter = new PHPParser_PrettyPrinter_Default();
+        return $this->prettyPrinter ?: $this->prettyPrinter = new Standard();
     }
 }

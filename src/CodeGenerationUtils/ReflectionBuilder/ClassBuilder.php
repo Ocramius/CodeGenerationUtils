@@ -18,18 +18,18 @@
 
 namespace CodeGenerationUtils\ReflectionBuilder;
 
-use PHPParser_Builder_Method;
-use PHPParser_Builder_Param;
-use PHPParser_Builder_Property;
-use PHPParser_BuilderAbstract;
-use PHPParser_Node;
-use PHPParser_Node_Const;
-use PHPParser_Node_Expr_ConstFetch;
-use PHPParser_Node_Name;
-use PHPParser_Node_Name_FullyQualified;
-use PHPParser_Node_Stmt_Class;
-use PHPParser_Node_Stmt_ClassConst;
-use PHPParser_Node_Stmt_Namespace;
+use PhpParser\Builder\Method;
+use PhpParser\Builder\Param;
+use PhpParser\Builder\Property;
+use PhpParser\BuilderAbstract;
+use PhpParser\Node;
+use PhpParser\Node\Const_;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\Namespace_;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
@@ -43,33 +43,33 @@ use ReflectionProperty;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class ClassBuilder extends PHPParser_BuilderAbstract
+class ClassBuilder extends BuilderAbstract
 {
     /**
      * @param \ReflectionClass $reflectionClass
      *
-     * @return PHPParser_Node[]
+     * @return PhpParser\Node[]
      */
     public function fromReflection(ReflectionClass $reflectionClass)
     {
-        $class = new PHPParser_Node_Stmt_Class($reflectionClass->getShortName());
+        $class = new Class_($reflectionClass->getShortName());
         $stmts = array($class);
 
         if ($parentClass = $reflectionClass->getParentClass()) {
-            $class->extends = new PHPParser_Node_Name_FullyQualified($parentClass->getName());
+            $class->extends = new FullyQualified($parentClass->getName());
         }
 
         $interfaces = array();
 
         foreach ($reflectionClass->getInterfaces() as $reflectionInterface) {
-            $interfaces[] = new PHPParser_Node_Name_FullyQualified($reflectionInterface->getName());
+            $interfaces[] = new FullyQualified($reflectionInterface->getName());
         }
 
         $class->implements = $interfaces;
 
         foreach ($reflectionClass->getConstants() as $constant => $value) {
-            $class->stmts[] = new PHPParser_Node_Stmt_ClassConst(
-                array(new PHPParser_Node_Const($constant, $this->normalizeValue($value)))
+            $class->stmts[] = new ClassConst(
+                array(new Const_($constant, $this->normalizeValue($value)))
             );
         }
 
@@ -85,7 +85,7 @@ class ClassBuilder extends PHPParser_BuilderAbstract
             return $stmts;
         }
 
-        return array(new PHPParser_Node_Stmt_Namespace(new PHPParser_Node_Name(explode('\\', $namespace)), $stmts));
+        return array(new Namespace_(new Name(explode('\\', $namespace)), $stmts));
     }
 
     /**
@@ -99,11 +99,11 @@ class ClassBuilder extends PHPParser_BuilderAbstract
     /**
      * @param ReflectionProperty $reflectionProperty
      *
-     * @return \PHPParser_Node_Stmt_Property
+     * @return \PhpParser\Node\Stmt\Property
      */
     protected function buildProperty(ReflectionProperty $reflectionProperty)
     {
-        $propertyBuilder = new PHPParser_Builder_Property($reflectionProperty->getName());
+        $propertyBuilder = new Property($reflectionProperty->getName());
 
         if ($reflectionProperty->isPublic()) {
             $propertyBuilder->makePublic();
@@ -133,11 +133,11 @@ class ClassBuilder extends PHPParser_BuilderAbstract
     /**
      * @param ReflectionMethod $reflectionMethod
      *
-     * @return \PHPParser_Node_Stmt_ClassMethod
+     * @return \PhpParser\Node\Stmt\ClassMethod
      */
     protected function buildMethod(ReflectionMethod $reflectionMethod)
     {
-        $methodBuilder = new PHPParser_Builder_Method($reflectionMethod->getName());
+        $methodBuilder = new Method($reflectionMethod->getName());
 
         if ($reflectionMethod->isPublic()) {
             $methodBuilder->makePublic();
@@ -179,11 +179,11 @@ class ClassBuilder extends PHPParser_BuilderAbstract
     /**
      * @param ReflectionParameter $reflectionParameter
      *
-     * @return \PHPParser_Node_Param
+     * @return \PhpParser\Node\Param
      */
     protected function buildParameter(ReflectionParameter $reflectionParameter)
     {
-        $parameterBuilder = new PHPParser_Builder_Param($reflectionParameter->getName());
+        $parameterBuilder = new Param($reflectionParameter->getName());
 
         if ($reflectionParameter->isPassedByReference()) {
             $parameterBuilder->makeByRef();
@@ -206,8 +206,8 @@ class ClassBuilder extends PHPParser_BuilderAbstract
                 && $reflectionParameter->isDefaultValueConstant()
             ) {
                 $parameterBuilder->setDefault(
-                    new PHPParser_Node_Expr_ConstFetch(
-                        new PHPParser_Node_Name($reflectionParameter->getDefaultValueConstantName())
+                    new ConstFetch(
+                        new Name($reflectionParameter->getDefaultValueConstantName())
                     )
                 );
             } else {

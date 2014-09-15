@@ -19,9 +19,9 @@
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\ClassExtensionVisitor;
-use PHPParser_Node_Name;
-use PHPParser_Node_Stmt_Class;
-use PHPParser_Node_Stmt_Namespace;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -37,8 +37,8 @@ class ClassExtensionVisitorTest extends PHPUnit_Framework_TestCase
     public function testRenamesNodesOnMatchingClass()
     {
         $visitor   = new ClassExtensionVisitor('Foo\\Bar', 'Baz\\Tab');
-        $class     = new PHPParser_Node_Stmt_Class('Bar');
-        $namespace = new PHPParser_Node_Stmt_Namespace(new PHPParser_Node_Name('Foo'));
+        $class     = new Class_('Bar');
+        $namespace = new Namespace_(new Name('Foo'));
 
         $visitor->beforeTraverse(array());
         $this->assertSame($namespace, $visitor->enterNode($namespace));
@@ -53,8 +53,8 @@ class ClassExtensionVisitorTest extends PHPUnit_Framework_TestCase
     public function testIgnoresNodesOnNonMatchingClass()
     {
         $visitor   = new ClassExtensionVisitor('Foo\\Bar', 'Baz\\Tab');
-        $class     = new PHPParser_Node_Stmt_Class('Tab');
-        $namespace = new PHPParser_Node_Stmt_Namespace(new PHPParser_Node_Name('Foo'));
+        $class     = new Class_('Tab');
+        $namespace = new Namespace_(new Name('Foo'));
 
         $visitor->beforeTraverse(array());
         $this->assertSame($namespace, $visitor->enterNode($namespace));
@@ -68,8 +68,8 @@ class ClassExtensionVisitorTest extends PHPUnit_Framework_TestCase
     public function testIgnoresNodesOnNonMatchingNamespace()
     {
         $visitor   = new ClassExtensionVisitor('Foo\\Bar', 'Baz\\Tab');
-        $class     = new PHPParser_Node_Stmt_Class('Bar');
-        $namespace = new PHPParser_Node_Stmt_Namespace(new PHPParser_Node_Name('Tab'));
+        $class     = new Class_('Bar');
+        $namespace = new Namespace_(new Name('Tab'));
 
         $visitor->beforeTraverse(array());
         $this->assertSame($namespace, $visitor->enterNode($namespace));
@@ -83,7 +83,7 @@ class ClassExtensionVisitorTest extends PHPUnit_Framework_TestCase
     public function testMatchOnEmptyNamespace()
     {
         $visitor   = new ClassExtensionVisitor('Foo', 'Baz\\Tab');
-        $class     = new PHPParser_Node_Stmt_Class('Foo');
+        $class     = new Class_('Foo');
 
         $visitor->beforeTraverse(array());
         $this->assertNull($visitor->enterNode($class));

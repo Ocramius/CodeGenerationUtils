@@ -18,10 +18,10 @@
 
 namespace CodeGenerationUtils\Visitor;
 
-use PHPParser_Lexer_Emulative;
-use PHPParser_Node;
-use PHPParser_NodeVisitorAbstract;
-use PHPParser_Parser;
+use PhpParser\Lexer\Emulative;
+use PhpParser\Node;
+use PhpParser\NodeVisitorAbstract;
+use PhpParser\Parser;
 use ReflectionClass;
 
 /**
@@ -33,7 +33,7 @@ use ReflectionClass;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class ClassClonerVisitor extends PHPParser_NodeVisitorAbstract
+class ClassClonerVisitor extends NodeVisitorAbstract
 {
     /**
      * @var ReflectionClass
@@ -54,13 +54,13 @@ class ClassClonerVisitor extends PHPParser_NodeVisitorAbstract
      *
      * @param array $nodes
      *
-     * @return \PHPParser_Node[]
+     * @return \PhpParser\Node[]
      */
     public function beforeTraverse(array $nodes)
     {
         // quickfix - if the list is empty, replace it it
         if (empty($nodes)) {
-            $parser = new PHPParser_Parser(new PHPParser_Lexer_Emulative);
+            $parser = new Parser(new Emulative);
 
             return $parser->parse(file_get_contents($this->reflectedClass->getFileName()));
         }

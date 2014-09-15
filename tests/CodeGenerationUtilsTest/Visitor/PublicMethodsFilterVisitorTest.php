@@ -19,10 +19,11 @@
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\PublicMethodsFilterVisitor;
-use PHPParser_Node;
-use PHPParser_Node_Name;
-use PHPParser_Node_Stmt_Class;
-use PHPParser_Node_Stmt_Namespace;
+use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -38,10 +39,10 @@ class PublicMethodsFilterVisitorTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider nodeProvider
      *
-     * @param PHPParser_Node $node
+     * @param PhpParser\Node $node
      * @param mixed          $expected
      */
-    public function testRemovesOnlyPrivateMethods(PHPParser_Node $node, $expected)
+    public function testRemovesOnlyPrivateMethods(Node $node, $expected)
     {
         $visitor = new PublicMethodsFilterVisitor();
 
@@ -52,27 +53,27 @@ class PublicMethodsFilterVisitorTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                new \PHPParser_Node_Stmt_ClassMethod(
+                new ClassMethod(
                     'foo',
-                    array('type' => PHPParser_Node_Stmt_Class::MODIFIER_PUBLIC)
+                    array('type' => Class_::MODIFIER_PUBLIC)
                 ),
                 null,
             ),
             array(
-                new \PHPParser_Node_Stmt_ClassMethod(
+                new ClassMethod(
                     'foo',
-                    array('type' => PHPParser_Node_Stmt_Class::MODIFIER_PROTECTED)
+                    array('type' => Class_::MODIFIER_PROTECTED)
                 ),
                 false,
             ),
             array(
-                new \PHPParser_Node_Stmt_ClassMethod(
+                new ClassMethod(
                     'foo',
-                    array('type' => PHPParser_Node_Stmt_Class::MODIFIER_PRIVATE)
+                    array('type' => Class_::MODIFIER_PRIVATE)
                 ),
                 false,
             ),
-            array(new \PHPParser_Node_Stmt_Class('foo'), null,),
+            array(new Class_('foo'), null,),
         );
     }
 }

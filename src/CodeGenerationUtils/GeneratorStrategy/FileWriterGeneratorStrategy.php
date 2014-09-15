@@ -20,8 +20,8 @@ namespace CodeGenerationUtils\GeneratorStrategy;
 
 use CodeGenerationUtils\FileLocator\FileLocatorInterface;
 use CodeGenerationUtils\Visitor\ClassFQCNResolverVisitor;
-use PHPParser_Node_Stmt_Class;
-use PHPParser_NodeTraverser;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\NodeTraverser;
 
 /**
  * Generator strategy that writes the generated classes to disk while generating them
@@ -39,7 +39,7 @@ class FileWriterGeneratorStrategy extends BaseGeneratorStrategy
     protected $fileLocator;
 
     /**
-     * @var \PHPParser_NodeTraverserInterface
+     * @var \PhpParser\NodeTraverserInterface
      */
     private $traverser;
 
@@ -52,7 +52,7 @@ class FileWriterGeneratorStrategy extends BaseGeneratorStrategy
     public function __construct(FileLocatorInterface $fileLocator)
     {
         $this->fileLocator = $fileLocator;
-        $this->traverser   = new PHPParser_NodeTraverser();
+        $this->traverser   = new NodeTraverser();
         $this->visitor     = new ClassFQCNResolverVisitor();
 
         $this->traverser->addVisitor($this->visitor);

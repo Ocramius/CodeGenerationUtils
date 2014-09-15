@@ -18,13 +18,13 @@
 
 namespace CodeGenerationUtils\Visitor;
 
-use PHPParser_Lexer_Emulative;
-use PHPParser_Node;
-use PHPParser_Node_Name;
-use PHPParser_Node_Stmt_Class;
-use PHPParser_Node_Stmt_Namespace;
-use PHPParser_NodeVisitorAbstract;
-use PHPParser_Parser;
+use PhpParser\Lexer\Emulative;
+use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\NodeVisitorAbstract;
+use PhpParser\Parser;
 use ReflectionClass;
 
 /**
@@ -34,7 +34,7 @@ use ReflectionClass;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class ClassRenamerVisitor extends PHPParser_NodeVisitorAbstract
+class ClassRenamerVisitor extends NodeVisitorAbstract
 {
     /**
      * @var ReflectionClass
@@ -52,12 +52,12 @@ class ClassRenamerVisitor extends PHPParser_NodeVisitorAbstract
     private $newNamespace;
 
     /**
-     * @var PHPParser_Node_Stmt_Namespace|null
+     * @var PhpParser\Node\Stmt\Namespace_|null
      */
     private $currentNamespace;
 
     /**
-     * @var PHPParser_Node_Stmt_Class|null the currently detected class in this namespace
+     * @var PhpParser\Node\Stmt\Class_|null the currently detected class in this namespace
      */
     private $replacedInNamespace;
 
@@ -86,13 +86,13 @@ class ClassRenamerVisitor extends PHPParser_NodeVisitorAbstract
     }
 
     /**
-     * @param PHPParser_Node $node
+     * @param PhpParser\Node $node
      *
-     * @return PHPParser_Node_Stmt_Namespace|void
+     * @return PhpParser\Node\Stmt\Namespace_|void
      */
-    public function enterNode(PHPParser_Node $node)
+    public function enterNode(Node $node)
     {
-        if ($node instanceof PHPParser_Node_Stmt_Namespace) {
+        if ($node instanceof Namespace_) {
             return $this->currentNamespace = $node;
         }
     }
@@ -100,15 +100,15 @@ class ClassRenamerVisitor extends PHPParser_NodeVisitorAbstract
     /**
      * Replaces (if matching) the given node to comply with the new given name
      *
-     * @param PHPParser_Node $node
+     * @param PhpParser\Node $node
      *
      * @todo can be abstracted away into a visitor that allows to modify the matched node via a callback
      *
-     * @return array|null|PHPParser_Node_Stmt_Class|PHPParser_Node_Stmt_Namespace|void
+     * @return array|null|PhpParser\Node\Stmt\Class_|PhpParser\Node\Stmt\Namespace_|void
      */
-    public function leaveNode(PHPParser_Node $node)
+    public function leaveNode(Node $node)
     {
-        if ($node instanceof PHPParser_Node_Stmt_Namespace) {
+        if ($node instanceof Namespace_) {
             $namespace                 = $this->currentNamespace;
             $replacedInNamespace       = $this->replacedInNamespace;
             $this->currentNamespace    = null;
@@ -126,7 +126,7 @@ class ClassRenamerVisitor extends PHPParser_NodeVisitorAbstract
             }
         }
 
-        if ($node instanceof PHPParser_Node_Stmt_Class
+        if ($node instanceof Class_
             && $this->namespaceMatches()
             && ($this->reflectedClass->getShortName() === $node->name)
         ) {
@@ -138,7 +138,7 @@ class ClassRenamerVisitor extends PHPParser_NodeVisitorAbstract
                 $this->currentNamespace->stmts = array($node);
             } elseif ($this->newNamespace) {
                 // wrap in namespace if no previous namespace exists
-                return new PHPParser_Node_Stmt_Namespace(new PHPParser_Node_Name($this->newNamespace), array($node));
+                return new Namespace_(new Name($this->newNamespace), array($node));
             }
 
             return $node;
