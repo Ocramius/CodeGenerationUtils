@@ -22,7 +22,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar\String;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\NodeVisitorAbstract;
@@ -76,7 +76,7 @@ class MethodDisablerVisitor extends NodeVisitorAbstract
             new Throw_(
                 new New_(
                     new FullyQualified('BadMethodCallException'),
-                    array(new Arg(new String('Method is disabled')))
+                    array(new Arg(new String_('Method is disabled')))
                 )
             )
         );
