@@ -23,6 +23,7 @@ namespace CodeGenerationUtilsTest\GeneratorStrategy;
 use CodeGenerationUtils\GeneratorStrategy\BaseGeneratorStrategy;
 use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\PrettyPrinterAbstract;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -53,13 +54,14 @@ class BaseGeneratorStrategyTest extends PHPUnit_Framework_TestCase
     {
         $strategy = new BaseGeneratorStrategy();
 
-        $prettyPrinter = $this->getMock('PhpParser\PrettyPrinterAbstract');
+        /* @var $prettyPrinter PrettyPrinterAbstract|\PHPUnit_Framework_MockObject_MockObject */
+        $prettyPrinter = $this->getMock(PrettyPrinterAbstract::class);
 
         $prettyPrinter
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('prettyPrint')
             ->with(array('bar'))
-            ->will($this->returnValue('foo'));
+            ->will(self::returnValue('foo'));
 
         $strategy->setPrettyPrinter($prettyPrinter);
 

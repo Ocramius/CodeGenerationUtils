@@ -65,10 +65,10 @@ class AutoloaderTest extends PHPUnit_Framework_TestCase
         $className = 'Foo\\' . UniqueIdentifierGenerator::getIdentifier('Bar');
         $this
             ->classNameInflector
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('isGeneratedClassName')
             ->with($className)
-            ->will($this->returnValue(false));
+            ->will(self::returnValue(false));
 
         self::assertFalse($this->autoloader->__invoke($className));
     }
@@ -81,15 +81,15 @@ class AutoloaderTest extends PHPUnit_Framework_TestCase
         $className = 'Foo\\' . UniqueIdentifierGenerator::getIdentifier('Bar');
         $this
             ->classNameInflector
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('isGeneratedClassName')
             ->with($className)
-            ->will($this->returnValue(true));
+            ->will(self::returnValue(true));
         $this
             ->fileLocator
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getGeneratedClassFileName')
-            ->will($this->returnValue(__DIR__ . '/non-existing'));
+            ->will(self::returnValue(__DIR__ . '/non-existing'));
 
         self::assertFalse($this->autoloader->__invoke($className));
     }
@@ -110,21 +110,21 @@ class AutoloaderTest extends PHPUnit_Framework_TestCase
         $namespace = 'Foo';
         $className = UniqueIdentifierGenerator::getIdentifier('Bar');
         $fqcn      = $namespace . '\\' . $className;
-        $fileName  = sys_get_temp_dir() . '/foo_' . uniqid() . '.php';
+        $fileName  = sys_get_temp_dir() . '/foo_' . uniqid('', true) . '.php';
 
         file_put_contents($fileName, '<?php namespace ' . $namespace . '; class ' . $className . '{}');
 
         $this
             ->classNameInflector
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('isGeneratedClassName')
             ->with($fqcn)
-            ->will($this->returnValue(true));
+            ->will(self::returnValue(true));
         $this
             ->fileLocator
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getGeneratedClassFileName')
-            ->will($this->returnValue($fileName));
+            ->will(self::returnValue($fileName));
 
         self::assertTrue($this->autoloader->__invoke($fqcn));
         self::assertTrue(class_exists($fqcn, false));

@@ -35,6 +35,8 @@ class ParameterEncoderTest extends PHPUnit_Framework_TestCase
      * @dataProvider getParameters
      *
      * @covers \CodeGenerationUtils\Inflector\Util\ParameterEncoder::encodeParameters
+     *
+     * @param array $parameters
      */
     public function testGeneratesValidClassName(array $parameters)
     {

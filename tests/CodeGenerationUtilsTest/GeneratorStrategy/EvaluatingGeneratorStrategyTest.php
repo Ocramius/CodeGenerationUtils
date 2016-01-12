@@ -54,11 +54,11 @@ class EvaluatingGeneratorStrategyTest extends PHPUnit_Framework_TestCase
     public function testGenerateWithDisabledEval()
     {
         if (! ini_get('suhosin.executor.disable_eval')) {
-            $this->markTestSkipped('Ini setting "suhosin.executor.disable_eval" is needed to run this test');
+            self::markTestSkipped('Ini setting "suhosin.executor.disable_eval" is needed to run this test');
         }
 
         $strategy       = new EvaluatingGeneratorStrategy();
-        $className      = 'Foo' . uniqid();
+        $className      = 'Foo' . uniqid('', true);
         $generated      = $strategy->generate(array(new Class_($className)));
 
         self::assertGreaterThan(0, strpos($generated, $className));

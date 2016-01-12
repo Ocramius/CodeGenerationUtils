@@ -59,6 +59,6 @@ class ClassClonerVisitorTest extends PHPUnit_Framework_TestCase
 
     public function testClonesClassIntoNonEmptyNodeList()
     {
-        $this->markTestIncomplete('Still not clear thoughts on this...');
+        self::markTestIncomplete('Still not clear thoughts on this...');
     }
 }

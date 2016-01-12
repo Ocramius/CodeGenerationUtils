@@ -39,8 +39,11 @@ class ClassNameInflectorTest extends PHPUnit_Framework_TestCase
      * @covers \CodeGenerationUtils\Inflector\ClassNameInflector::getUserClassName
      * @covers \CodeGenerationUtils\Inflector\ClassNameInflector::getGeneratedClassName
      * @covers \CodeGenerationUtils\Inflector\ClassNameInflector::isGeneratedClassName
+     *
+     * @param string $realClassName
+     * @param string $generatedClassName
      */
-    public function testInflector($realClassName, $generatedClassName)
+    public function testInflector(string $realClassName, string $generatedClassName)
     {
         $inflector = new ClassNameInflector('GeneratedClassNS');
 

@@ -83,7 +83,7 @@ class ClassBuilderTest extends PHPUnit_Framework_TestCase
 
         /* @var $namespace \PhpParser\Node\Stmt\Namespace_ */
         $namespace = $ast[0];
-        /* @var */
+        /* @var $class \PhpParser\Node\Stmt\Class_ */
         $class     = $namespace->stmts[0];
         $method    = 'defaultValueIsConstant';
 

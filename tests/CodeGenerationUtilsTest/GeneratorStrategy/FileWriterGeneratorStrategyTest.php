@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtilsTest\GeneratorStrategy;
 
+use CodeGenerationUtils\FileLocator\FileLocatorInterface;
 use CodeGenerationUtils\GeneratorStrategy\FileWriterGeneratorStrategy;
 use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
 use PhpParser\Node\Name;
@@ -41,17 +42,18 @@ class FileWriterGeneratorStrategyTest extends PHPUnit_Framework_TestCase
      */
     public function testGenerate()
     {
-        $locator   = $this->getMock('CodeGenerationUtils\\FileLocator\\FileLocatorInterface');
+        /* @var $locator \PHPUnit_Framework_MockObject_MockObject|FileLocatorInterface */
+        $locator   = $this->getMock(FileLocatorInterface::class);
         $generator = new FileWriterGeneratorStrategy($locator);
-        $tmpFile   = sys_get_temp_dir() . '/FileWriterGeneratorStrategyTest' . uniqid() . '.php';
+        $tmpFile   = sys_get_temp_dir() . '/FileWriterGeneratorStrategyTest' . uniqid('', true) . '.php';
         $className = UniqueIdentifierGenerator::getIdentifier('Bar');
         $fqcn      = 'Foo\\' . $className;
 
         $locator
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getGeneratedClassFileName')
             ->with($fqcn)
-            ->will($this->returnValue($tmpFile));
+            ->will(self::returnValue($tmpFile));
 
         $class     = new Class_($className);
         $namespace = new Namespace_(new Name('Foo'), array($class));
