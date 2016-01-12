@@ -65,7 +65,7 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
      * @param ReflectionClass $reflectedClass
      * @param string          $newFQCN
      */
-    public function __construct(ReflectionClass $reflectedClass, $newFQCN)
+    public function __construct(ReflectionClass $reflectedClass, string $newFQCN)
     {
         $this->reflectedClass = $reflectedClass;
         $fqcnParts            = explode('\\', $newFQCN);

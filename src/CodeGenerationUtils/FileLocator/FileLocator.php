@@ -40,7 +40,7 @@ class FileLocator implements FileLocatorInterface
      *
      * @throws \CodeGenerationUtils\Exception\InvalidGeneratedClassesDirectoryException
      */
-    public function __construct($generatedClassesDirectory)
+    public function __construct(string $generatedClassesDirectory)
     {
         $this->generatedClassesDirectory = realpath($generatedClassesDirectory);
 
@@ -52,7 +52,7 @@ class FileLocator implements FileLocatorInterface
     /**
      * {@inheritDoc}
      */
-    public function getGeneratedClassFileName($className) : string
+    public function getGeneratedClassFileName(string $className) : string
     {
         return $this->generatedClassesDirectory . DIRECTORY_SEPARATOR . str_replace('\\', '', $className) . '.php';
     }

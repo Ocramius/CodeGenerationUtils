@@ -53,10 +53,10 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
      * @param string $matchedClassFQCN
      * @param string $newParentClassFQCN
      */
-    public function __construct($matchedClassFQCN, $newParentClassFQCN)
+    public function __construct(string $matchedClassFQCN, string $newParentClassFQCN)
     {
-        $this->matchedClassFQCN = (string) $matchedClassFQCN;
-        $this->newParentClassFQCN = (string) $newParentClassFQCN;
+        $this->matchedClassFQCN   = $matchedClassFQCN;
+        $this->newParentClassFQCN = $newParentClassFQCN;
     }
 
     /**

@@ -54,7 +54,7 @@ class Autoloader implements AutoloaderInterface
     /**
      * {@inheritDoc}
      */
-    public function __invoke($className) : bool
+    public function __invoke(string $className) : bool
     {
         if (class_exists($className, false) || ! $this->classNameInflector->isGeneratedClassName($className)) {
             return false;

@@ -50,9 +50,9 @@ class ClassImplementorVisitor extends NodeVisitorAbstract
      * @param string   $matchedClassFQCN
      * @param string[] $interfaces
      */
-    public function __construct($matchedClassFQCN, array $interfaces)
+    public function __construct(string $matchedClassFQCN, array $interfaces)
     {
-        $this->matchedClassFQCN = (string) $matchedClassFQCN;
+        $this->matchedClassFQCN = $matchedClassFQCN;
         $this->interfaces       = array_map(
             function ($interfaceName) {
                 return new FullyQualified($interfaceName);

@@ -35,5 +35,5 @@ interface FileLocatorInterface
      *
      * @return string
      */
-    public function getGeneratedClassFileName($className) : string;
+    public function getGeneratedClassFileName(string $className) : string;
 }

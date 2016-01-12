@@ -35,8 +35,8 @@ class InvalidGeneratedClassesDirectoryException extends InvalidArgumentException
      *
      * @return self
      */
-    public static function generatedClassesDirectoryNotFound($directory) : self
+    public static function generatedClassesDirectoryNotFound(string $directory) : self
     {
-        return new self(sprintf('Provided directory "%s" does not exist', (string) $directory));
+        return new self(sprintf('Provided directory "%s" does not exist', $directory));
     }
 }
