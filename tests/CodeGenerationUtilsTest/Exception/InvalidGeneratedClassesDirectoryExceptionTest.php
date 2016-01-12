@@ -38,6 +38,6 @@ class InvalidGeneratedClassesDirectoryExceptionTest extends PHPUnit_Framework_Te
     {
         $exception = InvalidGeneratedClassesDirectoryException::generatedClassesDirectoryNotFound('foo/bar');
 
-        $this->assertSame('Provided directory "foo/bar" does not exist', $exception->getMessage());
+        self::assertSame('Provided directory "foo/bar" does not exist', $exception->getMessage());
     }
 }

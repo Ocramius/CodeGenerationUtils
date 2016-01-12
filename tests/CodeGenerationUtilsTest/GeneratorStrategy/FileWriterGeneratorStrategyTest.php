@@ -57,12 +57,12 @@ class FileWriterGeneratorStrategyTest extends PHPUnit_Framework_TestCase
         $namespace = new Namespace_(new Name('Foo'), array($class));
         $body      = $generator->generate(array($namespace));
 
-        $this->assertGreaterThan(0, strpos($body, $className));
-        $this->assertFalse(class_exists($fqcn, false));
-        $this->assertTrue(file_exists($tmpFile));
+        self::assertGreaterThan(0, strpos($body, $className));
+        self::assertFalse(class_exists($fqcn, false));
+        self::assertTrue(file_exists($tmpFile));
 
         require $tmpFile;
 
-        $this->assertTrue(class_exists($fqcn, false));
+        self::assertTrue(class_exists($fqcn, false));
     }
 }

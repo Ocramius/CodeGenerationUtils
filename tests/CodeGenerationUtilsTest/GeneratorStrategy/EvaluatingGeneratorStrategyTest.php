@@ -43,8 +43,8 @@ class EvaluatingGeneratorStrategyTest extends PHPUnit_Framework_TestCase
         $className      = UniqueIdentifierGenerator::getIdentifier('Foo');
         $generated      = $strategy->generate(array(new Class_($className)));
 
-        $this->assertGreaterThan(0, strpos($generated, $className));
-        $this->assertTrue(class_exists($className, false));
+        self::assertGreaterThan(0, strpos($generated, $className));
+        self::assertTrue(class_exists($className, false));
     }
 
     /**
@@ -61,7 +61,7 @@ class EvaluatingGeneratorStrategyTest extends PHPUnit_Framework_TestCase
         $className      = 'Foo' . uniqid();
         $generated      = $strategy->generate(array(new Class_($className)));
 
-        $this->assertGreaterThan(0, strpos($generated, $className));
-        $this->assertTrue(class_exists($className, false));
+        self::assertGreaterThan(0, strpos($generated, $className));
+        self::assertTrue(class_exists($className, false));
     }
 }

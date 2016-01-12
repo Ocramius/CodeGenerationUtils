@@ -46,8 +46,8 @@ class MethodDisablerVisitorTest extends PHPUnit_Framework_TestCase
 
         $visitor = new MethodDisablerVisitor($filter);
 
-        $this->assertSame($method, $visitor->leaveNode($method));
-        $this->assertInstanceOf('PhpParser\Node\Stmt\Throw_', reset($method->stmts));
+        self::assertSame($method, $visitor->leaveNode($method));
+        self::assertInstanceOf('PhpParser\Node\Stmt\Throw_', reset($method->stmts));
     }
 
     public function testSkipsOnFailedFiltering()
@@ -59,7 +59,7 @@ class MethodDisablerVisitorTest extends PHPUnit_Framework_TestCase
 
         $visitor = new MethodDisablerVisitor($filter);
 
-        $this->assertSame(false, $visitor->leaveNode($method));
+        self::assertSame(false, $visitor->leaveNode($method));
     }
 
     public function testSkipsOnIgnoreFiltering()
@@ -71,7 +71,7 @@ class MethodDisablerVisitorTest extends PHPUnit_Framework_TestCase
 
         $visitor = new MethodDisablerVisitor($filter);
 
-        $this->assertSame(null, $visitor->leaveNode($method));
+        self::assertSame(null, $visitor->leaveNode($method));
     }
 
     public function testSkipsOnNodeTypeMismatch()
@@ -83,6 +83,6 @@ class MethodDisablerVisitorTest extends PHPUnit_Framework_TestCase
 
         $visitor = new MethodDisablerVisitor($filter);
 
-        $this->assertSame(null, $visitor->leaveNode($class));
+        self::assertSame(null, $visitor->leaveNode($class));
     }
 }

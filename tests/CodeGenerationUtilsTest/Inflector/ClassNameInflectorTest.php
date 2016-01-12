@@ -44,12 +44,12 @@ class ClassNameInflectorTest extends PHPUnit_Framework_TestCase
     {
         $inflector = new ClassNameInflector('GeneratedClassNS');
 
-        $this->assertFalse($inflector->isGeneratedClassName($realClassName));
-        $this->assertTrue($inflector->isGeneratedClassName($generatedClassName));
-        $this->assertStringMatchesFormat($realClassName, $inflector->getUserClassName($realClassName));
-        $this->assertStringMatchesFormat($generatedClassName, $inflector->getGeneratedClassName($generatedClassName));
-        $this->assertStringMatchesFormat($generatedClassName, $inflector->getGeneratedClassName($realClassName));
-        $this->assertStringMatchesFormat($realClassName, $inflector->getUserClassName($generatedClassName));
+        self::assertFalse($inflector->isGeneratedClassName($realClassName));
+        self::assertTrue($inflector->isGeneratedClassName($generatedClassName));
+        self::assertStringMatchesFormat($realClassName, $inflector->getUserClassName($realClassName));
+        self::assertStringMatchesFormat($generatedClassName, $inflector->getGeneratedClassName($generatedClassName));
+        self::assertStringMatchesFormat($generatedClassName, $inflector->getGeneratedClassName($realClassName));
+        self::assertStringMatchesFormat($realClassName, $inflector->getUserClassName($generatedClassName));
     }
 
     /**
@@ -59,12 +59,12 @@ class ClassNameInflectorTest extends PHPUnit_Framework_TestCase
     {
         $inflector = new ClassNameInflector('GeneratedClassNS');
 
-        $this->assertSame($inflector->getGeneratedClassName('Foo\\Bar'), $inflector->getGeneratedClassName('Foo\\Bar'));
-        $this->assertSame(
+        self::assertSame($inflector->getGeneratedClassName('Foo\\Bar'), $inflector->getGeneratedClassName('Foo\\Bar'));
+        self::assertSame(
             $inflector->getGeneratedClassName('Foo\\Bar', array('baz' => 'tab')),
             $inflector->getGeneratedClassName('Foo\\Bar', array('baz' => 'tab'))
         );
-        $this->assertSame(
+        self::assertSame(
             $inflector->getGeneratedClassName('Foo\\Bar', array('tab' => 'baz')),
             $inflector->getGeneratedClassName('Foo\\Bar', array('tab' => 'baz'))
         );
@@ -77,19 +77,19 @@ class ClassNameInflectorTest extends PHPUnit_Framework_TestCase
     {
         $inflector = new ClassNameInflector('GeneratedClassNS');
 
-        $this->assertNotSame(
+        self::assertNotSame(
             $inflector->getGeneratedClassName('Foo\\Bar'),
             $inflector->getGeneratedClassName('Foo\\Bar', array('foo' => 'bar'))
         );
-        $this->assertNotSame(
+        self::assertNotSame(
             $inflector->getGeneratedClassName('Foo\\Bar', array('baz' => 'tab')),
             $inflector->getGeneratedClassName('Foo\\Bar', array('tab' => 'baz'))
         );
-        $this->assertNotSame(
+        self::assertNotSame(
             $inflector->getGeneratedClassName('Foo\\Bar', array('foo' => 'bar', 'tab' => 'baz')),
             $inflector->getGeneratedClassName('Foo\\Bar', array('foo' => 'bar'))
         );
-        $this->assertNotSame(
+        self::assertNotSame(
             $inflector->getGeneratedClassName('Foo\\Bar', array('foo' => 'bar', 'tab' => 'baz')),
             $inflector->getGeneratedClassName('Foo\\Bar', array('tab' => 'baz', 'foo' => 'bar'))
         );

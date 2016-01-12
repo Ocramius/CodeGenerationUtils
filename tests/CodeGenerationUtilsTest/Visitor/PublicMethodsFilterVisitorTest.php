@@ -48,7 +48,7 @@ class PublicMethodsFilterVisitorTest extends PHPUnit_Framework_TestCase
     {
         $visitor = new PublicMethodsFilterVisitor();
 
-        $this->assertSame($expected, $visitor->leaveNode($node));
+        self::assertSame($expected, $visitor->leaveNode($node));
     }
 
     public function nodeProvider()

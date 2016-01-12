@@ -46,14 +46,14 @@ class ClassRenamerVisitorTest extends PHPUnit_Framework_TestCase
         );
 
         $visitor->beforeTraverse(array());
-        $this->assertSame($namespace, $visitor->enterNode($namespace));
-        $this->assertNull($visitor->enterNode($class));
-        $this->assertSame($class, $visitor->leaveNode($class));
-        $this->assertSame($namespace, $visitor->leaveNode($namespace));
+        self::assertSame($namespace, $visitor->enterNode($namespace));
+        self::assertNull($visitor->enterNode($class));
+        self::assertSame($class, $visitor->leaveNode($class));
+        self::assertSame($namespace, $visitor->leaveNode($namespace));
 
-        $this->assertSame('Baz', $class->name);
-        $this->assertSame(array('Foo', 'Bar'), $namespace->name->parts);
-        $this->assertSame(array($class), $namespace->stmts);
+        self::assertSame('Baz', $class->name);
+        self::assertSame(array('Foo', 'Bar'), $namespace->name->parts);
+        self::assertSame(array($class), $namespace->stmts);
     }
 
     public function testIgnoresNodesOnNonMatchingClass()
@@ -65,13 +65,13 @@ class ClassRenamerVisitorTest extends PHPUnit_Framework_TestCase
         );
 
         $visitor->beforeTraverse(array());
-        $this->assertSame($namespace, $visitor->enterNode($namespace));
-        $this->assertNull($visitor->enterNode($class));
+        self::assertSame($namespace, $visitor->enterNode($namespace));
+        self::assertNull($visitor->enterNode($class));
         $visitor->leaveNode($class);
         $visitor->leaveNode($namespace);
 
-        $this->assertSame('Wrong', $class->name);
-        $this->assertSame(array('CodeGenerationUtilsTest', 'Visitor'), $namespace->name->parts);
+        self::assertSame('Wrong', $class->name);
+        self::assertSame(array('CodeGenerationUtilsTest', 'Visitor'), $namespace->name->parts);
     }
 
     public function testIgnoresNodesOnNonMatchingNamespace()
@@ -83,13 +83,13 @@ class ClassRenamerVisitorTest extends PHPUnit_Framework_TestCase
         );
 
         $visitor->beforeTraverse(array());
-        $this->assertSame($namespace, $visitor->enterNode($namespace));
-        $this->assertNull($visitor->enterNode($class));
+        self::assertSame($namespace, $visitor->enterNode($namespace));
+        self::assertNull($visitor->enterNode($class));
         $visitor->leaveNode($class);
         $visitor->leaveNode($namespace);
 
-        $this->assertSame('ClassRenamerVisitorTest', $class->name);
-        $this->assertSame(array('Wrong', 'Namespace', 'Here'), $namespace->name->parts);
+        self::assertSame('ClassRenamerVisitorTest', $class->name);
+        self::assertSame(array('Wrong', 'Namespace', 'Here'), $namespace->name->parts);
     }
 
     public function testMatchOnEmptyNamespace()
@@ -98,10 +98,10 @@ class ClassRenamerVisitorTest extends PHPUnit_Framework_TestCase
         $class     = new Class_('stdClass');
 
         $visitor->beforeTraverse(array());
-        $this->assertNull($visitor->enterNode($class));
-        $this->assertSame($class, $visitor->leaveNode($class));
+        self::assertNull($visitor->enterNode($class));
+        self::assertSame($class, $visitor->leaveNode($class));
 
-        $this->assertSame('Baz', $class->name);
+        self::assertSame('Baz', $class->name);
     }
 
     public function testUnwrapsNamespacedClassCorrectly()
@@ -113,12 +113,12 @@ class ClassRenamerVisitorTest extends PHPUnit_Framework_TestCase
         );
 
         $visitor->beforeTraverse(array());
-        $this->assertSame($namespace, $visitor->enterNode($namespace));
-        $this->assertNull($visitor->enterNode($class));
-        $this->assertSame($class, $visitor->leaveNode($class));
-        $this->assertSame(array($class), $visitor->leaveNode($namespace));
+        self::assertSame($namespace, $visitor->enterNode($namespace));
+        self::assertNull($visitor->enterNode($class));
+        self::assertSame($class, $visitor->leaveNode($class));
+        self::assertSame(array($class), $visitor->leaveNode($namespace));
 
-        $this->assertSame('Baz', $class->name);
+        self::assertSame('Baz', $class->name);
     }
 
     public function testWrapsGlobalClassCorrectly()
@@ -127,12 +127,12 @@ class ClassRenamerVisitorTest extends PHPUnit_Framework_TestCase
         $class     = new Class_('stdClass');
 
         $visitor->beforeTraverse(array());
-        $this->assertNull($visitor->enterNode($class));
+        self::assertNull($visitor->enterNode($class));
         $namespace = $visitor->leaveNode($class);
 
-        $this->assertInstanceOf('PhpParser\Node\Stmt\Namespace_', $namespace);
-        $this->assertSame('Foo', $namespace->name->toString());
-        $this->assertSame(array($class), $namespace->stmts);
+        self::assertInstanceOf('PhpParser\Node\Stmt\Namespace_', $namespace);
+        self::assertSame('Foo', $namespace->name->toString());
+        self::assertSame(array($class), $namespace->stmts);
     }
 
     public function testMismatchOnEmptyNamespace()
@@ -144,12 +144,12 @@ class ClassRenamerVisitorTest extends PHPUnit_Framework_TestCase
         );
 
         $visitor->beforeTraverse(array());
-        $this->assertSame($namespace, $visitor->enterNode($namespace));
-        $this->assertNull($visitor->enterNode($class));
+        self::assertSame($namespace, $visitor->enterNode($namespace));
+        self::assertNull($visitor->enterNode($class));
         $visitor->leaveNode($class);
         $visitor->leaveNode($namespace);
 
-        $this->assertSame('stdClass', $class->name);
-        $this->assertSame(array('Wrong', 'Namespace', 'Here'), $namespace->name->parts);
+        self::assertSame('stdClass', $class->name);
+        self::assertSame(array('Wrong', 'Namespace', 'Here'), $namespace->name->parts);
     }
 }

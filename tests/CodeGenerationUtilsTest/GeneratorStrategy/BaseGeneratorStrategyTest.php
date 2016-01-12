@@ -42,7 +42,7 @@ class BaseGeneratorStrategyTest extends PHPUnit_Framework_TestCase
         $className      = UniqueIdentifierGenerator::getIdentifier('Foo');
         $generated      = $strategy->generate(array(new Class_($className)));
 
-        $this->assertGreaterThan(0, strpos($generated, $className));
+        self::assertGreaterThan(0, strpos($generated, $className));
     }
 
     /**
@@ -63,6 +63,6 @@ class BaseGeneratorStrategyTest extends PHPUnit_Framework_TestCase
 
         $strategy->setPrettyPrinter($prettyPrinter);
 
-        $this->assertSame('foo', $strategy->generate(array('bar')));
+        self::assertSame('foo', $strategy->generate(array('bar')));
     }
 }

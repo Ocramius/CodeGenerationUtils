@@ -58,8 +58,8 @@ class ClassFQCNResolverVisitorTest extends PHPUnit_Framework_TestCase
         $this->visitor->beforeTraverse(array($class));
         $this->visitor->enterNode($class);
 
-        $this->assertSame('Foo', $this->visitor->getName());
-        $this->assertSame('', $this->visitor->getNamespace());
+        self::assertSame('Foo', $this->visitor->getName());
+        self::assertSame('', $this->visitor->getNamespace());
     }
 
     public function testDiscoversNamespacedClass()
@@ -73,8 +73,8 @@ class ClassFQCNResolverVisitorTest extends PHPUnit_Framework_TestCase
         $this->visitor->enterNode($namespace);
         $this->visitor->enterNode($class);
 
-        $this->assertSame('Foo', $this->visitor->getName());
-        $this->assertSame('Bar\\Baz', $this->visitor->getNamespace());
+        self::assertSame('Foo', $this->visitor->getName());
+        self::assertSame('Bar\\Baz', $this->visitor->getNamespace());
     }
 
     public function testThrowsExceptionOnMultipleClasses()
@@ -107,7 +107,7 @@ class ClassFQCNResolverVisitorTest extends PHPUnit_Framework_TestCase
 
     public function testThrowsExceptionWhenNoClassIsFound()
     {
-        $this->assertSame('', $this->visitor->getNamespace());
+        self::assertSame('', $this->visitor->getNamespace());
 
         $this->setExpectedException('CodeGenerationUtils\Visitor\Exception\UnexpectedValueException');
 

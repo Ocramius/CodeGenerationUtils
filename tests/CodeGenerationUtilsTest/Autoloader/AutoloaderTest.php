@@ -71,7 +71,7 @@ class AutoloaderTest extends PHPUnit_Framework_TestCase
             ->with($className)
             ->will($this->returnValue(false));
 
-        $this->assertFalse($this->autoloader->__invoke($className));
+        self::assertFalse($this->autoloader->__invoke($className));
     }
 
     /**
@@ -92,7 +92,7 @@ class AutoloaderTest extends PHPUnit_Framework_TestCase
             ->method('getGeneratedClassFileName')
             ->will($this->returnValue(__DIR__ . '/non-existing'));
 
-        $this->assertFalse($this->autoloader->__invoke($className));
+        self::assertFalse($this->autoloader->__invoke($className));
     }
 
     /**
@@ -100,7 +100,7 @@ class AutoloaderTest extends PHPUnit_Framework_TestCase
      */
     public function testWillNotAutoloadExistingClass()
     {
-        $this->assertFalse($this->autoloader->__invoke(__CLASS__));
+        self::assertFalse($this->autoloader->__invoke(__CLASS__));
     }
 
     /**
@@ -127,7 +127,7 @@ class AutoloaderTest extends PHPUnit_Framework_TestCase
             ->method('getGeneratedClassFileName')
             ->will($this->returnValue($fileName));
 
-        $this->assertTrue($this->autoloader->__invoke($fqcn));
-        $this->assertTrue(class_exists($fqcn, false));
+        self::assertTrue($this->autoloader->__invoke($fqcn));
+        self::assertTrue(class_exists($fqcn, false));
     }
 }

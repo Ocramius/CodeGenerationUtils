@@ -39,11 +39,11 @@ class FileLocatorTest extends PHPUnit_Framework_TestCase
     {
         $locator = new FileLocator(__DIR__);
 
-        $this->assertSame(
+        self::assertSame(
             __DIR__ . DIRECTORY_SEPARATOR . 'FooBarBaz.php',
             $locator->getGeneratedClassFileName('Foo\\Bar\\Baz')
         );
-        $this->assertSame(
+        self::assertSame(
             __DIR__ . DIRECTORY_SEPARATOR . 'Foo_Bar_Baz.php',
             $locator->getGeneratedClassFileName('Foo_Bar_Baz')
         );
