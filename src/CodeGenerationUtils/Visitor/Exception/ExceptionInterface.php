@@ -18,7 +18,6 @@
 
 namespace CodeGenerationUtils\Visitor\Exception;
 
-
 /**
  * Base exception interface for node visitors
  *
