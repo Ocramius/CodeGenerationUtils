@@ -83,6 +83,8 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
 
             return $node;
         }
+
+        return null;
     }
 
     /**
