@@ -41,7 +41,7 @@ class PublicMethodsFilterVisitorTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider nodeProvider
      *
-     * @param PhpParser\Node $node
+     * @param \PhpParser\Node $node
      * @param mixed          $expected
      */
     public function testRemovesOnlyPrivateMethods(Node $node, $expected)
