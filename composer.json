@@ -27,13 +27,13 @@
         "squizlabs/php_codesniffer": "~2.0"
     },
     "autoload": {
-        "psr-0": {
-            "CodeGenerationUtils\\": "src"
+        "psr-4": {
+            "CodeGenerationUtils\\": "src/CodeGenerationUtils"
         }
     },
     "autoload-dev": {
-        "psr-0": {
-            "CodeGenerationUtilsTests\\": "tests"
+        "psr-4": {
+            "CodeGenerationUtilsTests\\": "tests/CodeGenerationUtilsTests"
         }
     },
     "extra": {
