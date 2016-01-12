@@ -70,9 +70,9 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param PhpParser\Node $node
+     * @param \PhpParser\Node $node
      *
-     * @return PhpParser\Node\Stmt\Namespace_|null
+     * @return \PhpParser\Node\Stmt\Namespace_|null
      */
     public function enterNode(Node $node)
     {
@@ -91,9 +91,9 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
      *
      * @todo can be abstracted away into a visitor that allows to modify the node via a callback
      *
-     * @param PhpParser\Node $node
+     * @param \PhpParser\Node $node
      *
-     * @return PhpParser\Node\Stmt\Class_|void
+     * @return \PhpParser\Node\Stmt\Class_|void
      */
     public function leaveNode(Node $node)
     {

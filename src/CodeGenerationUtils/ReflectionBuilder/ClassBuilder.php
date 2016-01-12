@@ -38,7 +38,7 @@ use ReflectionProperty;
 /**
  * Rudimentary utility to build an AST from a reflection class
  *
- * @todo should be splitted into various utilities like this one and eventually replace `Zend\Code\Generator`
+ * @todo should be split into various utilities like this one and eventually replace `Zend\Code\Generator`
  *
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
@@ -48,12 +48,12 @@ class ClassBuilder extends BuilderAbstract
     /**
      * @param \ReflectionClass $reflectionClass
      *
-     * @return PhpParser\Node[]
+     * @return \PhpParser\Node[]
      */
     public function fromReflection(ReflectionClass $reflectionClass)
     {
-        $class = new Class_($reflectionClass->getShortName());
-        $stmts = array($class);
+        $class      = new Class_($reflectionClass->getShortName());
+        $statements = array($class);
 
         if ($parentClass = $reflectionClass->getParentClass()) {
             $class->extends = new FullyQualified($parentClass->getName());
@@ -82,10 +82,10 @@ class ClassBuilder extends BuilderAbstract
         }
 
         if (! $namespace = $reflectionClass->getNamespaceName()) {
-            return $stmts;
+            return $statements;
         }
 
-        return array(new Namespace_(new Name(explode('\\', $namespace)), $stmts));
+        return array(new Namespace_(new Name(explode('\\', $namespace)), $statements));
     }
 
     /**

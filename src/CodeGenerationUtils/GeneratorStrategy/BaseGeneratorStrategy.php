@@ -43,7 +43,7 @@ class BaseGeneratorStrategy implements GeneratorStrategyInterface
     }
 
     /**
-     * @param PhpParser\PrettyPrinterAbstract $prettyPrinter
+     * @param \PhpParser\PrettyPrinterAbstract $prettyPrinter
      */
     public function setPrettyPrinter(PrettyPrinterAbstract $prettyPrinter)
     {
@@ -51,7 +51,7 @@ class BaseGeneratorStrategy implements GeneratorStrategyInterface
     }
 
     /**
-     * @return PhpParser\PrettyPrinterAbstract
+     * @return \PhpParser\PrettyPrinterAbstract
      */
     protected function getPrettyPrinter()
     {

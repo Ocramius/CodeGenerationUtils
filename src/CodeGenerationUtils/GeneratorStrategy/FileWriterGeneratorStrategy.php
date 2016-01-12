@@ -20,7 +20,6 @@ namespace CodeGenerationUtils\GeneratorStrategy;
 
 use CodeGenerationUtils\FileLocator\FileLocatorInterface;
 use CodeGenerationUtils\Visitor\ClassFQCNResolverVisitor;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeTraverser;
 
 /**
@@ -62,6 +61,8 @@ class FileWriterGeneratorStrategy extends BaseGeneratorStrategy
      * Write generated code to disk and return the class code
      *
      * {@inheritDoc}
+     *
+     * @throws \CodeGenerationUtils\Visitor\Exception\UnexpectedValueException
      */
     public function generate(array $ast)
     {

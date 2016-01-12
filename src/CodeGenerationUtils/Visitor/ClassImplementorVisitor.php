@@ -40,7 +40,7 @@ class ClassImplementorVisitor extends NodeVisitorAbstract
     private $interfaces;
 
     /**
-     * @var PhpParser\Node\Stmt\Namespace_|null
+     * @var \PhpParser\Node\Stmt\Namespace_|null
      */
     private $currentNamespace;
 
@@ -63,6 +63,8 @@ class ClassImplementorVisitor extends NodeVisitorAbstract
      * Cleanup internal state
      *
      * @param array $nodes
+     *
+     * @return null
      */
     public function beforeTraverse(array $nodes)
     {
@@ -70,9 +72,9 @@ class ClassImplementorVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param PhpParser\Node $node
+     * @param \PhpParser\Node $node
      *
-     * @return PhpParser\Node\Stmt\Namespace_|void
+     * @return \PhpParser\Node\Stmt\Namespace_|void
      */
     public function enterNode(Node $node)
     {
@@ -87,11 +89,11 @@ class ClassImplementorVisitor extends NodeVisitorAbstract
      * Replaces class nodes with nodes implementing the given interfaces. Implemented interfaces are replaced,
      * not added.
      *
-     * @param PhpParser\Node $node
+     * @param \PhpParser\Node $node
      *
      * @todo can be abstracted away into a visitor that allows to modify the matched node via a callback
      *
-     * @return PhpParser\Node\Stmt\Class_|void
+     * @return \PhpParser\Node\Stmt\Class_|void
      */
     public function leaveNode(Node $node)
     {

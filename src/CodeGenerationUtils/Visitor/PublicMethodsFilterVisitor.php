@@ -33,7 +33,7 @@ class PublicMethodsFilterVisitor extends NodeVisitorAbstract
     /**
      * Removes the node if it is a non-public method
      *
-     * @param PhpParser\Node $node
+     * @param \PhpParser\Node $node
      *
      * @return bool|null
      */

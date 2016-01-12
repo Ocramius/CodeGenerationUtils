@@ -35,12 +35,12 @@ use PhpParser\Parser;
 class ClassFQCNResolverVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var PhpParser\Node\Stmt\Namespace_|null
+     * @var \PhpParser\Node\Stmt\Namespace_|null
      */
     private $namespace;
 
     /**
-     * @var PhpParser\Node\Stmt\Class_|null
+     * @var \PhpParser\Node\Stmt\Class_|null
      */
     private $class;
 
@@ -56,7 +56,9 @@ class ClassFQCNResolverVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param PhpParser\Node $node
+     * @param \PhpParser\Node $node
+     *
+     * @return null
      *
      * @throws Exception\UnexpectedValueException if more than one class is found
      */
