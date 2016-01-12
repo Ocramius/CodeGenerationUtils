@@ -39,7 +39,7 @@ abstract class UniqueIdentifierGenerator
      *
      * @return string
      */
-    public static function getIdentifier($name)
+    public static function getIdentifier($name) : string
     {
         return str_replace(
             '.',

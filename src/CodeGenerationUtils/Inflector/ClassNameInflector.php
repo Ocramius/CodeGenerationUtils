@@ -64,7 +64,7 @@ class ClassNameInflector implements ClassNameInflectorInterface
     /**
      * {@inheritDoc}
      */
-    public function getUserClassName($className)
+    public function getUserClassName($className) : string
     {
         if (false === $position = strrpos($className, $this->generatedClassMarker)) {
             return $className;
@@ -80,7 +80,7 @@ class ClassNameInflector implements ClassNameInflectorInterface
     /**
      * {@inheritDoc}
      */
-    public function getGeneratedClassName($className, array $options = array())
+    public function getGeneratedClassName($className, array $options = array()) : string
     {
         return $this->generatedClassesNamespace
             . $this->generatedClassMarker
@@ -91,7 +91,7 @@ class ClassNameInflector implements ClassNameInflectorInterface
     /**
      * {@inheritDoc}
      */
-    public function isGeneratedClassName($className)
+    public function isGeneratedClassName($className) : bool
     {
         return false !== strrpos($className, $this->generatedClassMarker);
     }

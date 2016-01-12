@@ -52,7 +52,7 @@ class FileLocator implements FileLocatorInterface
     /**
      * {@inheritDoc}
      */
-    public function getGeneratedClassFileName($className)
+    public function getGeneratedClassFileName($className) : string
     {
         return $this->generatedClassesDirectory . DIRECTORY_SEPARATOR . str_replace('\\', '', $className) . '.php';
     }

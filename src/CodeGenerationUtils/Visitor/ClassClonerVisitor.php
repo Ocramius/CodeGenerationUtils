@@ -58,7 +58,7 @@ class ClassClonerVisitor extends NodeVisitorAbstract
      *
      * @return \PhpParser\Node[]
      */
-    public function beforeTraverse(array $nodes)
+    public function beforeTraverse(array $nodes) : array
     {
         // quick fix - if the list is empty, replace it it
         if (! $nodes) {

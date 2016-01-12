@@ -35,5 +35,5 @@ interface AutoloaderInterface
      *
      * @return bool
      */
-    public function __invoke($className);
+    public function __invoke($className) : bool;
 }

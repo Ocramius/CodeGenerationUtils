@@ -33,7 +33,7 @@ interface FileLocatorInterface
      *
      * @param $className
      *
-     * @return mixed
+     * @return string
      */
-    public function getGeneratedClassFileName($className);
+    public function getGeneratedClassFileName($className) : string;
 }

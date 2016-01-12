@@ -46,7 +46,7 @@ class EvaluatingGeneratorStrategy extends BaseGeneratorStrategy
      *
      * {@inheritDoc}
      */
-    public function generate(array $ast)
+    public function generate(array $ast) : string
     {
         $code = parent::generate($ast);
 

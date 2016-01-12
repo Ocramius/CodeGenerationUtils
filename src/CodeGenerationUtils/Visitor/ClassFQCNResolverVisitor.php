@@ -88,7 +88,7 @@ class ClassFQCNResolverVisitor extends NodeVisitorAbstract
      *
      * @throws Exception\UnexpectedValueException if no class could be resolved
      */
-    public function getName()
+    public function getName() : string
     {
         if (! $this->class) {
             throw new UnexpectedValueException('No class discovered');
@@ -100,7 +100,7 @@ class ClassFQCNResolverVisitor extends NodeVisitorAbstract
     /**
      * @return string the namespace name of the discovered class
      */
-    public function getNamespace()
+    public function getNamespace() : string
     {
         return $this->namespace ? $this->namespace->name->toString() : '';
     }

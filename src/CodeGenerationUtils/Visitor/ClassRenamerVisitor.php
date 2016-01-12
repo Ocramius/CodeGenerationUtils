@@ -90,13 +90,15 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return \PhpParser\Node\Stmt\Namespace_|void
+     * @return \PhpParser\Node\Stmt\Namespace_|null
      */
     public function enterNode(Node $node)
     {
         if ($node instanceof Namespace_) {
             return $this->currentNamespace = $node;
         }
+
+        return null;
     }
 
     /**
@@ -106,7 +108,7 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
      *
      * @todo can be abstracted away into a visitor that allows to modify the matched node via a callback
      *
-     * @return array|null|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Namespace_|void
+     * @return array|null|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Namespace_|null
      */
     public function leaveNode(Node $node)
     {
@@ -145,6 +147,8 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
 
             return $node;
         }
+
+        return null;
     }
 
     /**
@@ -152,7 +156,7 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
      *
      * @return bool
      */
-    private function namespaceMatches()
+    private function namespaceMatches() : bool
     {
         $currentNamespace = ($this->currentNamespace && is_array($this->currentNamespace->name->parts))
             ? $this->currentNamespace->name->toString()

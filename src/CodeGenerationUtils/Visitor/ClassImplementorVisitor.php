@@ -76,7 +76,7 @@ class ClassImplementorVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return \PhpParser\Node\Stmt\Namespace_|void
+     * @return \PhpParser\Node\Stmt\Namespace_|null
      */
     public function enterNode(Node $node)
     {
@@ -85,6 +85,8 @@ class ClassImplementorVisitor extends NodeVisitorAbstract
 
             return $node;
         }
+
+        return null;
     }
 
     /**
@@ -95,7 +97,7 @@ class ClassImplementorVisitor extends NodeVisitorAbstract
      *
      * @todo can be abstracted away into a visitor that allows to modify the matched node via a callback
      *
-     * @return \PhpParser\Node\Stmt\Class_|void
+     * @return \PhpParser\Node\Stmt\Class_|null
      */
     public function leaveNode(Node $node)
     {
@@ -114,5 +116,7 @@ class ClassImplementorVisitor extends NodeVisitorAbstract
 
             return $node;
         }
+
+        return null;
     }
 }

@@ -66,7 +66,7 @@ class FileWriterGeneratorStrategy extends BaseGeneratorStrategy
      *
      * @throws \CodeGenerationUtils\Visitor\Exception\UnexpectedValueException
      */
-    public function generate(array $ast)
+    public function generate(array $ast) : string
     {
         $this->traverser->traverse($ast);
 

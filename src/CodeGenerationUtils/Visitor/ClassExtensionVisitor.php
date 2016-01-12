@@ -95,7 +95,7 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
      *
      * @param \PhpParser\Node $node
      *
-     * @return \PhpParser\Node\Stmt\Class_|void
+     * @return \PhpParser\Node\Stmt\Class_|null
      */
     public function leaveNode(Node $node)
     {
@@ -114,5 +114,7 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
 
             return $node;
         }
+
+        return null;
     }
 }

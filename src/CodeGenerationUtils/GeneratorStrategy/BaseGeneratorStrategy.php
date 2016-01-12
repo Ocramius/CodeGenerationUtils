@@ -39,7 +39,7 @@ class BaseGeneratorStrategy implements GeneratorStrategyInterface
     /**
      * {@inheritDoc}
      */
-    public function generate(array $ast)
+    public function generate(array $ast) : string
     {
         return $this->getPrettyPrinter()->prettyPrint($ast);
     }
@@ -53,9 +53,9 @@ class BaseGeneratorStrategy implements GeneratorStrategyInterface
     }
 
     /**
-     * @return \PhpParser\PrettyPrinterAbstract
+     * @return PrettyPrinterAbstract
      */
-    protected function getPrettyPrinter()
+    protected function getPrettyPrinter() : PrettyPrinterAbstract
     {
         return $this->prettyPrinter ?: $this->prettyPrinter = new Standard();
     }
