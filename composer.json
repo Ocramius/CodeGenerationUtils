@@ -33,7 +33,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "CodeGenerationUtilsTests\\": "tests/CodeGenerationUtilsTests"
+            "CodeGenerationUtilsTests\\":     "tests/CodeGenerationUtilsTests",
+            "CodeGenerationUtilsTestAsset\\": "tests/CodeGenerationUtilsTestAsset"
         }
     },
     "extra": {

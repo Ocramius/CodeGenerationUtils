@@ -20,13 +20,11 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtilsTest\Visitor;
 
-use CodeGenerationUtils\Visitor\ClassClonerVisitor;
 use CodeGenerationUtils\Visitor\ClassFQCNResolverVisitor;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit_Framework_TestCase;
-use ReflectionClass;
 
 /**
  * Tests for {@see \CodeGenerationUtils\Visitor\ClassClonerVisitor}

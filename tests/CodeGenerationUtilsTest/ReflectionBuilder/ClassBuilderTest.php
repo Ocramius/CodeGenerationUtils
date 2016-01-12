@@ -21,7 +21,7 @@ declare(strict_types=1);
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\ReflectionBuilder\ClassBuilder;
-use CodeGenerationUtilsTest\ReflectionBuilder\ClassWithDefaultValueIsConstantMethod;
+use CodeGenerationUtilsTestAsset\ClassWithDefaultValueIsConstantMethod;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPUnit_Framework_TestCase;
 use ReflectionClass;
@@ -56,7 +56,7 @@ class ClassBuilderTest extends PHPUnit_Framework_TestCase
         self::assertSame('ClassBuilderTest', $class->name);
 
         $currentMethod = __FUNCTION__;
-        /* @var $methods PhpParser\Node\Stmt\ClassMethod[] */
+        /* @var $methods \PhpParser\Node\Stmt\ClassMethod[] */
         $methods       = array_filter(
             $class->stmts,
             function ($node) use ($currentMethod) {
@@ -66,7 +66,7 @@ class ClassBuilderTest extends PHPUnit_Framework_TestCase
 
         self::assertCount(1, $methods);
 
-        /* @var $thisMethod PhpParser\Node\Stmt\ClassMethod */
+        /* @var $thisMethod \PhpParser\Node\Stmt\ClassMethod */
         $thisMethod = reset($methods);
 
         self::assertSame($currentMethod, $thisMethod->name);
@@ -83,10 +83,11 @@ class ClassBuilderTest extends PHPUnit_Framework_TestCase
 
         /* @var $namespace \PhpParser\Node\Stmt\Namespace_ */
         $namespace = $ast[0];
+        /* @var */
         $class     = $namespace->stmts[0];
         $method    = 'defaultValueIsConstant';
 
-        /* @var $methods PhpParser\Node\Stmt\ClassMethod[] */
+        /* @var $methods \PhpParser\Node\Stmt\ClassMethod[] */
         $methods = array_filter(
             $class->stmts,
             function ($node) use ($method) {
@@ -96,7 +97,7 @@ class ClassBuilderTest extends PHPUnit_Framework_TestCase
 
         self::assertCount(1, $methods);
 
-        /* @var $thisMethod PhpParser\Node\Stmt\ClassMethod */
+        /* @var $thisMethod \PhpParser\Node\Stmt\ClassMethod */
         $thisMethod = reset($methods);
 
         self::assertSame($method, $thisMethod->name);

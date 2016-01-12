@@ -18,7 +18,7 @@
 
 declare(strict_types=1);
 
-namespace CodeGenerationUtilsTest\ReflectionBuilder;
+namespace CodeGenerationUtilsTestAsset;
 
 /**
  * Class to use for testing the ReflectionBuilder {@see \CodeGenerationUtilsTest\Visitor\ClassBuilderTest}

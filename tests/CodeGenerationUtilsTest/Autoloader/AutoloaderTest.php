@@ -22,7 +22,6 @@ namespace CodeGenerationUtilsTest\Autoloader;
 
 use PHPUnit_Framework_TestCase;
 use CodeGenerationUtils\Autoloader\Autoloader;
-use CodeGenerationUtils\Inflector\ClassNameInflectorInterface;
 use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
 
 /**
