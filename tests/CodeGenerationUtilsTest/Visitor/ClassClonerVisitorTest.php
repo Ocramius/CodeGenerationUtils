@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\ClassClonerVisitor;
@@ -40,10 +42,11 @@ class ClassClonerVisitorTest extends PHPUnit_Framework_TestCase
 
         $nodes = $visitor->beforeTraverse(array());
 
-        $this->assertInstanceOf('PhpParser\Node\Stmt\Namespace_', $nodes[0]);
+        $this->assertInstanceOf('PhpParser\Node\Stmt\Declare_', $nodes[0]);
+        $this->assertInstanceOf('PhpParser\Node\Stmt\Namespace_', $nodes[1]);
 
         /* @var $node \PhpParser\Node\Stmt\Namespace_ */
-        $node = $nodes[0];
+        $node = $nodes[1];
 
         $this->assertSame(__NAMESPACE__, implode('\\', $node->name->parts));
 
