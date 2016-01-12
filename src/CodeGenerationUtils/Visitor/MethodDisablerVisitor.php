@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtils\Visitor;
 
 use PhpParser\Node;
@@ -56,9 +58,9 @@ class MethodDisablerVisitor extends NodeVisitorAbstract
     /**
      * Replaces the given node if it is a class method and matches according to the given callback
      *
-     * @param PhpParser\Node $node
+     * @param \PhpParser\Node $node
      *
-     * @return bool|null|PhpParser\Node\Stmt\ClassMethod
+     * @return bool|null|\PhpParser\Node\Stmt\ClassMethod
      */
     public function leaveNode(Node $node)
     {

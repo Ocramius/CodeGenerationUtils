@@ -16,12 +16,14 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtils\Visitor;
 
-use PhpParser\Lexer\Emulative;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\Parser;
+use PhpParser\ParserFactory;
 use ReflectionClass;
 
 /**
@@ -56,13 +58,13 @@ class ClassClonerVisitor extends NodeVisitorAbstract
      *
      * @return \PhpParser\Node[]
      */
-    public function beforeTraverse(array $nodes)
+    public function beforeTraverse(array $nodes) : array
     {
-        // quickfix - if the list is empty, replace it it
-        if (empty($nodes)) {
-            $parser = new Parser(new Emulative);
-
-            return $parser->parse(file_get_contents($this->reflectedClass->getFileName()));
+        // quick fix - if the list is empty, replace it it
+        if (! $nodes) {
+            return (new ParserFactory())
+                ->create(ParserFactory::PREFER_PHP7)
+                ->parse(file_get_contents($this->reflectedClass->getFileName()));
         }
 
         return $nodes;

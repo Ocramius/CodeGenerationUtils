@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtils\Exception;
 
 use InvalidArgumentException;
@@ -31,10 +33,10 @@ class InvalidGeneratedClassesDirectoryException extends InvalidArgumentException
     /**
      * @param string $directory
      *
-     * @return InvalidGeneratedClassesDirectoryException
+     * @return self
      */
-    public static function generatedClassesDirectoryNotFound($directory)
+    public static function generatedClassesDirectoryNotFound(string $directory) : self
     {
-        return new self(sprintf('Provided directory "%s" does not exist', (string) $directory));
+        return new self(sprintf('Provided directory "%s" does not exist', $directory));
     }
 }

@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtils\Inflector;
 
 use CodeGenerationUtils\Inflector\Util\ParameterEncoder;
@@ -51,9 +53,9 @@ class ClassNameInflector implements ClassNameInflectorInterface
     /**
      * @param string $generatedClassesNamespace
      */
-    public function __construct($generatedClassesNamespace)
+    public function __construct(string $generatedClassesNamespace)
     {
-        $this->generatedClassesNamespace  = (string) $generatedClassesNamespace;
+        $this->generatedClassesNamespace  = $generatedClassesNamespace;
         $this->generatedClassMarker       = '\\' . static::GENERATED_CLASS_MARKER . '\\';
         $this->generatedClassMarkerLength = strlen($this->generatedClassMarker);
         $this->parameterEncoder           = new ParameterEncoder();
@@ -62,7 +64,7 @@ class ClassNameInflector implements ClassNameInflectorInterface
     /**
      * {@inheritDoc}
      */
-    public function getUserClassName($className)
+    public function getUserClassName(string $className) : string
     {
         if (false === $position = strrpos($className, $this->generatedClassMarker)) {
             return $className;
@@ -78,7 +80,7 @@ class ClassNameInflector implements ClassNameInflectorInterface
     /**
      * {@inheritDoc}
      */
-    public function getGeneratedClassName($className, array $options = array())
+    public function getGeneratedClassName(string $className, array $options = array()) : string
     {
         return $this->generatedClassesNamespace
             . $this->generatedClassMarker
@@ -89,7 +91,7 @@ class ClassNameInflector implements ClassNameInflectorInterface
     /**
      * {@inheritDoc}
      */
-    public function isGeneratedClassName($className)
+    public function isGeneratedClassName(string $className) : bool
     {
         return false !== strrpos($className, $this->generatedClassMarker);
     }

@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtils\Visitor;
 
 use PhpParser\Node;
@@ -51,10 +53,10 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
      * @param string $matchedClassFQCN
      * @param string $newParentClassFQCN
      */
-    public function __construct($matchedClassFQCN, $newParentClassFQCN)
+    public function __construct(string $matchedClassFQCN, string $newParentClassFQCN)
     {
-        $this->matchedClassFQCN = (string) $matchedClassFQCN;
-        $this->newParentClassFQCN = (string) $newParentClassFQCN;
+        $this->matchedClassFQCN   = $matchedClassFQCN;
+        $this->newParentClassFQCN = $newParentClassFQCN;
     }
 
     /**
@@ -70,9 +72,9 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param PhpParser\Node $node
+     * @param \PhpParser\Node $node
      *
-     * @return PhpParser\Node\Stmt\Namespace_|null
+     * @return \PhpParser\Node\Stmt\Namespace_|null
      */
     public function enterNode(Node $node)
     {
@@ -81,6 +83,8 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
 
             return $node;
         }
+
+        return null;
     }
 
     /**
@@ -91,9 +95,9 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
      *
      * @todo can be abstracted away into a visitor that allows to modify the node via a callback
      *
-     * @param PhpParser\Node $node
+     * @param \PhpParser\Node $node
      *
-     * @return PhpParser\Node\Stmt\Class_|void
+     * @return \PhpParser\Node\Stmt\Class_|null
      */
     public function leaveNode(Node $node)
     {
@@ -112,5 +116,7 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
 
             return $node;
         }
+
+        return null;
     }
 }

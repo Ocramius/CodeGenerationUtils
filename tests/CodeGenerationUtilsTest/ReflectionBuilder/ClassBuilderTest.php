@@ -16,10 +16,12 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\ReflectionBuilder\ClassBuilder;
-use CodeGenerationUtilsTest\ReflectionBuilder\ClassWithDefaultValueIsConstantMethod;
+use CodeGenerationUtilsTestAsset\ClassWithDefaultValueIsConstantMethod;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPUnit_Framework_TestCase;
 use ReflectionClass;
@@ -44,17 +46,17 @@ class ClassBuilderTest extends PHPUnit_Framework_TestCase
         /* @var $namespace \PhpParser\Node\Stmt\Namespace_ */
         $namespace    = $ast[0];
 
-        $this->assertInstanceOf('PhpParser\Node\Stmt\Namespace_', $namespace);
-        $this->assertSame(__NAMESPACE__, $namespace->name->toString());
+        self::assertInstanceOf('PhpParser\Node\Stmt\Namespace_', $namespace);
+        self::assertSame(__NAMESPACE__, $namespace->name->toString());
 
         /* @var $class \PhpParser\Node\Stmt\Class_ */
         $class = $namespace->stmts[0];
 
-        $this->assertInstanceOf('PhpParser\Node\Stmt\Class_', $class);
-        $this->assertSame('ClassBuilderTest', $class->name);
+        self::assertInstanceOf('PhpParser\Node\Stmt\Class_', $class);
+        self::assertSame('ClassBuilderTest', $class->name);
 
         $currentMethod = __FUNCTION__;
-        /* @var $methods PhpParser\Node\Stmt\ClassMethod[] */
+        /* @var $methods \PhpParser\Node\Stmt\ClassMethod[] */
         $methods       = array_filter(
             $class->stmts,
             function ($node) use ($currentMethod) {
@@ -62,12 +64,12 @@ class ClassBuilderTest extends PHPUnit_Framework_TestCase
             }
         );
 
-        $this->assertCount(1, $methods);
+        self::assertCount(1, $methods);
 
-        /* @var $thisMethod PhpParser\Node\Stmt\ClassMethod */
+        /* @var $thisMethod \PhpParser\Node\Stmt\ClassMethod */
         $thisMethod = reset($methods);
 
-        $this->assertSame($currentMethod, $thisMethod->name);
+        self::assertSame($currentMethod, $thisMethod->name);
     }
 
     /**
@@ -81,10 +83,11 @@ class ClassBuilderTest extends PHPUnit_Framework_TestCase
 
         /* @var $namespace \PhpParser\Node\Stmt\Namespace_ */
         $namespace = $ast[0];
+        /* @var $class \PhpParser\Node\Stmt\Class_ */
         $class     = $namespace->stmts[0];
         $method    = 'defaultValueIsConstant';
 
-        /* @var $methods PhpParser\Node\Stmt\ClassMethod[] */
+        /* @var $methods \PhpParser\Node\Stmt\ClassMethod[] */
         $methods = array_filter(
             $class->stmts,
             function ($node) use ($method) {
@@ -92,11 +95,11 @@ class ClassBuilderTest extends PHPUnit_Framework_TestCase
             }
         );
 
-        $this->assertCount(1, $methods);
+        self::assertCount(1, $methods);
 
-        /* @var $thisMethod PhpParser\Node\Stmt\ClassMethod */
+        /* @var $thisMethod \PhpParser\Node\Stmt\ClassMethod */
         $thisMethod = reset($methods);
 
-        $this->assertSame($method, $thisMethod->name);
+        self::assertSame($method, $thisMethod->name);
     }
 }

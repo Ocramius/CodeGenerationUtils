@@ -4,7 +4,6 @@
     "type":              "library",
     "license":           "MIT",
     "homepage":          "https://github.com/Ocramius/CodeGenerationUtils",
-    "minimum-stability": "dev",
     "keywords":          [
         "reflection",
         "code generation",
@@ -20,23 +19,22 @@
         }
     ],
     "require": {
-        "php":                       ">=5.3.3",
-        "nikic/php-parser":          "~1.3"
+        "php":                       "~7.0",
+        "nikic/php-parser":          "~2.0"
     },
     "require-dev": {
-        "phpunit/phpunit":           ">=3.7",
-        "phpmd/phpmd":               "1.4.*",
-        "squizlabs/php_codesniffer": "1.4.*",
-        "satooshi/php-coveralls":    "~0.6"
+        "phpunit/phpunit":           "~5.0",
+        "squizlabs/php_codesniffer": "~2.0"
     },
     "autoload": {
-        "psr-0": {
-            "CodeGenerationUtils\\": "src"
+        "psr-4": {
+            "CodeGenerationUtils\\": "src/CodeGenerationUtils"
         }
     },
     "autoload-dev": {
-        "psr-0": {
-            "CodeGenerationUtilsTests\\": "tests"
+        "psr-4": {
+            "CodeGenerationUtilsTests\\":     "tests/CodeGenerationUtilsTests",
+            "CodeGenerationUtilsTestAsset\\": "tests/CodeGenerationUtilsTestAsset"
         }
     },
     "extra": {

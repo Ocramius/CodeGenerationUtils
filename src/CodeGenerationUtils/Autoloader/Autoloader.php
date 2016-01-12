@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtils\Autoloader;
 
 use CodeGenerationUtils\FileLocator\FileLocatorInterface;
@@ -52,7 +54,7 @@ class Autoloader implements AutoloaderInterface
     /**
      * {@inheritDoc}
      */
-    public function __invoke($className)
+    public function __invoke(string $className) : bool
     {
         if (class_exists($className, false) || ! $this->classNameInflector->isGeneratedClassName($className)) {
             return false;

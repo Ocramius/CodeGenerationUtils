@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\ClassImplementorVisitor;
@@ -41,13 +43,13 @@ class ClassImplementorVisitorTest extends PHPUnit_Framework_TestCase
         $namespace = new Namespace_(new Name('Foo'));
 
         $visitor->beforeTraverse(array());
-        $this->assertSame($namespace, $visitor->enterNode($namespace));
-        $this->assertNull($visitor->enterNode($class));
-        $this->assertSame($class, $visitor->leaveNode($class));
-        $this->assertNull($visitor->leaveNode($namespace));
+        self::assertSame($namespace, $visitor->enterNode($namespace));
+        self::assertNull($visitor->enterNode($class));
+        self::assertSame($class, $visitor->leaveNode($class));
+        self::assertNull($visitor->leaveNode($namespace));
 
-        $this->assertSame('Baz\\Tab', $class->implements[0]->toString());
-        $this->assertSame('Tar\\War', $class->implements[1]->toString());
+        self::assertSame('Baz\\Tab', $class->implements[0]->toString());
+        self::assertSame('Tar\\War', $class->implements[1]->toString());
     }
 
     public function testIgnoresNodesOnNonMatchingClass()
@@ -57,12 +59,12 @@ class ClassImplementorVisitorTest extends PHPUnit_Framework_TestCase
         $namespace = new Namespace_(new Name('Foo'));
 
         $visitor->beforeTraverse(array());
-        $this->assertSame($namespace, $visitor->enterNode($namespace));
-        $this->assertNull($visitor->enterNode($class));
-        $this->assertSame($class, $visitor->leaveNode($class));
-        $this->assertNull($visitor->leaveNode($namespace));
+        self::assertSame($namespace, $visitor->enterNode($namespace));
+        self::assertNull($visitor->enterNode($class));
+        self::assertSame($class, $visitor->leaveNode($class));
+        self::assertNull($visitor->leaveNode($namespace));
 
-        $this->assertEmpty($class->extends);
+        self::assertEmpty($class->extends);
     }
 
     public function testIgnoresNodesOnNonMatchingNamespace()
@@ -72,12 +74,12 @@ class ClassImplementorVisitorTest extends PHPUnit_Framework_TestCase
         $namespace = new Namespace_(new Name('Tab'));
 
         $visitor->beforeTraverse(array());
-        $this->assertSame($namespace, $visitor->enterNode($namespace));
-        $this->assertNull($visitor->enterNode($class));
-        $this->assertSame($class, $visitor->leaveNode($class));
-        $this->assertNull($visitor->leaveNode($namespace));
+        self::assertSame($namespace, $visitor->enterNode($namespace));
+        self::assertNull($visitor->enterNode($class));
+        self::assertSame($class, $visitor->leaveNode($class));
+        self::assertNull($visitor->leaveNode($namespace));
 
-        $this->assertEmpty($class->extends);
+        self::assertEmpty($class->extends);
     }
 
     public function testMatchOnEmptyNamespace()
@@ -86,10 +88,10 @@ class ClassImplementorVisitorTest extends PHPUnit_Framework_TestCase
         $class     = new Class_('Foo');
 
         $visitor->beforeTraverse(array());
-        $this->assertNull($visitor->enterNode($class));
-        $this->assertSame($class, $visitor->leaveNode($class));
+        self::assertNull($visitor->enterNode($class));
+        self::assertSame($class, $visitor->leaveNode($class));
 
-        $this->assertSame('Baz\\Tab', $class->implements[0]->toString());
-        $this->assertSame('Tar\\War', $class->implements[1]->toString());
+        self::assertSame('Baz\\Tab', $class->implements[0]->toString());
+        self::assertSame('Tar\\War', $class->implements[1]->toString());
     }
 }

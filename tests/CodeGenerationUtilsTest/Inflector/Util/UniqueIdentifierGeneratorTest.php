@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtilsTest\Inflector\Util;
 
 use PHPUnit_Framework_TestCase;
@@ -33,10 +35,12 @@ class UniqueIdentifierGeneratorTest extends PHPUnit_Framework_TestCase
      * @dataProvider getBaseIdentifierNames
      *
      * @covers \CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator::getIdentifier
+     *
+     * @param string $name
      */
-    public function testGeneratesUniqueIdentifiers($name)
+    public function testGeneratesUniqueIdentifiers(string $name)
     {
-        $this->assertNotSame(
+        self::assertNotSame(
             UniqueIdentifierGenerator::getIdentifier($name),
             UniqueIdentifierGenerator::getIdentifier($name)
         );
@@ -46,10 +50,12 @@ class UniqueIdentifierGeneratorTest extends PHPUnit_Framework_TestCase
      * @dataProvider getBaseIdentifierNames
      *
      * @covers \CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator::getIdentifier
+     *
+     * @param string $name
      */
-    public function testGeneratesValidIdentifiers($name)
+    public function testGeneratesValidIdentifiers(string $name)
     {
-        $this->assertRegExp(
+        self::assertRegExp(
             '/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]+$/',
             UniqueIdentifierGenerator::getIdentifier($name)
         );
@@ -60,7 +66,7 @@ class UniqueIdentifierGeneratorTest extends PHPUnit_Framework_TestCase
      *
      * @return string[][]
      */
-    public function getBaseIdentifierNames()
+    public function getBaseIdentifierNames() : array
     {
         return array(
             array(''),

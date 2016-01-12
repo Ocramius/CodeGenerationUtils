@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtilsTest\Inflector\Util;
 
 use PHPUnit_Framework_TestCase;
@@ -33,12 +35,14 @@ class ParameterEncoderTest extends PHPUnit_Framework_TestCase
      * @dataProvider getParameters
      *
      * @covers \CodeGenerationUtils\Inflector\Util\ParameterEncoder::encodeParameters
+     *
+     * @param array $parameters
      */
     public function testGeneratesValidClassName(array $parameters)
     {
         $encoder = new ParameterEncoder();
 
-        $this->assertRegExp(
+        self::assertRegExp(
             '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]+/',
             $encoder->encodeParameters($parameters),
             'Encoded string is a valid class identifier'

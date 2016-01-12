@@ -16,8 +16,9 @@
  * and is licensed under the MIT license.
  */
 
-namespace CodeGenerationUtils\Visitor\Exception;
+declare(strict_types=1);
 
+namespace CodeGenerationUtils\Visitor\Exception;
 
 /**
  * Base exception interface for node visitors

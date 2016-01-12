@@ -16,15 +16,15 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtils\Visitor;
 
-use PhpParser\Lexer\Emulative;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeVisitorAbstract;
-use PhpParser\Parser;
 use ReflectionClass;
 
 /**
@@ -52,12 +52,12 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
     private $newNamespace;
 
     /**
-     * @var PhpParser\Node\Stmt\Namespace_|null
+     * @var \PhpParser\Node\Stmt\Namespace_|null
      */
     private $currentNamespace;
 
     /**
-     * @var PhpParser\Node\Stmt\Class_|null the currently detected class in this namespace
+     * @var \PhpParser\Node\Stmt\Class_|null the currently detected class in this namespace
      */
     private $replacedInNamespace;
 
@@ -65,7 +65,7 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
      * @param ReflectionClass $reflectedClass
      * @param string          $newFQCN
      */
-    public function __construct(ReflectionClass $reflectedClass, $newFQCN)
+    public function __construct(ReflectionClass $reflectedClass, string $newFQCN)
     {
         $this->reflectedClass = $reflectedClass;
         $fqcnParts            = explode('\\', $newFQCN);
@@ -77,6 +77,8 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
      * Cleanup internal state
      *
      * @param array $nodes
+     *
+     * @return null
      */
     public function beforeTraverse(array $nodes)
     {
@@ -86,25 +88,27 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param PhpParser\Node $node
+     * @param \PhpParser\Node $node
      *
-     * @return PhpParser\Node\Stmt\Namespace_|void
+     * @return \PhpParser\Node\Stmt\Namespace_|null
      */
     public function enterNode(Node $node)
     {
         if ($node instanceof Namespace_) {
             return $this->currentNamespace = $node;
         }
+
+        return null;
     }
 
     /**
      * Replaces (if matching) the given node to comply with the new given name
      *
-     * @param PhpParser\Node $node
+     * @param \PhpParser\Node $node
      *
      * @todo can be abstracted away into a visitor that allows to modify the matched node via a callback
      *
-     * @return array|null|PhpParser\Node\Stmt\Class_|PhpParser\Node\Stmt\Namespace_|void
+     * @return array|null|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Namespace_|null
      */
     public function leaveNode(Node $node)
     {
@@ -143,6 +147,8 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
 
             return $node;
         }
+
+        return null;
     }
 
     /**
@@ -150,7 +156,7 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
      *
      * @return bool
      */
-    private function namespaceMatches()
+    private function namespaceMatches() : bool
     {
         $currentNamespace = ($this->currentNamespace && is_array($this->currentNamespace->name->parts))
             ? $this->currentNamespace->name->toString()

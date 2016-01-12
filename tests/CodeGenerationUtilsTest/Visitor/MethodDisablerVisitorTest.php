@@ -16,13 +16,14 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\MethodDisablerVisitor;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -38,49 +39,53 @@ class MethodDisablerVisitorTest extends PHPUnit_Framework_TestCase
     public function testDisablesMethod()
     {
         $method = new ClassMethod('test');
+        /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */
         $filter = $this->getMock('stdClass', array('__invoke'));
 
-        $filter->expects($this->once())->method('__invoke')->with($method)->will($this->returnValue(true));
+        $filter->expects(self::once())->method('__invoke')->with($method)->will(self::returnValue(true));
 
         $visitor = new MethodDisablerVisitor($filter);
 
-        $this->assertSame($method, $visitor->leaveNode($method));
-        $this->assertInstanceOf('PhpParser\Node\Stmt\Throw_', reset($method->stmts));
+        self::assertSame($method, $visitor->leaveNode($method));
+        self::assertInstanceOf('PhpParser\Node\Stmt\Throw_', reset($method->stmts));
     }
 
     public function testSkipsOnFailedFiltering()
     {
         $method = new ClassMethod('test');
+        /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */
         $filter = $this->getMock('stdClass', array('__invoke'));
 
-        $filter->expects($this->once())->method('__invoke')->with($method)->will($this->returnValue(false));
+        $filter->expects(self::once())->method('__invoke')->with($method)->will(self::returnValue(false));
 
         $visitor = new MethodDisablerVisitor($filter);
 
-        $this->assertSame(false, $visitor->leaveNode($method));
+        self::assertSame(false, $visitor->leaveNode($method));
     }
 
     public function testSkipsOnIgnoreFiltering()
     {
         $method = new ClassMethod('test');
+        /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */
         $filter = $this->getMock('stdClass', array('__invoke'));
 
-        $filter->expects($this->once())->method('__invoke')->with($method)->will($this->returnValue(null));
+        $filter->expects(self::once())->method('__invoke')->with($method)->will(self::returnValue(null));
 
         $visitor = new MethodDisablerVisitor($filter);
 
-        $this->assertSame(null, $visitor->leaveNode($method));
+        self::assertNull($visitor->leaveNode($method));
     }
 
     public function testSkipsOnNodeTypeMismatch()
     {
         $class  = new Class_('test');
+        /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */
         $filter = $this->getMock('stdClass', array('__invoke'));
 
-        $filter->expects($this->never())->method('__invoke');
+        $filter->expects(self::never())->method('__invoke');
 
         $visitor = new MethodDisablerVisitor($filter);
 
-        $this->assertSame(null, $visitor->leaveNode($class));
+        self::assertNull($visitor->leaveNode($class));
     }
 }

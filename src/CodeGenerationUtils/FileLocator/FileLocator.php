@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtils\FileLocator;
 
 use CodeGenerationUtils\Exception\InvalidGeneratedClassesDirectoryException as InvalidDirectory;
@@ -38,7 +40,7 @@ class FileLocator implements FileLocatorInterface
      *
      * @throws \CodeGenerationUtils\Exception\InvalidGeneratedClassesDirectoryException
      */
-    public function __construct($generatedClassesDirectory)
+    public function __construct(string $generatedClassesDirectory)
     {
         $this->generatedClassesDirectory = realpath($generatedClassesDirectory);
 
@@ -50,7 +52,7 @@ class FileLocator implements FileLocatorInterface
     /**
      * {@inheritDoc}
      */
-    public function getGeneratedClassFileName($className)
+    public function getGeneratedClassFileName(string $className) : string
     {
         return $this->generatedClassesDirectory . DIRECTORY_SEPARATOR . str_replace('\\', '', $className) . '.php';
     }

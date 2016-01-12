@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtilsTest\GeneratorStrategy;
 
 use CodeGenerationUtils\GeneratorStrategy\EvaluatingGeneratorStrategy;
@@ -41,8 +43,8 @@ class EvaluatingGeneratorStrategyTest extends PHPUnit_Framework_TestCase
         $className      = UniqueIdentifierGenerator::getIdentifier('Foo');
         $generated      = $strategy->generate(array(new Class_($className)));
 
-        $this->assertGreaterThan(0, strpos($generated, $className));
-        $this->assertTrue(class_exists($className, false));
+        self::assertGreaterThan(0, strpos($generated, $className));
+        self::assertTrue(class_exists($className, false));
     }
 
     /**
@@ -52,14 +54,14 @@ class EvaluatingGeneratorStrategyTest extends PHPUnit_Framework_TestCase
     public function testGenerateWithDisabledEval()
     {
         if (! ini_get('suhosin.executor.disable_eval')) {
-            $this->markTestSkipped('Ini setting "suhosin.executor.disable_eval" is needed to run this test');
+            self::markTestSkipped('Ini setting "suhosin.executor.disable_eval" is needed to run this test');
         }
 
         $strategy       = new EvaluatingGeneratorStrategy();
-        $className      = 'Foo' . uniqid();
+        $className      = 'Foo' . uniqid('', true);
         $generated      = $strategy->generate(array(new Class_($className)));
 
-        $this->assertGreaterThan(0, strpos($generated, $className));
-        $this->assertTrue(class_exists($className, false));
+        self::assertGreaterThan(0, strpos($generated, $className));
+        self::assertTrue(class_exists($className, false));
     }
 }

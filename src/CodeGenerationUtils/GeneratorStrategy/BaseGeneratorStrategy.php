@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtils\GeneratorStrategy;
 
 use PhpParser\PrettyPrinter\Standard;
@@ -37,13 +39,13 @@ class BaseGeneratorStrategy implements GeneratorStrategyInterface
     /**
      * {@inheritDoc}
      */
-    public function generate(array $ast)
+    public function generate(array $ast) : string
     {
         return $this->getPrettyPrinter()->prettyPrint($ast);
     }
 
     /**
-     * @param PhpParser\PrettyPrinterAbstract $prettyPrinter
+     * @param \PhpParser\PrettyPrinterAbstract $prettyPrinter
      */
     public function setPrettyPrinter(PrettyPrinterAbstract $prettyPrinter)
     {
@@ -51,9 +53,9 @@ class BaseGeneratorStrategy implements GeneratorStrategyInterface
     }
 
     /**
-     * @return PhpParser\PrettyPrinterAbstract
+     * @return PrettyPrinterAbstract
      */
-    protected function getPrettyPrinter()
+    protected function getPrettyPrinter() : PrettyPrinterAbstract
     {
         return $this->prettyPrinter ?: $this->prettyPrinter = new Standard();
     }

@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtils\GeneratorStrategy;
 
 /**
@@ -44,7 +46,7 @@ class EvaluatingGeneratorStrategy extends BaseGeneratorStrategy
      *
      * {@inheritDoc}
      */
-    public function generate(array $ast)
+    public function generate(array $ast) : string
     {
         $code = parent::generate($ast);
 

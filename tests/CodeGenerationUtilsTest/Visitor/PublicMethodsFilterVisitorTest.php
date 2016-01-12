@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\PublicMethodsFilterVisitor;
@@ -23,7 +25,6 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -39,14 +40,14 @@ class PublicMethodsFilterVisitorTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider nodeProvider
      *
-     * @param PhpParser\Node $node
+     * @param \PhpParser\Node $node
      * @param mixed          $expected
      */
     public function testRemovesOnlyPrivateMethods(Node $node, $expected)
     {
         $visitor = new PublicMethodsFilterVisitor();
 
-        $this->assertSame($expected, $visitor->leaveNode($node));
+        self::assertSame($expected, $visitor->leaveNode($node));
     }
 
     public function nodeProvider()

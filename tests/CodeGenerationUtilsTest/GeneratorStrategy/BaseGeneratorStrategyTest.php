@@ -16,11 +16,14 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtilsTest\GeneratorStrategy;
 
 use CodeGenerationUtils\GeneratorStrategy\BaseGeneratorStrategy;
 use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\PrettyPrinterAbstract;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -40,7 +43,7 @@ class BaseGeneratorStrategyTest extends PHPUnit_Framework_TestCase
         $className      = UniqueIdentifierGenerator::getIdentifier('Foo');
         $generated      = $strategy->generate(array(new Class_($className)));
 
-        $this->assertGreaterThan(0, strpos($generated, $className));
+        self::assertGreaterThan(0, strpos($generated, $className));
     }
 
     /**
@@ -51,16 +54,17 @@ class BaseGeneratorStrategyTest extends PHPUnit_Framework_TestCase
     {
         $strategy = new BaseGeneratorStrategy();
 
-        $prettyPrinter = $this->getMock('PhpParser\PrettyPrinterAbstract');
+        /* @var $prettyPrinter PrettyPrinterAbstract|\PHPUnit_Framework_MockObject_MockObject */
+        $prettyPrinter = $this->getMock(PrettyPrinterAbstract::class);
 
         $prettyPrinter
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('prettyPrint')
             ->with(array('bar'))
-            ->will($this->returnValue('foo'));
+            ->will(self::returnValue('foo'));
 
         $strategy->setPrettyPrinter($prettyPrinter);
 
-        $this->assertSame('foo', $strategy->generate(array('bar')));
+        self::assertSame('foo', $strategy->generate(array('bar')));
     }
 }

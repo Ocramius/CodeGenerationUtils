@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtils\Inflector;
 
 /**
@@ -38,7 +40,7 @@ interface ClassNameInflectorInterface
      *
      * @return string
      */
-    public function getUserClassName($className);
+    public function getUserClassName(string $className) : string;
 
     /**
      * Retrieve the FQCN of the generated class for the given user-defined class name
@@ -46,9 +48,9 @@ interface ClassNameInflectorInterface
      * @param string $className
      * @param array  $options   arbitrary options to be used for the generated class name
      *
-     * @return mixed
+     * @return string
      */
-    public function getGeneratedClassName($className, array $options = array());
+    public function getGeneratedClassName(string $className, array $options = array()) : string;
 
     /**
      * Retrieve whether the provided class name is a generated class
@@ -57,5 +59,5 @@ interface ClassNameInflectorInterface
      *
      * @return bool
      */
-    public function isGeneratedClassName($className);
+    public function isGeneratedClassName(string $className) : bool;
 }

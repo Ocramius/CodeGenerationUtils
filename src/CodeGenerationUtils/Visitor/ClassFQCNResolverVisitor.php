@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtils\Visitor;
 
 use CodeGenerationUtils\Visitor\Exception\UnexpectedValueException;
@@ -35,12 +37,12 @@ use PhpParser\Parser;
 class ClassFQCNResolverVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var PhpParser\Node\Stmt\Namespace_|null
+     * @var \PhpParser\Node\Stmt\Namespace_|null
      */
     private $namespace;
 
     /**
-     * @var PhpParser\Node\Stmt\Class_|null
+     * @var \PhpParser\Node\Stmt\Class_|null
      */
     private $class;
 
@@ -56,7 +58,9 @@ class ClassFQCNResolverVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param PhpParser\Node $node
+     * @param \PhpParser\Node $node
+     *
+     * @return null
      *
      * @throws Exception\UnexpectedValueException if more than one class is found
      */
@@ -84,7 +88,7 @@ class ClassFQCNResolverVisitor extends NodeVisitorAbstract
      *
      * @throws Exception\UnexpectedValueException if no class could be resolved
      */
-    public function getName()
+    public function getName() : string
     {
         if (! $this->class) {
             throw new UnexpectedValueException('No class discovered');
@@ -96,7 +100,7 @@ class ClassFQCNResolverVisitor extends NodeVisitorAbstract
     /**
      * @return string the namespace name of the discovered class
      */
-    public function getNamespace()
+    public function getNamespace() : string
     {
         return $this->namespace ? $this->namespace->name->toString() : '';
     }

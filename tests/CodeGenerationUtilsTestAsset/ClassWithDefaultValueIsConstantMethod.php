@@ -16,7 +16,9 @@
  * and is licensed under the MIT license.
  */
 
-namespace CodeGenerationUtilsTest\ReflectionBuilder;
+declare(strict_types=1);
+
+namespace CodeGenerationUtilsTestAsset;
 
 /**
  * Class to use for testing the ReflectionBuilder {@see \CodeGenerationUtilsTest\Visitor\ClassBuilderTest}

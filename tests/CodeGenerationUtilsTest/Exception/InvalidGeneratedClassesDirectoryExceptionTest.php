@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtilsTest\Exception;
 
 use PHPUnit_Framework_TestCase;
@@ -36,6 +38,6 @@ class InvalidGeneratedClassesDirectoryExceptionTest extends PHPUnit_Framework_Te
     {
         $exception = InvalidGeneratedClassesDirectoryException::generatedClassesDirectoryNotFound('foo/bar');
 
-        $this->assertSame('Provided directory "foo/bar" does not exist', $exception->getMessage());
+        self::assertSame('Provided directory "foo/bar" does not exist', $exception->getMessage());
     }
 }

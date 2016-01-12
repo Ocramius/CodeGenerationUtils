@@ -16,6 +16,8 @@
  * and is licensed under the MIT license.
  */
 
+declare(strict_types=1);
+
 namespace CodeGenerationUtils\FileLocator;
 
 /**
@@ -31,7 +33,7 @@ interface FileLocatorInterface
      *
      * @param $className
      *
-     * @return mixed
+     * @return string
      */
-    public function getGeneratedClassFileName($className);
+    public function getGeneratedClassFileName(string $className) : string;
 }
