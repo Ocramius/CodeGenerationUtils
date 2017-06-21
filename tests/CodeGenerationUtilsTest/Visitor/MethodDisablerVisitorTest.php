@@ -40,7 +40,7 @@ class MethodDisablerVisitorTest extends PHPUnit_Framework_TestCase
     {
         $method = new ClassMethod('test');
         /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */
-        $filter = $this->getMock('stdClass', array('__invoke'));
+        $filter = $this->getMockBuilder('stdClass')->setMethods(['__invoke'])->getMock();
 
         $filter->expects(self::once())->method('__invoke')->with($method)->will(self::returnValue(true));
 
@@ -54,7 +54,7 @@ class MethodDisablerVisitorTest extends PHPUnit_Framework_TestCase
     {
         $method = new ClassMethod('test');
         /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */
-        $filter = $this->getMock('stdClass', array('__invoke'));
+        $filter = $this->getMockBuilder('stdClass')->setMethods(['__invoke'])->getMock();
 
         $filter->expects(self::once())->method('__invoke')->with($method)->will(self::returnValue(false));
 
@@ -67,7 +67,7 @@ class MethodDisablerVisitorTest extends PHPUnit_Framework_TestCase
     {
         $method = new ClassMethod('test');
         /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */
-        $filter = $this->getMock('stdClass', array('__invoke'));
+        $filter = $this->getMockBuilder('stdClass')->setMethods(['__invoke'])->getMock();
 
         $filter->expects(self::once())->method('__invoke')->with($method)->will(self::returnValue(null));
 
@@ -80,7 +80,7 @@ class MethodDisablerVisitorTest extends PHPUnit_Framework_TestCase
     {
         $class  = new Class_('test');
         /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */
-        $filter = $this->getMock('stdClass', array('__invoke'));
+        $filter = $this->getMockBuilder('stdClass')->setMethods(['__invoke'])->getMock();
 
         $filter->expects(self::never())->method('__invoke');
 
