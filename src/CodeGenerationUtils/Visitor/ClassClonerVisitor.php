@@ -48,7 +48,6 @@ class ClassClonerVisitor extends NodeVisitorAbstract
     public function __construct(ReflectionClass $reflectedClass)
     {
         $this->reflectedClass = $reflectedClass;
-
     }
 
     /**
