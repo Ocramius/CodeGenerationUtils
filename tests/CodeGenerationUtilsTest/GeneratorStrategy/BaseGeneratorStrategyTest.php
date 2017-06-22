@@ -55,7 +55,7 @@ class BaseGeneratorStrategyTest extends PHPUnit_Framework_TestCase
         $strategy = new BaseGeneratorStrategy();
 
         /* @var $prettyPrinter PrettyPrinterAbstract|\PHPUnit_Framework_MockObject_MockObject */
-        $prettyPrinter = $this->getMock(PrettyPrinterAbstract::class);
+        $prettyPrinter = $this->createMock(PrettyPrinterAbstract::class);
 
         $prettyPrinter
             ->expects(self::once())

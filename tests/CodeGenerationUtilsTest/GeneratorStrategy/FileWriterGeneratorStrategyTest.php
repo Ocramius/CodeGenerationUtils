@@ -43,7 +43,7 @@ class FileWriterGeneratorStrategyTest extends PHPUnit_Framework_TestCase
     public function testGenerate()
     {
         /* @var $locator \PHPUnit_Framework_MockObject_MockObject|FileLocatorInterface */
-        $locator   = $this->getMock(FileLocatorInterface::class);
+        $locator   = $this->createMock(FileLocatorInterface::class);
         $generator = new FileWriterGeneratorStrategy($locator);
         $tmpFile   = sys_get_temp_dir() . '/FileWriterGeneratorStrategyTest' . uniqid('', true) . '.php';
         $className = UniqueIdentifierGenerator::getIdentifier('Bar');

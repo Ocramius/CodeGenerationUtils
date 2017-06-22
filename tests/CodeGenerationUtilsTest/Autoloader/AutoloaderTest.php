@@ -52,8 +52,8 @@ class AutoloaderTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->fileLocator        = $this->getMock('CodeGenerationUtils\\FileLocator\\FileLocatorInterface');
-        $this->classNameInflector = $this->getMock('CodeGenerationUtils\\Inflector\\ClassNameInflectorInterface');
+        $this->fileLocator        = $this->createMock('CodeGenerationUtils\\FileLocator\\FileLocatorInterface');
+        $this->classNameInflector = $this->createMock('CodeGenerationUtils\\Inflector\\ClassNameInflectorInterface');
         $this->autoloader         = new Autoloader($this->fileLocator, $this->classNameInflector);
     }
 
