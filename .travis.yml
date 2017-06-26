@@ -6,13 +6,19 @@ php:
   - nightly
   - hhvm
 
+env:
+  matrix:
+    - DEPENDENCIES="high"
+    - DEPENDENCIES="low"
+
 matrix:
   allow_failures:
     - php: hhvm
     - php: nightly
 
 before_script:
-  - composer update --prefer-source
+  - if [ "$DEPENDENCIES" = "high" ]; then composer --prefer-source update; fi;
+  - if [ "$DEPENDENCIES" = "low" ]; then composer --prefer-lowest --prefer-source update; fi;
 
 script:
   - ./vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml --exclude-group Functional,Performance
