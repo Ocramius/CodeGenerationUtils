@@ -6,19 +6,26 @@ php:
   - nightly
   - hhvm
 
+env:
+  matrix:
+    - DEPENDENCIES="high"
+    - DEPENDENCIES="low"
+
 matrix:
   allow_failures:
     - php: hhvm
     - php: nightly
 
 before_script:
-  - composer update --prefer-source
+  - if [ "$DEPENDENCIES" = "high" ]; then composer --prefer-source update; fi;
+  - if [ "$DEPENDENCIES" = "low" ]; then composer --prefer-lowest --prefer-source update; fi;
 
 script:
   - ./vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml --exclude-group Functional,Performance
   - ./vendor/bin/phpunit --group=Functional
   - php -n ./vendor/bin/phpunit --group=Performance
-  - ./vendor/bin/phpcs --standard=PSR2 ./src/ ./tests/
+  # Only run the code standards with the latest package
+  - if [ "$DEPENDENCIES" = "high" ]; then ./vendor/bin/phpcs --standard=PSR2 ./src/ ./tests/; fi;
 
 after_script:
   - if [[ $TRAVIS_PHP_VERSION = '7.0' ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi
