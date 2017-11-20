@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtilsTest\Inflector\Util;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use CodeGenerationUtils\Inflector\Util\ParameterEncoder;
 
 /**
@@ -29,7 +29,7 @@ use CodeGenerationUtils\Inflector\Util\ParameterEncoder;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class ParameterEncoderTest extends PHPUnit_Framework_TestCase
+class ParameterEncoderTest extends TestCase
 {
     /**
      * @dataProvider getParameters

@@ -24,7 +24,7 @@ use CodeGenerationUtils\Visitor\ClassImplementorVisitor;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for {@see \CodeGenerationUtils\Visitor\ClassClonerVisitor}
@@ -34,7 +34,7 @@ use PHPUnit_Framework_TestCase;
  *
  * @covers \CodeGenerationUtils\Visitor\ClassImplementorVisitor
  */
-class ClassImplementorVisitorTest extends PHPUnit_Framework_TestCase
+class ClassImplementorVisitorTest extends TestCase
 {
     public function testRenamesNodesOnMatchingClass()
     {

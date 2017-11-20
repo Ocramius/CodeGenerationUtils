@@ -23,7 +23,7 @@ namespace CodeGenerationUtilsTest\GeneratorStrategy;
 use CodeGenerationUtils\GeneratorStrategy\EvaluatingGeneratorStrategy;
 use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
 use PhpParser\Node\Stmt\Class_;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for {@see \CodeGenerationUtils\GeneratorStrategy\EvaluatingGeneratorStrategy}
@@ -31,7 +31,7 @@ use PHPUnit_Framework_TestCase;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class EvaluatingGeneratorStrategyTest extends PHPUnit_Framework_TestCase
+class EvaluatingGeneratorStrategyTest extends TestCase
 {
     /**
      * @covers \CodeGenerationUtils\GeneratorStrategy\EvaluatingGeneratorStrategy::generate

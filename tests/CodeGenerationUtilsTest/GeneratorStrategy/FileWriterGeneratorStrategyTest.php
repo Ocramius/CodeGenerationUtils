@@ -26,7 +26,7 @@ use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for {@see \CodeGenerationUtils\GeneratorStrategy\FileWriterGeneratorStrategy}
@@ -34,7 +34,7 @@ use PHPUnit_Framework_TestCase;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class FileWriterGeneratorStrategyTest extends PHPUnit_Framework_TestCase
+class FileWriterGeneratorStrategyTest extends TestCase
 {
     /**
      * @covers \CodeGenerationUtils\GeneratorStrategy\FileWriterGeneratorStrategy::__construct

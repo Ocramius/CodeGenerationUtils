@@ -25,7 +25,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for {@see \CodeGenerationUtils\Visitor\ClassClonerVisitor}
@@ -35,7 +35,7 @@ use PHPUnit_Framework_TestCase;
  *
  * @covers \CodeGenerationUtils\Visitor\PublicMethodsFilterVisitor
  */
-class PublicMethodsFilterVisitorTest extends PHPUnit_Framework_TestCase
+class PublicMethodsFilterVisitorTest extends TestCase
 {
     /**
      * @dataProvider nodeProvider

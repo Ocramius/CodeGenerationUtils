@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtilsTest\Inflector;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use CodeGenerationUtils\Inflector\ClassNameInflector;
 use CodeGenerationUtils\Inflector\ClassNameInflectorInterface;
 
@@ -30,7 +30,7 @@ use CodeGenerationUtils\Inflector\ClassNameInflectorInterface;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class ClassNameInflectorTest extends PHPUnit_Framework_TestCase
+class ClassNameInflectorTest extends TestCase
 {
     /**
      * @dataProvider getClassNames

@@ -24,7 +24,7 @@ use CodeGenerationUtils\Visitor\ClassRenamerVisitor;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
@@ -35,7 +35,7 @@ use ReflectionClass;
  *
  * @covers \CodeGenerationUtils\Visitor\ClassRenamerVisitor
  */
-class ClassRenamerVisitorTest extends PHPUnit_Framework_TestCase
+class ClassRenamerVisitorTest extends TestCase
 {
     public function testRenamesNodesOnMatchingClass()
     {

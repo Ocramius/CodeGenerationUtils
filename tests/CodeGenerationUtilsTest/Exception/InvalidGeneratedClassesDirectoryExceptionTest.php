@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtilsTest\Exception;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use CodeGenerationUtils\Exception\InvalidGeneratedClassesDirectoryException;
 
 /**
@@ -29,7 +29,7 @@ use CodeGenerationUtils\Exception\InvalidGeneratedClassesDirectoryException;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class InvalidGeneratedClassesDirectoryExceptionTest extends PHPUnit_Framework_TestCase
+class InvalidGeneratedClassesDirectoryExceptionTest extends TestCase
 {
     /**
      * @covers \CodeGenerationUtils\Exception\InvalidGeneratedClassesDirectoryException

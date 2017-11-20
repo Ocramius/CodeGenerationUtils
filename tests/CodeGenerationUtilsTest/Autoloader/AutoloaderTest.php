@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtilsTest\Autoloader;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use CodeGenerationUtils\Autoloader\Autoloader;
 use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
 
@@ -30,7 +30,7 @@ use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class AutoloaderTest extends PHPUnit_Framework_TestCase
+class AutoloaderTest extends TestCase
 {
     /**
      * @var \CodeGenerationUtils\Autoloader\Autoloader
