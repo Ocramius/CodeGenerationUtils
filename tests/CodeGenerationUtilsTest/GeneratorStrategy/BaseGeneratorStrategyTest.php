@@ -24,7 +24,7 @@ use CodeGenerationUtils\GeneratorStrategy\BaseGeneratorStrategy;
 use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\PrettyPrinterAbstract;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for {@see \CodeGenerationUtils\GeneratorStrategy\BaseGeneratorStrategy}
@@ -32,7 +32,7 @@ use PHPUnit_Framework_TestCase;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class BaseGeneratorStrategyTest extends PHPUnit_Framework_TestCase
+class BaseGeneratorStrategyTest extends TestCase
 {
     /**
      * @covers \CodeGenerationUtils\GeneratorStrategy\BaseGeneratorStrategy::generate

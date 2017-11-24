@@ -23,7 +23,7 @@ namespace CodeGenerationUtilsTest\Visitor;
 use CodeGenerationUtils\ReflectionBuilder\ClassBuilder;
 use CodeGenerationUtilsTestAsset\ClassWithDefaultValueIsConstantMethod;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
@@ -34,7 +34,7 @@ use ReflectionClass;
  *
  * @covers \CodeGenerationUtils\ReflectionBuilder\ClassBuilder
  */
-class ClassBuilderTest extends PHPUnit_Framework_TestCase
+class ClassBuilderTest extends TestCase
 {
     /**
      * Simple test reflecting this test class

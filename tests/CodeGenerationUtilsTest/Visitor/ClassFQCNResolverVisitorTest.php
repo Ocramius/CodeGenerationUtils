@@ -24,7 +24,7 @@ use CodeGenerationUtils\Visitor\ClassFQCNResolverVisitor;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for {@see \CodeGenerationUtils\Visitor\ClassClonerVisitor}
@@ -34,7 +34,7 @@ use PHPUnit_Framework_TestCase;
  *
  * @covers \CodeGenerationUtils\Visitor\ClassFQCNResolverVisitor
  */
-class ClassFQCNResolverVisitorTest extends PHPUnit_Framework_TestCase
+class ClassFQCNResolverVisitorTest extends TestCase
 {
     /**
      * @var ClassFQCNResolverVisitor
@@ -84,7 +84,7 @@ class ClassFQCNResolverVisitorTest extends PHPUnit_Framework_TestCase
 
         $this->visitor->enterNode($class1);
 
-        $this->setExpectedException('CodeGenerationUtils\Visitor\Exception\UnexpectedValueException');
+        $this->expectException('CodeGenerationUtils\Visitor\Exception\UnexpectedValueException');
 
         $this->visitor->enterNode($class2);
     }
@@ -98,7 +98,7 @@ class ClassFQCNResolverVisitorTest extends PHPUnit_Framework_TestCase
 
         $this->visitor->enterNode($namespace1);
 
-        $this->setExpectedException('CodeGenerationUtils\Visitor\Exception\UnexpectedValueException');
+        $this->expectException('CodeGenerationUtils\Visitor\Exception\UnexpectedValueException');
 
         $this->visitor->enterNode($namespace2);
     }
@@ -107,7 +107,7 @@ class ClassFQCNResolverVisitorTest extends PHPUnit_Framework_TestCase
     {
         self::assertSame('', $this->visitor->getNamespace());
 
-        $this->setExpectedException('CodeGenerationUtils\Visitor\Exception\UnexpectedValueException');
+        $this->expectException('CodeGenerationUtils\Visitor\Exception\UnexpectedValueException');
 
         $this->visitor->getName();
     }

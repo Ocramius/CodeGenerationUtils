@@ -21,7 +21,7 @@ declare(strict_types=1);
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\ClassClonerVisitor;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
@@ -32,7 +32,7 @@ use ReflectionClass;
  *
  * @covers \CodeGenerationUtils\Visitor\ClassClonerVisitor
  */
-class ClassClonerVisitorTest extends PHPUnit_Framework_TestCase
+class ClassClonerVisitorTest extends TestCase
 {
     public function testClonesClassIntoEmptyNodeList()
     {
