@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace CodeGenerationUtils\Visitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
@@ -132,9 +133,9 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
 
         if ($node instanceof Class_
             && $this->namespaceMatches()
-            && ($this->reflectedClass->getShortName() === $node->name)
+            && ($this->reflectedClass->getShortName() === $node->name->name)
         ) {
-            $node->name = $this->newName;
+            $node->name = new Identifier($this->newName);
 
             // @todo too simplistic (assumes single class per namespace right now)
             if ($this->currentNamespace) {

@@ -51,7 +51,7 @@ class ClassRenamerVisitorTest extends TestCase
         self::assertSame($class, $visitor->leaveNode($class));
         self::assertSame($namespace, $visitor->leaveNode($namespace));
 
-        self::assertSame('Baz', $class->name);
+        self::assertSame('Baz', $class->name->name);
         self::assertSame(array('Foo', 'Bar'), $namespace->name->parts);
         self::assertSame(array($class), $namespace->stmts);
     }
@@ -70,7 +70,7 @@ class ClassRenamerVisitorTest extends TestCase
         $visitor->leaveNode($class);
         $visitor->leaveNode($namespace);
 
-        self::assertSame('Wrong', $class->name);
+        self::assertSame('Wrong', $class->name->name);
         self::assertSame(array('CodeGenerationUtilsTest', 'Visitor'), $namespace->name->parts);
     }
 
@@ -88,7 +88,7 @@ class ClassRenamerVisitorTest extends TestCase
         $visitor->leaveNode($class);
         $visitor->leaveNode($namespace);
 
-        self::assertSame('ClassRenamerVisitorTest', $class->name);
+        self::assertSame('ClassRenamerVisitorTest', $class->name->name);
         self::assertSame(array('Wrong', 'Namespace', 'Here'), $namespace->name->parts);
     }
 
@@ -101,7 +101,7 @@ class ClassRenamerVisitorTest extends TestCase
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
 
-        self::assertSame('Baz', $class->name);
+        self::assertSame('Baz', $class->name->name);
     }
 
     public function testUnwrapsNamespacedClassCorrectly()
@@ -118,7 +118,7 @@ class ClassRenamerVisitorTest extends TestCase
         self::assertSame($class, $visitor->leaveNode($class));
         self::assertSame(array($class), $visitor->leaveNode($namespace));
 
-        self::assertSame('Baz', $class->name);
+        self::assertSame('Baz', $class->name->name);
     }
 
     public function testWrapsGlobalClassCorrectly()
@@ -149,7 +149,7 @@ class ClassRenamerVisitorTest extends TestCase
         $visitor->leaveNode($class);
         $visitor->leaveNode($namespace);
 
-        self::assertSame('stdClass', $class->name);
+        self::assertSame('stdClass', $class->name->name);
         self::assertSame(array('Wrong', 'Namespace', 'Here'), $namespace->name->parts);
     }
 }
