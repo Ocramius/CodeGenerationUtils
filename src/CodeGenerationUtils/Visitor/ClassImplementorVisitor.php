@@ -110,7 +110,7 @@ class ClassImplementorVisitor extends NodeVisitorAbstract
                 ? implode('\\', $this->currentNamespace->name->parts)
                 : '';
 
-            if (trim($namespace . '\\' . $node->name, '\\') === $this->matchedClassFQCN) {
+            if (trim($namespace . '\\' . $node->name->name, '\\') === $this->matchedClassFQCN) {
                 $node->implements = $this->interfaces;
             }
 

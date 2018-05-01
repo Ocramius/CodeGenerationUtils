@@ -23,7 +23,7 @@ namespace CodeGenerationUtils\ReflectionBuilder;
 use PhpParser\Builder\Method;
 use PhpParser\Builder\Param;
 use PhpParser\Builder\Property;
-use PhpParser\BuilderAbstract;
+use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Expr\ConstFetch;
@@ -45,7 +45,7 @@ use ReflectionProperty;
  * @author Marco Pivetta <ocramius@gmail.com>
  * @license MIT
  */
-class ClassBuilder extends BuilderAbstract
+class ClassBuilder
 {
     /**
      * @param \ReflectionClass $reflectionClass
@@ -71,7 +71,7 @@ class ClassBuilder extends BuilderAbstract
 
         foreach ($reflectionClass->getConstants() as $constant => $value) {
             $class->stmts[] = new ClassConst(
-                array(new Const_($constant, $this->normalizeValue($value)))
+                array(new Const_($constant, BuilderHelpers::normalizeValue($value)))
             );
         }
 

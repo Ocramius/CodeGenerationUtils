@@ -53,14 +53,14 @@ class ClassBuilderTest extends TestCase
         $class = $namespace->stmts[0];
 
         self::assertInstanceOf('PhpParser\Node\Stmt\Class_', $class);
-        self::assertSame('ClassBuilderTest', $class->name);
+        self::assertSame('ClassBuilderTest', $class->name->name);
 
         $currentMethod = __FUNCTION__;
         /* @var $methods \PhpParser\Node\Stmt\ClassMethod[] */
         $methods       = array_filter(
             $class->stmts,
             function ($node) use ($currentMethod) {
-                return $node instanceof ClassMethod && $node->name === $currentMethod;
+                return $node instanceof ClassMethod && $node->name->name === $currentMethod;
             }
         );
 
@@ -69,7 +69,7 @@ class ClassBuilderTest extends TestCase
         /* @var $thisMethod \PhpParser\Node\Stmt\ClassMethod */
         $thisMethod = reset($methods);
 
-        self::assertSame($currentMethod, $thisMethod->name);
+        self::assertSame($currentMethod, $thisMethod->name->name);
     }
 
     /**
@@ -91,7 +91,7 @@ class ClassBuilderTest extends TestCase
         $methods = array_filter(
             $class->stmts,
             function ($node) use ($method) {
-                return ($node instanceof ClassMethod && $node->name === $method);
+                return ($node instanceof ClassMethod && $node->name->name === $method);
             }
         );
 
@@ -100,6 +100,6 @@ class ClassBuilderTest extends TestCase
         /* @var $thisMethod \PhpParser\Node\Stmt\ClassMethod */
         $thisMethod = reset($methods);
 
-        self::assertSame($method, $thisMethod->name);
+        self::assertSame($method, $thisMethod->name->name);
     }
 }
