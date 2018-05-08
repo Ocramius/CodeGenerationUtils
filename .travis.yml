@@ -1,10 +1,9 @@
 language: php
 
 php:
-  - 7.0
   - 7.1
+  - 7.2
   - nightly
-  - hhvm
 
 env:
   matrix:
@@ -13,7 +12,6 @@ env:
 
 matrix:
   allow_failures:
-    - php: hhvm
     - php: nightly
 
 before_script:
@@ -28,5 +26,5 @@ script:
   - if [ "$DEPENDENCIES" = "high" ]; then ./vendor/bin/phpcs --standard=PSR2 ./src/ ./tests/; fi;
 
 after_script:
-  - if [[ $TRAVIS_PHP_VERSION = '7.0' ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi
-  - if [[ $TRAVIS_PHP_VERSION = '7.0' ]]; then php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml; fi
+  - if [[ $TRAVIS_PHP_VERSION = '7.1' ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi
+  - if [[ $TRAVIS_PHP_VERSION = '7.1' ]]; then php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml; fi
