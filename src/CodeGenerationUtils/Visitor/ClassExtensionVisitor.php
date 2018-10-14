@@ -110,7 +110,7 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
                 ? implode('\\', $this->currentNamespace->name->parts)
                 : '';
 
-            if (trim($namespace . '\\' . $node->name, '\\') === $this->matchedClassFQCN) {
+            if (trim($namespace . '\\' . (string)$node->name, '\\') === $this->matchedClassFQCN) {
                 $node->extends = new FullyQualified($this->newParentClassFQCN);
             }
 

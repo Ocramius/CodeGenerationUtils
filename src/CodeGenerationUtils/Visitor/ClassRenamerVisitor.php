@@ -132,7 +132,7 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
 
         if ($node instanceof Class_
             && $this->namespaceMatches()
-            && ($this->reflectedClass->getShortName() === $node->name)
+            && ($this->reflectedClass->getShortName() === (string)$node->name)
         ) {
             $node->name = $this->newName;
 
