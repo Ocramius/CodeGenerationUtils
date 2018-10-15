@@ -54,7 +54,7 @@ class ClassClonerVisitorTest extends TestCase
         $class = end($node->stmts);
 
         self::assertInstanceOf('PhpParser\Node\Stmt\Class_', $class);
-        self::assertSame('ClassClonerVisitorTest', $class->name);
+        self::assertSame('ClassClonerVisitorTest', (string)$class->name);
     }
 
     public function testClonesClassIntoNonEmptyNodeList()

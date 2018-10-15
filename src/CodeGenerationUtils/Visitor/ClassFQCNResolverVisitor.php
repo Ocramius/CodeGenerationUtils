@@ -94,7 +94,7 @@ class ClassFQCNResolverVisitor extends NodeVisitorAbstract
             throw new UnexpectedValueException('No class discovered');
         }
 
-        return $this->class->name;
+        return (string)$this->class->name;
     }
 
     /**
