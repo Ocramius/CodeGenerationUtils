@@ -6,7 +6,7 @@ It is a small project that aims at collecting common solutions to code generatio
 that I often face, and for now it doesn't have a really solid structure.
 
 I built it to workaround limitations that I often faced while working
-with [`Zend\Code`](https://github.com/zendframework/zf2/tree/master/library/Zend/Code),
+with [`Zend\Code`](https://github.com/zendframework/zend-code),
 and it is mainly based on the logic of [PHP-Parser](https://github.com/nikic/PHP-Parser).
 
 It will be stabilized together with [GeneratedHydrator](https://github.com/Ocramius/GeneratedHydrator)
