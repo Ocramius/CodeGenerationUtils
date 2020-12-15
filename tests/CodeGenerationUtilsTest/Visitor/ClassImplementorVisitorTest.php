@@ -36,7 +36,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ClassImplementorVisitorTest extends TestCase
 {
-    public function testRenamesNodesOnMatchingClass()
+    public function testRenamesNodesOnMatchingClass(): void
     {
         $visitor   = new ClassImplementorVisitor('Foo\\Bar', array('Baz\\Tab', 'Tar\\War'));
         $class     = new Class_('Bar');
@@ -52,7 +52,7 @@ class ClassImplementorVisitorTest extends TestCase
         self::assertSame('Tar\\War', $class->implements[1]->toString());
     }
 
-    public function testIgnoresNodesOnNonMatchingClass()
+    public function testIgnoresNodesOnNonMatchingClass(): void
     {
         $visitor   = new ClassImplementorVisitor('Foo\\Bar', array('Baz\\Tab', 'Tar\\War'));
         $class     = new Class_('Tab');
@@ -67,7 +67,7 @@ class ClassImplementorVisitorTest extends TestCase
         self::assertEmpty($class->extends);
     }
 
-    public function testIgnoresNodesOnNonMatchingNamespace()
+    public function testIgnoresNodesOnNonMatchingNamespace(): void
     {
         $visitor   = new ClassImplementorVisitor('Foo\\Bar', array('Baz\\Tab', 'Tar\\War'));
         $class     = new Class_('Bar');
@@ -82,7 +82,7 @@ class ClassImplementorVisitorTest extends TestCase
         self::assertEmpty($class->extends);
     }
 
-    public function testMatchOnEmptyNamespace()
+    public function testMatchOnEmptyNamespace(): void
     {
         $visitor   = new ClassImplementorVisitor('Foo', array('Baz\\Tab', 'Tar\\War'));
         $class     = new Class_('Foo');

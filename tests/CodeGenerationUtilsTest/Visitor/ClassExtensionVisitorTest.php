@@ -36,7 +36,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ClassExtensionVisitorTest extends TestCase
 {
-    public function testRenamesNodesOnMatchingClass()
+    public function testRenamesNodesOnMatchingClass(): void
     {
         $visitor   = new ClassExtensionVisitor('Foo\\Bar', 'Baz\\Tab');
         $class     = new Class_('Bar');
@@ -52,7 +52,7 @@ class ClassExtensionVisitorTest extends TestCase
         self::assertSame('Baz\\Tab', $class->extends->toString());
     }
 
-    public function testIgnoresNodesOnNonMatchingClass()
+    public function testIgnoresNodesOnNonMatchingClass(): void
     {
         $visitor   = new ClassExtensionVisitor('Foo\\Bar', 'Baz\\Tab');
         $class     = new Class_('Tab');
@@ -67,7 +67,7 @@ class ClassExtensionVisitorTest extends TestCase
         self::assertNull($class->extends);
     }
 
-    public function testIgnoresNodesOnNonMatchingNamespace()
+    public function testIgnoresNodesOnNonMatchingNamespace(): void
     {
         $visitor   = new ClassExtensionVisitor('Foo\\Bar', 'Baz\\Tab');
         $class     = new Class_('Bar');
@@ -82,7 +82,7 @@ class ClassExtensionVisitorTest extends TestCase
         self::assertNull($class->extends);
     }
 
-    public function testMatchOnEmptyNamespace()
+    public function testMatchOnEmptyNamespace(): void
     {
         $visitor   = new ClassExtensionVisitor('Foo', 'Baz\\Tab');
         $class     = new Class_('Foo');

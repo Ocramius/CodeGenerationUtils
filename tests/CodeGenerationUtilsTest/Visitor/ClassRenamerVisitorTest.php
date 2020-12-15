@@ -37,7 +37,7 @@ use ReflectionClass;
  */
 class ClassRenamerVisitorTest extends TestCase
 {
-    public function testRenamesNodesOnMatchingClass()
+    public function testRenamesNodesOnMatchingClass(): void
     {
         $visitor   = new ClassRenamerVisitor(new ReflectionClass(__CLASS__), 'Foo\\Bar\\Baz');
         $class     = new Class_('ClassRenamerVisitorTest');
@@ -56,7 +56,7 @@ class ClassRenamerVisitorTest extends TestCase
         self::assertSame(array($class), $namespace->stmts);
     }
 
-    public function testIgnoresNodesOnNonMatchingClass()
+    public function testIgnoresNodesOnNonMatchingClass(): void
     {
         $visitor   = new ClassRenamerVisitor(new ReflectionClass(__CLASS__), 'Foo\\Bar\\Baz');
         $class     = new Class_('Wrong');
@@ -74,7 +74,7 @@ class ClassRenamerVisitorTest extends TestCase
         self::assertSame(array('CodeGenerationUtilsTest', 'Visitor'), $namespace->name->parts);
     }
 
-    public function testIgnoresNodesOnNonMatchingNamespace()
+    public function testIgnoresNodesOnNonMatchingNamespace(): void
     {
         $visitor   = new ClassRenamerVisitor(new ReflectionClass(__CLASS__), 'Foo\\Bar\\Baz');
         $class     = new Class_('ClassRenamerVisitorTest');
@@ -92,7 +92,7 @@ class ClassRenamerVisitorTest extends TestCase
         self::assertSame(array('Wrong', 'Namespace', 'Here'), $namespace->name->parts);
     }
 
-    public function testMatchOnEmptyNamespace()
+    public function testMatchOnEmptyNamespace(): void
     {
         $visitor   = new ClassRenamerVisitor(new ReflectionClass('stdClass'), 'Baz');
         $class     = new Class_('stdClass');
@@ -104,7 +104,7 @@ class ClassRenamerVisitorTest extends TestCase
         self::assertSame('Baz', (string)$class->name);
     }
 
-    public function testUnwrapsNamespacedClassCorrectly()
+    public function testUnwrapsNamespacedClassCorrectly(): void
     {
         $visitor   = new ClassRenamerVisitor(new ReflectionClass(__CLASS__), 'Baz');
         $class     = new Class_('ClassRenamerVisitorTest');
@@ -121,7 +121,7 @@ class ClassRenamerVisitorTest extends TestCase
         self::assertSame('Baz', (string)$class->name);
     }
 
-    public function testWrapsGlobalClassCorrectly()
+    public function testWrapsGlobalClassCorrectly(): void
     {
         $visitor   = new ClassRenamerVisitor(new ReflectionClass('stdClass'), 'Foo\\Bar');
         $class     = new Class_('stdClass');
@@ -130,12 +130,12 @@ class ClassRenamerVisitorTest extends TestCase
         self::assertNull($visitor->enterNode($class));
         $namespace = $visitor->leaveNode($class);
 
-        self::assertInstanceOf('PhpParser\Node\Stmt\Namespace_', $namespace);
+        self::assertInstanceOf(Namespace_::class, $namespace);
         self::assertSame('Foo', $namespace->name->toString());
         self::assertSame(array($class), $namespace->stmts);
     }
 
-    public function testMismatchOnEmptyNamespace()
+    public function testMismatchOnEmptyNamespace(): void
     {
         $visitor   = new ClassRenamerVisitor(new ReflectionClass('stdClass'), 'Baz');
         $class     = new Class_('stdClass');

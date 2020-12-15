@@ -37,7 +37,7 @@ class EvaluatingGeneratorStrategyTest extends TestCase
      * @covers \CodeGenerationUtils\GeneratorStrategy\EvaluatingGeneratorStrategy::generate
      * @covers \CodeGenerationUtils\GeneratorStrategy\EvaluatingGeneratorStrategy::__construct
      */
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $strategy       = new EvaluatingGeneratorStrategy();
         $className      = UniqueIdentifierGenerator::getIdentifier('Foo');
@@ -51,7 +51,7 @@ class EvaluatingGeneratorStrategyTest extends TestCase
      * @covers \CodeGenerationUtils\GeneratorStrategy\EvaluatingGeneratorStrategy::generate
      * @covers \CodeGenerationUtils\GeneratorStrategy\EvaluatingGeneratorStrategy::__construct
      */
-    public function testGenerateWithDisabledEval()
+    public function testGenerateWithDisabledEval(): void
     {
         if (! ini_get('suhosin.executor.disable_eval')) {
             self::markTestSkipped('Ini setting "suhosin.executor.disable_eval" is needed to run this test');

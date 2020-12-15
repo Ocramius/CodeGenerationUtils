@@ -25,6 +25,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit\Framework\TestCase;
+use CodeGenerationUtils\Visitor\Exception\UnexpectedValueException;
 
 /**
  * Tests for {@see \CodeGenerationUtils\Visitor\ClassClonerVisitor}
@@ -44,12 +45,12 @@ class ClassFQCNResolverVisitorTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->visitor = new ClassFQCNResolverVisitor();
     }
 
-    public function testDiscoversSimpleClass()
+    public function testDiscoversSimpleClass(): void
     {
         $class = new Class_('Foo');
 
@@ -60,7 +61,7 @@ class ClassFQCNResolverVisitorTest extends TestCase
         self::assertSame('', $this->visitor->getNamespace());
     }
 
-    public function testDiscoversNamespacedClass()
+    public function testDiscoversNamespacedClass(): void
     {
         $namespace = new Namespace_(new Name(array('Bar', 'Baz')));
         $class     = new Class_('Foo');
@@ -75,7 +76,7 @@ class ClassFQCNResolverVisitorTest extends TestCase
         self::assertSame('Bar\\Baz', $this->visitor->getNamespace());
     }
 
-    public function testThrowsExceptionOnMultipleClasses()
+    public function testThrowsExceptionOnMultipleClasses(): void
     {
         $class1 = new Class_('Foo');
         $class2 = new Class_('Bar');
@@ -84,12 +85,12 @@ class ClassFQCNResolverVisitorTest extends TestCase
 
         $this->visitor->enterNode($class1);
 
-        $this->expectException('CodeGenerationUtils\Visitor\Exception\UnexpectedValueException');
+        $this->expectException(UnexpectedValueException::class);
 
         $this->visitor->enterNode($class2);
     }
 
-    public function testThrowsExceptionOnMultipleNamespaces()
+    public function testThrowsExceptionOnMultipleNamespaces(): void
     {
         $namespace1 = new Namespace_(new Name('Foo'));
         $namespace2 = new Namespace_(new Name('Bar'));
@@ -98,16 +99,16 @@ class ClassFQCNResolverVisitorTest extends TestCase
 
         $this->visitor->enterNode($namespace1);
 
-        $this->expectException('CodeGenerationUtils\Visitor\Exception\UnexpectedValueException');
+        $this->expectException(UnexpectedValueException::class);
 
         $this->visitor->enterNode($namespace2);
     }
 
-    public function testThrowsExceptionWhenNoClassIsFound()
+    public function testThrowsExceptionWhenNoClassIsFound(): void
     {
         self::assertSame('', $this->visitor->getNamespace());
 
-        $this->expectException('CodeGenerationUtils\Visitor\Exception\UnexpectedValueException');
+        $this->expectException(UnexpectedValueException::class);
 
         $this->visitor->getName();
     }
