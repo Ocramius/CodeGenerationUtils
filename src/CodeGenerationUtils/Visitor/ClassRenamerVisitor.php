@@ -79,13 +79,10 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
     /**
      * Replaces (if matching) the given node to comply with the new given name
      *
-     * @return Class_[]|Class_|Namespace_|null
-     *
      * @psalm-return array{Class_}|Class_|Namespace_|null
-     *
      * @todo can be abstracted away into a visitor that allows to modify the matched node via a callback
      */
-    public function leaveNode(Node $node)
+    public function leaveNode(Node $node): array | Class_ | Namespace_ | null
     {
         if ($node instanceof Namespace_) {
             $namespace                 = $this->currentNamespace;

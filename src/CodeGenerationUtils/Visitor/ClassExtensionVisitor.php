@@ -77,11 +77,9 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
      *
      * @param Node $node
      *
-     * @return Class_|null
-     *
      * @todo can be abstracted away into a visitor that allows to modify the node via a callback
      */
-    public function leaveNode(Node $node)
+    public function leaveNode(Node $node): ?Class_
     {
         if ($node instanceof Namespace_) {
             $this->currentNamespace = null;
