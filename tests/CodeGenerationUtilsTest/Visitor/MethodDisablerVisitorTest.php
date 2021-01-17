@@ -24,12 +24,14 @@ use CodeGenerationUtils\Visitor\MethodDisablerVisitor;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+
+use function assert;
+use function is_callable;
+use function reset;
 
 /**
  * Tests for {@see \CodeGenerationUtils\Visitor\ClassClonerVisitor}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  *
  * @covers \CodeGenerationUtils\Visitor\MethodDisablerVisitor
  */
@@ -38,8 +40,8 @@ class MethodDisablerVisitorTest extends TestCase
     public function testDisablesMethod(): void
     {
         $method = new ClassMethod('test');
-        /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */
         $filter = $this->getMockBuilder('stdClass')->setMethods(['__invoke'])->getMock();
+        assert($filter instanceof PHPUnit_Framework_MockObject_MockObject || is_callable($filter));
 
         $filter->expects(self::once())->method('__invoke')->with($method)->will(self::returnValue(true));
 
@@ -52,8 +54,8 @@ class MethodDisablerVisitorTest extends TestCase
     public function testSkipsOnFailedFiltering(): void
     {
         $method = new ClassMethod('test');
-        /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */
         $filter = $this->getMockBuilder('stdClass')->setMethods(['__invoke'])->getMock();
+        assert($filter instanceof PHPUnit_Framework_MockObject_MockObject || is_callable($filter));
 
         $filter->expects(self::once())->method('__invoke')->with($method)->will(self::returnValue(false));
 
@@ -65,8 +67,8 @@ class MethodDisablerVisitorTest extends TestCase
     public function testSkipsOnIgnoreFiltering(): void
     {
         $method = new ClassMethod('test');
-        /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */
         $filter = $this->getMockBuilder('stdClass')->setMethods(['__invoke'])->getMock();
+        assert($filter instanceof PHPUnit_Framework_MockObject_MockObject || is_callable($filter));
 
         $filter->expects(self::once())->method('__invoke')->with($method)->will(self::returnValue(null));
 
@@ -78,8 +80,8 @@ class MethodDisablerVisitorTest extends TestCase
     public function testSkipsOnNodeTypeMismatch(): void
     {
         $class  = new Class_('test');
-        /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */
         $filter = $this->getMockBuilder('stdClass')->setMethods(['__invoke'])->getMock();
+        assert($filter instanceof PHPUnit_Framework_MockObject_MockObject || is_callable($filter));
 
         $filter->expects(self::never())->method('__invoke');
 

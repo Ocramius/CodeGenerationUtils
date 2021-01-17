@@ -23,38 +23,22 @@ namespace CodeGenerationUtils\Autoloader;
 use CodeGenerationUtils\FileLocator\FileLocatorInterface;
 use CodeGenerationUtils\Inflector\ClassNameInflectorInterface;
 
-/**
- * {@inheritDoc}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
- */
+use function class_exists;
+use function file_exists;
+
 class Autoloader implements AutoloaderInterface
 {
-    /**
-     * @var \CodeGenerationUtils\FileLocator\FileLocatorInterface
-     */
-    protected $fileLocator;
+    protected FileLocatorInterface $fileLocator;
 
-    /**
-     * @var \CodeGenerationUtils\Inflector\ClassNameInflectorInterface
-     */
-    protected $classNameInflector;
+    protected ClassNameInflectorInterface $classNameInflector;
 
-    /**
-     * @param \CodeGenerationUtils\FileLocator\FileLocatorInterface      $fileLocator
-     * @param \CodeGenerationUtils\Inflector\ClassNameInflectorInterface $classNameInflector
-     */
     public function __construct(FileLocatorInterface $fileLocator, ClassNameInflectorInterface $classNameInflector)
     {
         $this->fileLocator        = $fileLocator;
         $this->classNameInflector = $classNameInflector;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function __invoke(string $className) : bool
+    public function __invoke(string $className): bool
     {
         if (class_exists($className, false) || ! $this->classNameInflector->isGeneratedClassName($className)) {
             return false;

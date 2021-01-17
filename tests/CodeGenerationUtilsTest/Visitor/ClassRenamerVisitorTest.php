@@ -30,109 +30,106 @@ use ReflectionClass;
 /**
  * Tests for {@see \CodeGenerationUtils\Visitor\ClassClonerVisitor}
  *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
- *
  * @covers \CodeGenerationUtils\Visitor\ClassRenamerVisitor
  */
 class ClassRenamerVisitorTest extends TestCase
 {
     public function testRenamesNodesOnMatchingClass(): void
     {
-        $visitor   = new ClassRenamerVisitor(new ReflectionClass(__CLASS__), 'Foo\\Bar\\Baz');
+        $visitor   = new ClassRenamerVisitor(new ReflectionClass(self::class), 'Foo\\Bar\\Baz');
         $class     = new Class_('ClassRenamerVisitorTest');
         $namespace = new Namespace_(
-            new Name(array('CodeGenerationUtilsTest', 'Visitor'))
+            new Name(['CodeGenerationUtilsTest', 'Visitor'])
         );
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertSame($namespace, $visitor->enterNode($namespace));
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
         self::assertSame($namespace, $visitor->leaveNode($namespace));
 
-        self::assertSame('Baz', (string)$class->name);
-        self::assertSame(array('Foo', 'Bar'), $namespace->name->parts);
-        self::assertSame(array($class), $namespace->stmts);
+        self::assertSame('Baz', (string) $class->name);
+        self::assertSame(['Foo', 'Bar'], $namespace->name->parts);
+        self::assertSame([$class], $namespace->stmts);
     }
 
     public function testIgnoresNodesOnNonMatchingClass(): void
     {
-        $visitor   = new ClassRenamerVisitor(new ReflectionClass(__CLASS__), 'Foo\\Bar\\Baz');
+        $visitor   = new ClassRenamerVisitor(new ReflectionClass(self::class), 'Foo\\Bar\\Baz');
         $class     = new Class_('Wrong');
         $namespace = new Namespace_(
-            new Name(array('CodeGenerationUtilsTest', 'Visitor'))
+            new Name(['CodeGenerationUtilsTest', 'Visitor'])
         );
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertSame($namespace, $visitor->enterNode($namespace));
         self::assertNull($visitor->enterNode($class));
         $visitor->leaveNode($class);
         $visitor->leaveNode($namespace);
 
-        self::assertSame('Wrong', (string)$class->name);
-        self::assertSame(array('CodeGenerationUtilsTest', 'Visitor'), $namespace->name->parts);
+        self::assertSame('Wrong', (string) $class->name);
+        self::assertSame(['CodeGenerationUtilsTest', 'Visitor'], $namespace->name->parts);
     }
 
     public function testIgnoresNodesOnNonMatchingNamespace(): void
     {
-        $visitor   = new ClassRenamerVisitor(new ReflectionClass(__CLASS__), 'Foo\\Bar\\Baz');
+        $visitor   = new ClassRenamerVisitor(new ReflectionClass(self::class), 'Foo\\Bar\\Baz');
         $class     = new Class_('ClassRenamerVisitorTest');
         $namespace = new Namespace_(
-            new Name(array('Wrong', 'Namespace', 'Here'))
+            new Name(['Wrong', 'Namespace', 'Here'])
         );
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertSame($namespace, $visitor->enterNode($namespace));
         self::assertNull($visitor->enterNode($class));
         $visitor->leaveNode($class);
         $visitor->leaveNode($namespace);
 
-        self::assertSame('ClassRenamerVisitorTest', (string)$class->name);
-        self::assertSame(array('Wrong', 'Namespace', 'Here'), $namespace->name->parts);
+        self::assertSame('ClassRenamerVisitorTest', (string) $class->name);
+        self::assertSame(['Wrong', 'Namespace', 'Here'], $namespace->name->parts);
     }
 
     public function testMatchOnEmptyNamespace(): void
     {
-        $visitor   = new ClassRenamerVisitor(new ReflectionClass('stdClass'), 'Baz');
-        $class     = new Class_('stdClass');
+        $visitor = new ClassRenamerVisitor(new ReflectionClass('stdClass'), 'Baz');
+        $class   = new Class_('stdClass');
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
 
-        self::assertSame('Baz', (string)$class->name);
+        self::assertSame('Baz', (string) $class->name);
     }
 
     public function testUnwrapsNamespacedClassCorrectly(): void
     {
-        $visitor   = new ClassRenamerVisitor(new ReflectionClass(__CLASS__), 'Baz');
+        $visitor   = new ClassRenamerVisitor(new ReflectionClass(self::class), 'Baz');
         $class     = new Class_('ClassRenamerVisitorTest');
         $namespace = new Namespace_(
-            new Name(array('CodeGenerationUtilsTest', 'Visitor'))
+            new Name(['CodeGenerationUtilsTest', 'Visitor'])
         );
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertSame($namespace, $visitor->enterNode($namespace));
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
-        self::assertSame(array($class), $visitor->leaveNode($namespace));
+        self::assertSame([$class], $visitor->leaveNode($namespace));
 
-        self::assertSame('Baz', (string)$class->name);
+        self::assertSame('Baz', (string) $class->name);
     }
 
     public function testWrapsGlobalClassCorrectly(): void
     {
-        $visitor   = new ClassRenamerVisitor(new ReflectionClass('stdClass'), 'Foo\\Bar');
-        $class     = new Class_('stdClass');
+        $visitor = new ClassRenamerVisitor(new ReflectionClass('stdClass'), 'Foo\\Bar');
+        $class   = new Class_('stdClass');
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertNull($visitor->enterNode($class));
         $namespace = $visitor->leaveNode($class);
 
         self::assertInstanceOf(Namespace_::class, $namespace);
         self::assertSame('Foo', $namespace->name->toString());
-        self::assertSame(array($class), $namespace->stmts);
+        self::assertSame([$class], $namespace->stmts);
     }
 
     public function testMismatchOnEmptyNamespace(): void
@@ -140,16 +137,16 @@ class ClassRenamerVisitorTest extends TestCase
         $visitor   = new ClassRenamerVisitor(new ReflectionClass('stdClass'), 'Baz');
         $class     = new Class_('stdClass');
         $namespace = new Namespace_(
-            new Name(array('Wrong', 'Namespace', 'Here'))
+            new Name(['Wrong', 'Namespace', 'Here'])
         );
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertSame($namespace, $visitor->enterNode($namespace));
         self::assertNull($visitor->enterNode($class));
         $visitor->leaveNode($class);
         $visitor->leaveNode($namespace);
 
-        self::assertSame('stdClass', (string)$class->name);
-        self::assertSame(array('Wrong', 'Namespace', 'Here'), $namespace->name->parts);
+        self::assertSame('stdClass', (string) $class->name);
+        self::assertSame(['Wrong', 'Namespace', 'Here'], $namespace->name->parts);
     }
 }

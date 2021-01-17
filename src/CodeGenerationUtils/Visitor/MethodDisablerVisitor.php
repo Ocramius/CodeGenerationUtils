@@ -32,25 +32,23 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * Disables class methods matching a given filter by replacing their body so that
  * they throw an exception when they are called.
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class MethodDisablerVisitor extends NodeVisitorAbstract
 {
     /**
      * @var callable
+     * @psalm-var callable(Node ): ?bool
      */
     private $filter;
 
     /**
-     * Constructor.
-     *
      * @param callable $filter a filter method that accepts a single parameter of
      *                         type {@see \PhpParser\Node} and returns null|true|false to
      *                         respectively ignore, remove or replace it.
+     *
+     * @psalm-param callable(\PhpParser\Node): ?bool
      */
-    public function __construct($filter)
+    public function __construct(callable $filter)
     {
         $this->filter = $filter;
     }
@@ -58,30 +56,30 @@ class MethodDisablerVisitor extends NodeVisitorAbstract
     /**
      * Replaces the given node if it is a class method and matches according to the given callback
      *
-     * @param \PhpParser\Node $node
-     *
-     * @return bool|null|\PhpParser\Node\Stmt\ClassMethod
+     * @return bool|ClassMethod|null
      */
     public function leaveNode(Node $node)
     {
         $filter = $this->filter;
 
-        if (! $node instanceof ClassMethod || null === ($filterResult = $filter($node))) {
+        if (! $node instanceof ClassMethod) {
             return null;
         }
 
-        if (false === $filterResult) {
-            return false;
+        $filterResult = $filter($node);
+
+        if (! $filterResult) {
+            return $filterResult;
         }
 
-        $node->stmts = array(
+        $node->stmts = [
             new Throw_(
                 new New_(
                     new FullyQualified('BadMethodCallException'),
-                    array(new Arg(new String_('Method is disabled')))
+                    [new Arg(new String_('Method is disabled'))]
                 )
-            )
-        );
+            ),
+        ];
 
         return $node;
     }

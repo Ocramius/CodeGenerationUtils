@@ -20,15 +20,14 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtilsTest\FileLocator;
 
-use PHPUnit\Framework\TestCase;
-use CodeGenerationUtils\FileLocator\FileLocator;
 use CodeGenerationUtils\Exception\InvalidGeneratedClassesDirectoryException;
+use CodeGenerationUtils\FileLocator\FileLocator;
+use PHPUnit\Framework\TestCase;
+
+use const DIRECTORY_SEPARATOR;
 
 /**
  * Tests for {@see \CodeGenerationUtils\FileLocator\FileLocator}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class FileLocatorTest extends TestCase
 {

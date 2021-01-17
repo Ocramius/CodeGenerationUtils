@@ -25,26 +25,16 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeVisitorAbstract;
-use PhpParser\Parser;
 
 /**
  * Resolves the FQCN of the class included in the AST.
  * Assumes a single class.
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class ClassFQCNResolverVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var \PhpParser\Node\Stmt\Namespace_|null
-     */
-    private $namespace;
+    private ?Namespace_ $namespace = null;
 
-    /**
-     * @var \PhpParser\Node\Stmt\Class_|null
-     */
-    private $class;
+    private ?Class_ $class = null;
 
     /**
      * {@inheritDoc}
@@ -58,11 +48,9 @@ class ClassFQCNResolverVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param \PhpParser\Node $node
-     *
      * @return null
      *
-     * @throws Exception\UnexpectedValueException if more than one class is found
+     * @throws Exception\UnexpectedValueException if more than one class is found.
      */
     public function enterNode(Node $node)
     {
@@ -74,33 +62,35 @@ class ClassFQCNResolverVisitor extends NodeVisitorAbstract
             $this->namespace = $node;
         }
 
-        if ($node instanceof Class_) {
-            if ($this->class) {
-                throw new UnexpectedValueException('Multiple classes discovered');
-            }
-
-            $this->class = $node;
+        if (! ($node instanceof Class_)) {
+            return;
         }
+
+        if ($this->class) {
+            throw new UnexpectedValueException('Multiple classes discovered');
+        }
+
+        $this->class = $node;
     }
 
     /**
      * @return string the short name of the discovered class
      *
-     * @throws Exception\UnexpectedValueException if no class could be resolved
+     * @throws Exception\UnexpectedValueException if no class could be resolved.
      */
-    public function getName() : string
+    public function getName(): string
     {
         if (! $this->class) {
             throw new UnexpectedValueException('No class discovered');
         }
 
-        return (string)$this->class->name;
+        return (string) $this->class->name;
     }
 
     /**
      * @return string the namespace name of the discovered class
      */
-    public function getNamespace() : string
+    public function getNamespace(): string
     {
         return $this->namespace ? $this->namespace->name->toString() : '';
     }

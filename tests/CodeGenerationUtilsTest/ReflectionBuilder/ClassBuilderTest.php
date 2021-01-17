@@ -24,15 +24,16 @@ use CodeGenerationUtils\ReflectionBuilder\ClassBuilder;
 use CodeGenerationUtilsTestAsset\ClassWithDefaultValueIsConstantMethod;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use PhpParser\Node\Stmt\Namespace_;
+
+use function array_filter;
+use function assert;
+use function reset;
 
 /**
  * Tests for {@see \CodeGenerationUtils\ReflectionBuilder\ClassBuilder}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  *
  * @covers \CodeGenerationUtils\ReflectionBuilder\ClassBuilder
  */
@@ -44,25 +45,25 @@ class ClassBuilderTest extends TestCase
     public function testBuildSelf(): void
     {
         $classBuilder = new ClassBuilder();
-        $ast          = $classBuilder->fromReflection(new ReflectionClass(__CLASS__));
-        /* @var $namespace Namespace_ */
+        $ast          = $classBuilder->fromReflection(new ReflectionClass(self::class));
         $namespace    = $ast[0];
+        assert($namespace instanceof Namespace_);
 
         self::assertInstanceOf(Namespace_::class, $namespace);
         self::assertSame(__NAMESPACE__, $namespace->name->toString());
 
-        /* @var $class Class_ */
         $class = $namespace->stmts[0];
+        assert($class instanceof Class_);
 
         self::assertInstanceOf(Class_::class, $class);
-        self::assertSame('ClassBuilderTest', (string)$class->name);
+        self::assertSame('ClassBuilderTest', (string) $class->name);
 
         $currentMethod = __FUNCTION__;
-        /* @var $methods ClassMethod[] */
-        $methods       = array_filter(
+        /** @var ClassMethod[] $methods */
+        $methods = array_filter(
             $class->stmts,
             static function ($node) use ($currentMethod) {
-                return $node instanceof ClassMethod && (string)$node->name === $currentMethod;
+                return $node instanceof ClassMethod && (string) $node->name === $currentMethod;
             }
         );
 
@@ -70,7 +71,7 @@ class ClassBuilderTest extends TestCase
 
         $thisMethod = reset($methods);
 
-        self::assertSame($currentMethod, (string)$thisMethod->name);
+        self::assertSame($currentMethod, (string) $thisMethod->name);
     }
 
     /**
@@ -82,17 +83,17 @@ class ClassBuilderTest extends TestCase
         $testClass    = new ClassWithDefaultValueIsConstantMethod();
         $ast          = $classBuilder->fromReflection(new ReflectionClass($testClass));
 
-        /* @var $namespace Namespace_ */
         $namespace = $ast[0];
-        /* @var $class Class_ */
-        $class     = $namespace->stmts[0];
-        $method    = 'defaultValueIsConstant';
+        assert($namespace instanceof Namespace_);
+        $class = $namespace->stmts[0];
+        assert($class instanceof Class_);
+        $method = 'defaultValueIsConstant';
 
-        /* @var $methods ClassMethod[] */
+        /** @var ClassMethod[] $methods */
         $methods = array_filter(
             $class->stmts,
             static function ($node) use ($method) {
-                return ($node instanceof ClassMethod && (string)$node->name === $method);
+                return $node instanceof ClassMethod && (string) $node->name === $method;
             }
         );
 
@@ -100,6 +101,6 @@ class ClassBuilderTest extends TestCase
 
         $thisMethod = reset($methods);
 
-        self::assertSame($method, (string)$thisMethod->name);
+        self::assertSame($method, (string) $thisMethod->name);
     }
 }

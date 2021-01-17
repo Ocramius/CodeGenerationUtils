@@ -20,22 +20,18 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtilsTestAsset;
 
+use const PHP_VERSION;
+
 /**
  * Class to use for testing the ReflectionBuilder {@see \CodeGenerationUtilsTest\ReflectionBuilder\ClassBuilderTest}
- *
- * @author Samuel Parkinson <sam@graze.com>
- * @license MIT
  */
 class ClassWithDefaultValueIsConstantMethod
 {
     /**
      * Method to test the ReflectionProperty::getDefaultValueConstantName usage
      * within {@see \CodeGenerationUtils\ReflectionBuilder\ClassBuilder}.
-     *
-     * @param string $test
-     * @return void
      */
-    public function defaultValueIsConstant($test = PHP_VERSION)
+    public function defaultValueIsConstant(string $test = PHP_VERSION): void
     {
         return;
     }

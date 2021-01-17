@@ -21,40 +21,37 @@ declare(strict_types=1);
 namespace CodeGenerationUtils\Visitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeVisitorAbstract;
 
+use function array_map;
+use function implode;
+use function is_array;
+use function trim;
+
 /**
  * Implements the given interfaces on the given class name within the AST
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class ClassImplementorVisitor extends NodeVisitorAbstract
 {
-    private $matchedClassFQCN;
+    private string $matchedClassFQCN;
+
+    /** @var Name[] */
+    private array $interfaces;
+
+    private ?Namespace_ $currentNamespace = null;
 
     /**
-     * @var \PhpParser\Node\Name[]
-     */
-    private $interfaces;
-
-    /**
-     * @var \PhpParser\Node\Stmt\Namespace_|null
-     */
-    private $currentNamespace;
-
-    /**
-     * @param string   $matchedClassFQCN
      * @param string[] $interfaces
      */
     public function __construct(string $matchedClassFQCN, array $interfaces)
     {
         $this->matchedClassFQCN = $matchedClassFQCN;
         $this->interfaces       = array_map(
-            function ($interfaceName) {
+            static function ($interfaceName) {
                 return new FullyQualified($interfaceName);
             },
             $interfaces
@@ -62,23 +59,18 @@ class ClassImplementorVisitor extends NodeVisitorAbstract
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Cleanup internal state
-     *
-     * @param array $nodes
-     *
-     * @return null
      */
     public function beforeTraverse(array $nodes)
     {
         $this->currentNamespace = null;
+
+        return null;
     }
 
-    /**
-     * @param \PhpParser\Node $node
-     *
-     * @return \PhpParser\Node\Stmt\Namespace_|null
-     */
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): ?Namespace_
     {
         if ($node instanceof Namespace_) {
             $this->currentNamespace = $node;
@@ -93,24 +85,20 @@ class ClassImplementorVisitor extends NodeVisitorAbstract
      * Replaces class nodes with nodes implementing the given interfaces. Implemented interfaces are replaced,
      * not added.
      *
-     * @param \PhpParser\Node $node
-     *
      * @todo can be abstracted away into a visitor that allows to modify the matched node via a callback
-     *
-     * @return \PhpParser\Node\Stmt\Class_|null
      */
-    public function leaveNode(Node $node)
+    public function leaveNode(Node $node): ?Class_
     {
         if ($node instanceof Namespace_) {
             $this->currentNamespace = null;
         }
 
         if ($node instanceof Class_) {
-            $namespace = ($this->currentNamespace && is_array($this->currentNamespace->name->parts))
+            $namespace = $this->currentNamespace && is_array($this->currentNamespace->name->parts)
                 ? implode('\\', $this->currentNamespace->name->parts)
                 : '';
 
-            if (trim($namespace . '\\' . (string)$node->name, '\\') === $this->matchedClassFQCN) {
+            if (trim($namespace . '\\' . (string) $node->name, '\\') === $this->matchedClassFQCN) {
                 $node->implements = $this->interfaces;
             }
 

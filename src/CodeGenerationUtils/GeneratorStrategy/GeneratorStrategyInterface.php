@@ -20,20 +20,19 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtils\GeneratorStrategy;
 
+use PhpParser\Node;
+
 /**
  * Generator strategy interface - defines basic behavior of class generators
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 interface GeneratorStrategyInterface
 {
     /**
      * Generate the provided AST as a class
      *
-     * @param \PhpParser\Node[] $ast
+     * @param Node[] $ast
      *
      * @return string the class body
      */
-    public function generate(array $ast) : string;
+    public function generate(array $ast): string;
 }

@@ -26,33 +26,21 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeVisitorAbstract;
 
+use function implode;
+use function is_array;
+use function trim;
+
 /**
  * Visitor that extends the matched class in the visited AST from another given class
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class ClassExtensionVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var string
-     */
-    private $matchedClassFQCN;
+    private string $matchedClassFQCN;
 
-    /**
-     * @var string
-     */
-    private $newParentClassFQCN;
+    private string $newParentClassFQCN;
 
-    /**
-     * @var \PhpParser\Node\Stmt\Namespace_|null
-     */
-    private $currentNamespace;
+    private ?Namespace_ $currentNamespace = null;
 
-    /**
-     * @param string $matchedClassFQCN
-     * @param string $newParentClassFQCN
-     */
     public function __construct(string $matchedClassFQCN, string $newParentClassFQCN)
     {
         $this->matchedClassFQCN   = $matchedClassFQCN;
@@ -71,12 +59,7 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
         $this->currentNamespace = null;
     }
 
-    /**
-     * @param \PhpParser\Node $node
-     *
-     * @return \PhpParser\Node\Stmt\Namespace_|null
-     */
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): ?Namespace_
     {
         if ($node instanceof Namespace_) {
             $this->currentNamespace = $node;
@@ -93,11 +76,11 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
      * When leaving a node that is a class, replaces it with a modified version that extends the
      * given parent class
      *
+     * @param Node $node
+     *
+     * @return Class_|null
+     *
      * @todo can be abstracted away into a visitor that allows to modify the node via a callback
-     *
-     * @param \PhpParser\Node $node
-     *
-     * @return \PhpParser\Node\Stmt\Class_|null
      */
     public function leaveNode(Node $node)
     {
@@ -106,11 +89,11 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
         }
 
         if ($node instanceof Class_) {
-            $namespace = ($this->currentNamespace && is_array($this->currentNamespace->name->parts))
+            $namespace = $this->currentNamespace && is_array($this->currentNamespace->name->parts)
                 ? implode('\\', $this->currentNamespace->name->parts)
                 : '';
 
-            if (trim($namespace . '\\' . (string)$node->name, '\\') === $this->matchedClassFQCN) {
+            if (trim($namespace . '\\' . (string) $node->name, '\\') === $this->matchedClassFQCN) {
                 $node->extends = new FullyQualified($this->newParentClassFQCN);
             }
 

@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtils\ReflectionBuilder;
 
+use BadMethodCallException;
 use PhpParser\Builder\Method;
 use PhpParser\Builder\Param;
 use PhpParser\Builder\Property;
@@ -37,31 +38,30 @@ use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
 
+use function explode;
+use function method_exists;
+
 /**
  * Rudimentary utility to build an AST from a reflection class
  *
  * @todo should be split into various utilities like this one and eventually replace `Zend\Code\Generator`
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class ClassBuilder
 {
     /**
-     * @param \ReflectionClass $reflectionClass
-     *
-     * @return \PhpParser\Node[]
+     * @return Node[]
      */
-    public function fromReflection(ReflectionClass $reflectionClass) : array
+    public function fromReflection(ReflectionClass $reflectionClass): array
     {
-        $class      = new Class_($reflectionClass->getShortName());
-        $statements = array($class);
+        $class       = new Class_($reflectionClass->getShortName());
+        $statements  = [$class];
+        $parentClass = $reflectionClass->getParentClass();
 
-        if ($parentClass = $reflectionClass->getParentClass()) {
+        if ($parentClass) {
             $class->extends = new FullyQualified($parentClass->getName());
         }
 
-        $interfaces = array();
+        $interfaces = [];
 
         foreach ($reflectionClass->getInterfaces() as $reflectionInterface) {
             $interfaces[] = new FullyQualified($reflectionInterface->getName());
@@ -71,7 +71,7 @@ class ClassBuilder
 
         foreach ($reflectionClass->getConstants() as $constant => $value) {
             $class->stmts[] = new ClassConst(
-                array(new Const_($constant, BuilderHelpers::normalizeValue($value)))
+                [new Const_($constant, BuilderHelpers::normalizeValue($value))]
             );
         }
 
@@ -83,27 +83,26 @@ class ClassBuilder
             $class->stmts[] = $this->buildMethod($reflectionMethod);
         }
 
-        if (! $namespace = $reflectionClass->getNamespaceName()) {
+        $namespace = $reflectionClass->getNamespaceName();
+
+        if ($namespace === '') {
             return $statements;
         }
 
-        return array(new Namespace_(new Name(explode('\\', $namespace)), $statements));
+        return [new Namespace_(new Name(explode('\\', $namespace)), $statements)];
     }
 
     /**
-     * @throws \BadMethodCallException disabled method
-     */
-    public function getNode()
-    {
-        throw new \BadMethodCallException('Disabled');
-    }
-
-    /**
-     * @param ReflectionProperty $reflectionProperty
+     * @throws BadMethodCallException disabled method.
      *
-     * @return Node\Stmt\Property
+     * @psalm-return never-return
      */
-    protected function buildProperty(ReflectionProperty $reflectionProperty) : Node\Stmt\Property
+    public function getNode(): void
+    {
+        throw new BadMethodCallException('Disabled');
+    }
+
+    protected function buildProperty(ReflectionProperty $reflectionProperty): Node\Stmt\Property
     {
         $propertyBuilder = new Property($reflectionProperty->getName());
 
@@ -132,12 +131,7 @@ class ClassBuilder
         return $propertyBuilder->getNode();
     }
 
-    /**
-     * @param ReflectionMethod $reflectionMethod
-     *
-     * @return \PhpParser\Node\Stmt\ClassMethod
-     */
-    protected function buildMethod(ReflectionMethod $reflectionMethod) : Node\Stmt\ClassMethod
+    protected function buildMethod(ReflectionMethod $reflectionMethod): Node\Stmt\ClassMethod
     {
         $methodBuilder = new Method($reflectionMethod->getName());
 
@@ -178,12 +172,7 @@ class ClassBuilder
         return $methodBuilder->getNode();
     }
 
-    /**
-     * @param ReflectionParameter $reflectionParameter
-     *
-     * @return Node\Param
-     */
-    protected function buildParameter(ReflectionParameter $reflectionParameter) : Node\Param
+    protected function buildParameter(ReflectionParameter $reflectionParameter): Node\Param
     {
         $parameterBuilder = new Param($reflectionParameter->getName());
 
@@ -199,14 +188,14 @@ class ClassBuilder
             $parameterBuilder->setTypeHint('callable');
         }
 
-        if ($type = $reflectionParameter->getClass()) {
+        $type = $reflectionParameter->getClass();
+
+        if ($type !== null) {
             $parameterBuilder->setTypeHint($type->getName());
         }
 
         if ($reflectionParameter->isDefaultValueAvailable()) {
-            if (method_exists($reflectionParameter, 'isDefaultValueConstant')
-                && $reflectionParameter->isDefaultValueConstant()
-            ) {
+            if ($reflectionParameter->isDefaultValueConstant()) {
                 $parameterBuilder->setDefault(
                     new ConstFetch(
                         new Name($reflectionParameter->getDefaultValueConstantName())

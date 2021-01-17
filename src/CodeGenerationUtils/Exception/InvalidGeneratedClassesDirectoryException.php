@@ -22,20 +22,14 @@ namespace CodeGenerationUtils\Exception;
 
 use InvalidArgumentException;
 
+use function sprintf;
+
 /**
  * Exception for invalid directories
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class InvalidGeneratedClassesDirectoryException extends InvalidArgumentException implements ExceptionInterface
 {
-    /**
-     * @param string $directory
-     *
-     * @return self
-     */
-    public static function generatedClassesDirectoryNotFound(string $directory) : self
+    public static function generatedClassesDirectoryNotFound(string $directory): self
     {
         return new self(sprintf('Provided directory "%s" does not exist', $directory));
     }

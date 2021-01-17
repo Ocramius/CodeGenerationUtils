@@ -26,21 +26,14 @@ use PhpParser\NodeVisitorAbstract;
 
 /**
  * Removes all non-public class methods
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class PublicMethodsFilterVisitor extends NodeVisitorAbstract
 {
     /**
      * Removes the node if it is a non-public method
-     *
-     * @param \PhpParser\Node $node
-     *
-     * @return bool|null
      */
-    public function leaveNode(Node $node)
+    public function leaveNode(Node $node): ?bool
     {
-        return ($node instanceof ClassMethod && ! $node->isPublic()) ? false : null;
+        return $node instanceof ClassMethod && ! $node->isPublic() ? false : null;
     }
 }

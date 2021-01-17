@@ -29,20 +29,17 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for {@see \CodeGenerationUtils\Visitor\ClassClonerVisitor}
  *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
- *
  * @covers \CodeGenerationUtils\Visitor\ClassImplementorVisitor
  */
 class ClassImplementorVisitorTest extends TestCase
 {
     public function testRenamesNodesOnMatchingClass(): void
     {
-        $visitor   = new ClassImplementorVisitor('Foo\\Bar', array('Baz\\Tab', 'Tar\\War'));
+        $visitor   = new ClassImplementorVisitor('Foo\\Bar', ['Baz\\Tab', 'Tar\\War']);
         $class     = new Class_('Bar');
         $namespace = new Namespace_(new Name('Foo'));
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertSame($namespace, $visitor->enterNode($namespace));
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
@@ -54,11 +51,11 @@ class ClassImplementorVisitorTest extends TestCase
 
     public function testIgnoresNodesOnNonMatchingClass(): void
     {
-        $visitor   = new ClassImplementorVisitor('Foo\\Bar', array('Baz\\Tab', 'Tar\\War'));
+        $visitor   = new ClassImplementorVisitor('Foo\\Bar', ['Baz\\Tab', 'Tar\\War']);
         $class     = new Class_('Tab');
         $namespace = new Namespace_(new Name('Foo'));
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertSame($namespace, $visitor->enterNode($namespace));
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
@@ -69,11 +66,11 @@ class ClassImplementorVisitorTest extends TestCase
 
     public function testIgnoresNodesOnNonMatchingNamespace(): void
     {
-        $visitor   = new ClassImplementorVisitor('Foo\\Bar', array('Baz\\Tab', 'Tar\\War'));
+        $visitor   = new ClassImplementorVisitor('Foo\\Bar', ['Baz\\Tab', 'Tar\\War']);
         $class     = new Class_('Bar');
         $namespace = new Namespace_(new Name('Tab'));
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertSame($namespace, $visitor->enterNode($namespace));
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
@@ -84,10 +81,10 @@ class ClassImplementorVisitorTest extends TestCase
 
     public function testMatchOnEmptyNamespace(): void
     {
-        $visitor   = new ClassImplementorVisitor('Foo', array('Baz\\Tab', 'Tar\\War'));
-        $class     = new Class_('Foo');
+        $visitor = new ClassImplementorVisitor('Foo', ['Baz\\Tab', 'Tar\\War']);
+        $class   = new Class_('Foo');
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
 

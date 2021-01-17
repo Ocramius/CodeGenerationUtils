@@ -22,16 +22,17 @@ namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\ClassClonerVisitor;
 use PhpParser\Node\Stmt\Class_;
-use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+
+use function assert;
+use function end;
+use function implode;
 
 /**
  * Tests for {@see \CodeGenerationUtils\Visitor\ClassClonerVisitor}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  *
  * @covers \CodeGenerationUtils\Visitor\ClassClonerVisitor
  */
@@ -39,25 +40,25 @@ class ClassClonerVisitorTest extends TestCase
 {
     public function testClonesClassIntoEmptyNodeList(): void
     {
-        $reflectionClass = new ReflectionClass(__CLASS__);
+        $reflectionClass = new ReflectionClass(self::class);
 
         $visitor = new ClassClonerVisitor($reflectionClass);
 
-        $nodes = $visitor->beforeTraverse(array());
+        $nodes = $visitor->beforeTraverse([]);
 
         self::assertInstanceOf(Declare_::class, $nodes[0]);
         self::assertInstanceOf(Namespace_::class, $nodes[1]);
 
-        /* @var $node Namespace_ */
         $node = $nodes[1];
+        assert($node instanceof Namespace_);
 
         self::assertSame(__NAMESPACE__, implode('\\', $node->name->parts));
 
-        /* @var $class Class_ */
         $class = end($node->stmts);
+        assert($class instanceof Class_);
 
         self::assertInstanceOf(Class_::class, $class);
-        self::assertSame('ClassClonerVisitorTest', (string)$class->name);
+        self::assertSame('ClassClonerVisitorTest', (string) $class->name);
     }
 
     public function testClonesClassIntoNonEmptyNodeList(): void

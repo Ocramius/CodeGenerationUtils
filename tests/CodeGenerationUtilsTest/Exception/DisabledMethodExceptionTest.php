@@ -20,14 +20,11 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtilsTest\Exception;
 
-use PHPUnit\Framework\TestCase;
 use CodeGenerationUtils\Exception\DisabledMethodException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for {@see \CodeGenerationUtils\Exception\DisabledMethodException}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class DisabledMethodExceptionTest extends TestCase
 {

@@ -22,34 +22,26 @@ namespace CodeGenerationUtils\GeneratorStrategy;
 
 use CodeGenerationUtils\FileLocator\FileLocatorInterface;
 use CodeGenerationUtils\Visitor\ClassFQCNResolverVisitor;
+use CodeGenerationUtils\Visitor\Exception\UnexpectedValueException;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeTraverserInterface;
+
+use function file_put_contents;
+use function rename;
+use function trim;
+use function uniqid;
 
 /**
  * Generator strategy that writes the generated classes to disk while generating them
  *
  * {@inheritDoc}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class FileWriterGeneratorStrategy extends BaseGeneratorStrategy
 {
-    /**
-     * @var \CodeGenerationUtils\FileLocator\FileLocatorInterface
-     */
-    protected $fileLocator;
+    protected FileLocatorInterface $fileLocator;
+    private NodeTraverserInterface $traverser;
+    private ClassFQCNResolverVisitor $visitor;
 
-    /**
-     * @var \PhpParser\NodeTraverserInterface
-     */
-    private $traverser;
-
-    private $visitor;
-
-
-    /**
-     * @param \CodeGenerationUtils\FileLocator\FileLocatorInterface $fileLocator
-     */
     public function __construct(FileLocatorInterface $fileLocator)
     {
         $this->fileLocator = $fileLocator;
@@ -64,9 +56,9 @@ class FileWriterGeneratorStrategy extends BaseGeneratorStrategy
      *
      * {@inheritDoc}
      *
-     * @throws \CodeGenerationUtils\Visitor\Exception\UnexpectedValueException
+     * @throws UnexpectedValueException
      */
-    public function generate(array $ast) : string
+    public function generate(array $ast): string
     {
         $this->traverser->traverse($ast);
 

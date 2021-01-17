@@ -25,11 +25,13 @@ use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
 use PhpParser\Node\Stmt\Class_;
 use PHPUnit\Framework\TestCase;
 
+use function class_exists;
+use function ini_get;
+use function strpos;
+use function uniqid;
+
 /**
  * Tests for {@see \CodeGenerationUtils\GeneratorStrategy\EvaluatingGeneratorStrategy}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class EvaluatingGeneratorStrategyTest extends TestCase
 {
@@ -39,9 +41,9 @@ class EvaluatingGeneratorStrategyTest extends TestCase
      */
     public function testGenerate(): void
     {
-        $strategy       = new EvaluatingGeneratorStrategy();
-        $className      = UniqueIdentifierGenerator::getIdentifier('Foo');
-        $generated      = $strategy->generate(array(new Class_($className)));
+        $strategy  = new EvaluatingGeneratorStrategy();
+        $className = UniqueIdentifierGenerator::getIdentifier('Foo');
+        $generated = $strategy->generate([new Class_($className)]);
 
         self::assertGreaterThan(0, strpos($generated, $className));
         self::assertTrue(class_exists($className, false));
@@ -57,9 +59,9 @@ class EvaluatingGeneratorStrategyTest extends TestCase
             self::markTestSkipped('Ini setting "suhosin.executor.disable_eval" is needed to run this test');
         }
 
-        $strategy       = new EvaluatingGeneratorStrategy();
-        $className      = 'Foo' . uniqid('', true);
-        $generated      = $strategy->generate(array(new Class_($className)));
+        $strategy  = new EvaluatingGeneratorStrategy();
+        $className = 'Foo' . uniqid('', true);
+        $generated = $strategy->generate([new Class_($className)]);
 
         self::assertGreaterThan(0, strpos($generated, $className));
         self::assertTrue(class_exists($className, false));

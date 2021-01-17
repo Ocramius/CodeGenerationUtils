@@ -22,18 +22,9 @@ namespace CodeGenerationUtils\FileLocator;
 
 /**
  * File locator - enables discovering files where generated classes are located
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 interface FileLocatorInterface
 {
-    /**
-     * Retrieves the file name for the given generated class FQCN
-     *
-     * @param $className
-     *
-     * @return string
-     */
-    public function getGeneratedClassFileName(string $className) : string;
+    /** Retrieves the file name for the given generated class FQCN */
+    public function getGeneratedClassFileName(string $className): string;
 }

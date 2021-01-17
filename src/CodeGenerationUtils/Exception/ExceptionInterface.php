@@ -22,9 +22,6 @@ namespace CodeGenerationUtils\Exception;
 
 /**
  * Base exception class for the code generator component
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 interface ExceptionInterface
 {

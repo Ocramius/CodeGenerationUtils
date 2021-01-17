@@ -25,37 +25,25 @@ use PhpParser\PrettyPrinterAbstract;
 
 /**
  * Generator strategy that generates the class body
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class BaseGeneratorStrategy implements GeneratorStrategyInterface
 {
-    /**
-     * @var \PhpParser\PrettyPrinterAbstract|null
-     */
-    private $prettyPrinter;
+    private ?PrettyPrinterAbstract $prettyPrinter = null;
 
     /**
      * {@inheritDoc}
      */
-    public function generate(array $ast) : string
+    public function generate(array $ast): string
     {
         return $this->getPrettyPrinter()->prettyPrint($ast);
     }
 
-    /**
-     * @param \PhpParser\PrettyPrinterAbstract $prettyPrinter
-     */
-    public function setPrettyPrinter(PrettyPrinterAbstract $prettyPrinter)
+    public function setPrettyPrinter(PrettyPrinterAbstract $prettyPrinter): void
     {
         $this->prettyPrinter = $prettyPrinter;
     }
 
-    /**
-     * @return PrettyPrinterAbstract
-     */
-    protected function getPrettyPrinter() : PrettyPrinterAbstract
+    protected function getPrettyPrinter(): PrettyPrinterAbstract
     {
         return $this->prettyPrinter ?: $this->prettyPrinter = new Standard();
     }

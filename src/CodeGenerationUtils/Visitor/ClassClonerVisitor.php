@@ -20,31 +20,22 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtils\Visitor;
 
-use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
-use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use ReflectionClass;
+
+use function file_get_contents;
 
 /**
  * Visitor capable of generating an AST given a reflection class that is written in a file
  *
  * @todo doesn't work with evaluated code (file must exist)
  * @todo simply skips if the AST is not empty - should instead be extended to decide what to do
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class ClassClonerVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var ReflectionClass
-     */
-    private $reflectedClass;
+    private ReflectionClass $reflectedClass;
 
-    /**
-     * @param ReflectionClass $reflectedClass
-     */
     public function __construct(ReflectionClass $reflectedClass)
     {
         $this->reflectedClass = $reflectedClass;
@@ -55,9 +46,9 @@ class ClassClonerVisitor extends NodeVisitorAbstract
      *
      * @param array $nodes
      *
-     * @return \PhpParser\Node[]
+     * @return Node[]
      */
-    public function beforeTraverse(array $nodes) : array
+    public function beforeTraverse(array $nodes): array
     {
         // quick fix - if the list is empty, replace it it
         if (! $nodes) {

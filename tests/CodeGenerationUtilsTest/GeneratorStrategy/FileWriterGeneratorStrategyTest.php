@@ -27,12 +27,16 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+
+use function assert;
+use function class_exists;
+use function strpos;
+use function sys_get_temp_dir;
+use function uniqid;
 
 /**
  * Tests for {@see \CodeGenerationUtils\GeneratorStrategy\FileWriterGeneratorStrategy}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class FileWriterGeneratorStrategyTest extends TestCase
 {
@@ -40,10 +44,10 @@ class FileWriterGeneratorStrategyTest extends TestCase
      * @covers \CodeGenerationUtils\GeneratorStrategy\FileWriterGeneratorStrategy::__construct
      * @covers \CodeGenerationUtils\GeneratorStrategy\FileWriterGeneratorStrategy::generate
      */
-    public function testGenerate()
+    public function testGenerate(): void
     {
-        /* @var $locator \PHPUnit_Framework_MockObject_MockObject|FileLocatorInterface */
-        $locator   = $this->createMock(FileLocatorInterface::class);
+        $locator = $this->createMock(FileLocatorInterface::class);
+        assert($locator instanceof PHPUnit_Framework_MockObject_MockObject || $locator instanceof FileLocatorInterface);
         $generator = new FileWriterGeneratorStrategy($locator);
         $tmpFile   = sys_get_temp_dir() . '/FileWriterGeneratorStrategyTest' . uniqid('', true) . '.php';
         $className = UniqueIdentifierGenerator::getIdentifier('Bar');
@@ -56,8 +60,8 @@ class FileWriterGeneratorStrategyTest extends TestCase
             ->willReturn($tmpFile);
 
         $class     = new Class_($className);
-        $namespace = new Namespace_(new Name('Foo'), array($class));
-        $body      = $generator->generate(array($namespace));
+        $namespace = new Namespace_(new Name('Foo'), [$class]);
+        $body      = $generator->generate([$namespace]);
 
         self::assertGreaterThan(0, strpos($body, $className));
         self::assertFalse(class_exists($fqcn, false));

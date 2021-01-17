@@ -29,9 +29,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for {@see \CodeGenerationUtils\Visitor\ClassClonerVisitor}
  *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
- *
  * @covers \CodeGenerationUtils\Visitor\ClassExtensionVisitor
  */
 class ClassExtensionVisitorTest extends TestCase
@@ -42,7 +39,7 @@ class ClassExtensionVisitorTest extends TestCase
         $class     = new Class_('Bar');
         $namespace = new Namespace_(new Name('Foo'));
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertSame($namespace, $visitor->enterNode($namespace));
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
@@ -58,7 +55,7 @@ class ClassExtensionVisitorTest extends TestCase
         $class     = new Class_('Tab');
         $namespace = new Namespace_(new Name('Foo'));
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertSame($namespace, $visitor->enterNode($namespace));
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
@@ -73,7 +70,7 @@ class ClassExtensionVisitorTest extends TestCase
         $class     = new Class_('Bar');
         $namespace = new Namespace_(new Name('Tab'));
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertSame($namespace, $visitor->enterNode($namespace));
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
@@ -84,10 +81,10 @@ class ClassExtensionVisitorTest extends TestCase
 
     public function testMatchOnEmptyNamespace(): void
     {
-        $visitor   = new ClassExtensionVisitor('Foo', 'Baz\\Tab');
-        $class     = new Class_('Foo');
+        $visitor = new ClassExtensionVisitor('Foo', 'Baz\\Tab');
+        $class   = new Class_('Foo');
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
 
