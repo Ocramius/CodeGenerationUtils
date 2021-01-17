@@ -20,47 +20,45 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtilsTest\Autoloader;
 
-use PHPUnit\Framework\TestCase;
 use CodeGenerationUtils\Autoloader\Autoloader;
+use CodeGenerationUtils\FileLocator\FileLocatorInterface;
+use CodeGenerationUtils\Inflector\ClassNameInflectorInterface;
 use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+use function class_exists;
+use function file_put_contents;
+use function sys_get_temp_dir;
+use function uniqid;
 
 /**
  * Tests for {@see \CodeGenerationUtils\Autoloader\Autoloader}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class AutoloaderTest extends TestCase
 {
-    /**
-     * @var \CodeGenerationUtils\Autoloader\Autoloader
-     */
-    protected $autoloader;
+    protected Autoloader $autoloader;
 
-    /**
-     * @var \CodeGenerationUtils\FileLocator\FileLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var FileLocatorInterface&MockObject */
     protected $fileLocator;
 
-    /**
-     * @var \CodeGenerationUtils\Inflector\ClassNameInflectorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var ClassNameInflectorInterface&MockObject */
     protected $classNameInflector;
 
     /**
      * @covers \CodeGenerationUtils\Autoloader\Autoloader::__construct
      */
-    public function setUp()
+    public function setUp(): void
     {
-        $this->fileLocator        = $this->createMock('CodeGenerationUtils\\FileLocator\\FileLocatorInterface');
-        $this->classNameInflector = $this->createMock('CodeGenerationUtils\\Inflector\\ClassNameInflectorInterface');
+        $this->fileLocator        = $this->createMock(FileLocatorInterface::class);
+        $this->classNameInflector = $this->createMock(ClassNameInflectorInterface::class);
         $this->autoloader         = new Autoloader($this->fileLocator, $this->classNameInflector);
     }
 
     /**
      * @covers \CodeGenerationUtils\Autoloader\Autoloader::__invoke
      */
-    public function testWillNotAutoloadUserClasses()
+    public function testWillNotAutoloadUserClasses(): void
     {
         $className = 'Foo\\' . UniqueIdentifierGenerator::getIdentifier('Bar');
         $this
@@ -68,7 +66,7 @@ class AutoloaderTest extends TestCase
             ->expects(self::once())
             ->method('isGeneratedClassName')
             ->with($className)
-            ->will(self::returnValue(false));
+            ->willReturn(false);
 
         self::assertFalse($this->autoloader->__invoke($className));
     }
@@ -76,20 +74,22 @@ class AutoloaderTest extends TestCase
     /**
      * @covers \CodeGenerationUtils\Autoloader\Autoloader::__invoke
      */
-    public function testWillNotAutoloadNonExistingClass()
+    public function testWillNotAutoloadNonExistingClass(): void
     {
         $className = 'Foo\\' . UniqueIdentifierGenerator::getIdentifier('Bar');
+
         $this
             ->classNameInflector
             ->expects(self::once())
             ->method('isGeneratedClassName')
             ->with($className)
-            ->will(self::returnValue(true));
+            ->willReturn(true);
+
         $this
             ->fileLocator
             ->expects(self::once())
             ->method('getGeneratedClassFileName')
-            ->will(self::returnValue(__DIR__ . '/non-existing'));
+            ->willReturn(__DIR__ . '/non-existing');
 
         self::assertFalse($this->autoloader->__invoke($className));
     }
@@ -97,15 +97,15 @@ class AutoloaderTest extends TestCase
     /**
      * @covers \CodeGenerationUtils\Autoloader\Autoloader::__invoke
      */
-    public function testWillNotAutoloadExistingClass()
+    public function testWillNotAutoloadExistingClass(): void
     {
-        self::assertFalse($this->autoloader->__invoke(__CLASS__));
+        self::assertFalse($this->autoloader->__invoke(self::class));
     }
 
     /**
      * @covers \CodeGenerationUtils\Autoloader\Autoloader::__invoke
      */
-    public function testWillAutoloadExistingFile()
+    public function testWillAutoloadExistingFile(): void
     {
         $namespace = 'Foo';
         $className = UniqueIdentifierGenerator::getIdentifier('Bar');
@@ -119,12 +119,13 @@ class AutoloaderTest extends TestCase
             ->expects(self::once())
             ->method('isGeneratedClassName')
             ->with($fqcn)
-            ->will(self::returnValue(true));
+            ->willReturn(true);
+
         $this
             ->fileLocator
             ->expects(self::once())
             ->method('getGeneratedClassFileName')
-            ->will(self::returnValue($fileName));
+            ->willReturn($fileName);
 
         self::assertTrue($this->autoloader->__invoke($fqcn));
         self::assertTrue(class_exists($fqcn, false));

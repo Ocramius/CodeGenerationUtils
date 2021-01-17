@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\ClassFQCNResolverVisitor;
+use CodeGenerationUtils\Visitor\Exception\UnexpectedValueException;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
@@ -29,45 +30,36 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for {@see \CodeGenerationUtils\Visitor\ClassClonerVisitor}
  *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
- *
  * @covers \CodeGenerationUtils\Visitor\ClassFQCNResolverVisitor
  */
 class ClassFQCNResolverVisitorTest extends TestCase
 {
-    /**
-     * @var ClassFQCNResolverVisitor
-     */
-    protected $visitor;
+    protected ClassFQCNResolverVisitor $visitor;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setUp()
+    public function setUp(): void
     {
         $this->visitor = new ClassFQCNResolverVisitor();
     }
 
-    public function testDiscoversSimpleClass()
+    public function testDiscoversSimpleClass(): void
     {
         $class = new Class_('Foo');
 
-        $this->visitor->beforeTraverse(array($class));
+        $this->visitor->beforeTraverse([$class]);
         $this->visitor->enterNode($class);
 
         self::assertSame('Foo', $this->visitor->getName());
         self::assertSame('', $this->visitor->getNamespace());
     }
 
-    public function testDiscoversNamespacedClass()
+    public function testDiscoversNamespacedClass(): void
     {
-        $namespace = new Namespace_(new Name(array('Bar', 'Baz')));
+        $namespace = new Namespace_(new Name(['Bar', 'Baz']));
         $class     = new Class_('Foo');
 
-        $namespace->stmts = array($class);
+        $namespace->stmts = [$class];
 
-        $this->visitor->beforeTraverse(array($namespace));
+        $this->visitor->beforeTraverse([$namespace]);
         $this->visitor->enterNode($namespace);
         $this->visitor->enterNode($class);
 
@@ -75,39 +67,39 @@ class ClassFQCNResolverVisitorTest extends TestCase
         self::assertSame('Bar\\Baz', $this->visitor->getNamespace());
     }
 
-    public function testThrowsExceptionOnMultipleClasses()
+    public function testThrowsExceptionOnMultipleClasses(): void
     {
         $class1 = new Class_('Foo');
         $class2 = new Class_('Bar');
 
-        $this->visitor->beforeTraverse(array($class1, $class2));
+        $this->visitor->beforeTraverse([$class1, $class2]);
 
         $this->visitor->enterNode($class1);
 
-        $this->expectException('CodeGenerationUtils\Visitor\Exception\UnexpectedValueException');
+        $this->expectException(UnexpectedValueException::class);
 
         $this->visitor->enterNode($class2);
     }
 
-    public function testThrowsExceptionOnMultipleNamespaces()
+    public function testThrowsExceptionOnMultipleNamespaces(): void
     {
         $namespace1 = new Namespace_(new Name('Foo'));
         $namespace2 = new Namespace_(new Name('Bar'));
 
-        $this->visitor->beforeTraverse(array($namespace1, $namespace2));
+        $this->visitor->beforeTraverse([$namespace1, $namespace2]);
 
         $this->visitor->enterNode($namespace1);
 
-        $this->expectException('CodeGenerationUtils\Visitor\Exception\UnexpectedValueException');
+        $this->expectException(UnexpectedValueException::class);
 
         $this->visitor->enterNode($namespace2);
     }
 
-    public function testThrowsExceptionWhenNoClassIsFound()
+    public function testThrowsExceptionWhenNoClassIsFound(): void
     {
         self::assertSame('', $this->visitor->getNamespace());
 
-        $this->expectException('CodeGenerationUtils\Visitor\Exception\UnexpectedValueException');
+        $this->expectException(UnexpectedValueException::class);
 
         $this->visitor->getName();
     }

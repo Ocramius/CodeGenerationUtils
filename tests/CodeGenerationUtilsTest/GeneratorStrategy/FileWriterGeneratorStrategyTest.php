@@ -28,11 +28,13 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit\Framework\TestCase;
 
+use function class_exists;
+use function strpos;
+use function sys_get_temp_dir;
+use function uniqid;
+
 /**
  * Tests for {@see \CodeGenerationUtils\GeneratorStrategy\FileWriterGeneratorStrategy}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class FileWriterGeneratorStrategyTest extends TestCase
 {
@@ -40,9 +42,8 @@ class FileWriterGeneratorStrategyTest extends TestCase
      * @covers \CodeGenerationUtils\GeneratorStrategy\FileWriterGeneratorStrategy::__construct
      * @covers \CodeGenerationUtils\GeneratorStrategy\FileWriterGeneratorStrategy::generate
      */
-    public function testGenerate()
+    public function testGenerate(): void
     {
-        /* @var $locator \PHPUnit_Framework_MockObject_MockObject|FileLocatorInterface */
         $locator   = $this->createMock(FileLocatorInterface::class);
         $generator = new FileWriterGeneratorStrategy($locator);
         $tmpFile   = sys_get_temp_dir() . '/FileWriterGeneratorStrategyTest' . uniqid('', true) . '.php';
@@ -53,16 +54,17 @@ class FileWriterGeneratorStrategyTest extends TestCase
             ->expects(self::any())
             ->method('getGeneratedClassFileName')
             ->with($fqcn)
-            ->will(self::returnValue($tmpFile));
+            ->willReturn($tmpFile);
 
         $class     = new Class_($className);
-        $namespace = new Namespace_(new Name('Foo'), array($class));
-        $body      = $generator->generate(array($namespace));
+        $namespace = new Namespace_(new Name('Foo'), [$class]);
+        $body      = $generator->generate([$namespace]);
 
         self::assertGreaterThan(0, strpos($body, $className));
         self::assertFalse(class_exists($fqcn, false));
-        self::assertTrue(file_exists($tmpFile));
+        self::assertFileExists($tmpFile);
 
+        /** @psalm-suppress UnresolvableInclude we are doing some runtime evaluation on purpose */
         require $tmpFile;
 
         self::assertTrue(class_exists($fqcn, false));

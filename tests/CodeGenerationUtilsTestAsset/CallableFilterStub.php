@@ -18,22 +18,14 @@
 
 declare(strict_types=1);
 
-namespace CodeGenerationUtils\Visitor;
+namespace CodeGenerationUtilsTestAsset;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\NodeVisitorAbstract;
 
 /**
- * Removes all non-public class methods
+ * Stub of a `callable(Node): ?bool` to be used in unit tests
  */
-class PublicMethodsFilterVisitor extends NodeVisitorAbstract
+interface CallableFilterStub
 {
-    /**
-     * Removes the node if it is a non-public method
-     */
-    public function leaveNode(Node $node): ?bool
-    {
-        return $node instanceof ClassMethod && ! $node->isPublic() ? false : null;
-    }
+    public function __invoke(Node $node): ?bool;
 }

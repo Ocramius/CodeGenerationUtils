@@ -20,18 +20,19 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtils\GeneratorStrategy;
 
+use function file_put_contents;
+use function ini_get;
+use function sys_get_temp_dir;
+use function uniqid;
+use function unlink;
+
 /**
  * Generator strategy that produces the code and evaluates it at runtime
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class EvaluatingGeneratorStrategy extends BaseGeneratorStrategy
 {
-    /**
-     * @var bool flag indicating whether {@see eval} can be used
-     */
-    private $canEval = true;
+    /** @var bool flag indicating whether {@see eval} can be used */
+    private bool $canEval = true;
 
     /**
      * Constructor
@@ -46,7 +47,7 @@ class EvaluatingGeneratorStrategy extends BaseGeneratorStrategy
      *
      * {@inheritDoc}
      */
-    public function generate(array $ast) : string
+    public function generate(array $ast): string
     {
         $code = parent::generate($ast);
 
@@ -54,6 +55,7 @@ class EvaluatingGeneratorStrategy extends BaseGeneratorStrategy
             $fileName = sys_get_temp_dir() . '/EvaluatingGeneratorStrategy.php.tmp.' . uniqid('', true);
 
             file_put_contents($fileName, "<?php\n" . $code);
+            /** @psalm-suppress UnresolvableInclude we're doing `eval()` here! There's no going back! */
             require $fileName;
             unlink($fileName);
 

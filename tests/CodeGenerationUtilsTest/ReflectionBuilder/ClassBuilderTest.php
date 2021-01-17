@@ -18,19 +18,22 @@
 
 declare(strict_types=1);
 
-namespace CodeGenerationUtilsTest\Visitor;
+namespace CodeGenerationUtilsTest\ReflectionBuilder;
 
 use CodeGenerationUtils\ReflectionBuilder\ClassBuilder;
 use CodeGenerationUtilsTestAsset\ClassWithDefaultValueIsConstantMethod;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
+use function array_filter;
+use function assert;
+use function reset;
+
 /**
  * Tests for {@see \CodeGenerationUtils\ReflectionBuilder\ClassBuilder}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  *
  * @covers \CodeGenerationUtils\ReflectionBuilder\ClassBuilder
  */
@@ -39,67 +42,69 @@ class ClassBuilderTest extends TestCase
     /**
      * Simple test reflecting this test class
      */
-    public function testBuildSelf()
+    public function testBuildSelf(): void
     {
         $classBuilder = new ClassBuilder();
-        $ast          = $classBuilder->fromReflection(new ReflectionClass(__CLASS__));
-        /* @var $namespace \PhpParser\Node\Stmt\Namespace_ */
+        $ast          = $classBuilder->fromReflection(new ReflectionClass(self::class));
         $namespace    = $ast[0];
+        assert($namespace instanceof Namespace_);
 
-        self::assertInstanceOf('PhpParser\Node\Stmt\Namespace_', $namespace);
-        self::assertSame(__NAMESPACE__, $namespace->name->toString());
+        self::assertInstanceOf(Namespace_::class, $namespace);
 
-        /* @var $class \PhpParser\Node\Stmt\Class_ */
+        $namespaceName = $namespace->name;
+
+        self::assertNotNull($namespaceName);
+        self::assertSame(__NAMESPACE__, $namespaceName->toString());
+
         $class = $namespace->stmts[0];
+        assert($class instanceof Class_);
 
-        self::assertInstanceOf('PhpParser\Node\Stmt\Class_', $class);
-        self::assertSame('ClassBuilderTest', (string)$class->name);
+        self::assertInstanceOf(Class_::class, $class);
+        self::assertSame('ClassBuilderTest', (string) $class->name);
 
         $currentMethod = __FUNCTION__;
-        /* @var $methods \PhpParser\Node\Stmt\ClassMethod[] */
-        $methods       = array_filter(
+        /** @var ClassMethod[] $methods */
+        $methods = array_filter(
             $class->stmts,
-            function ($node) use ($currentMethod) {
-                return $node instanceof ClassMethod && (string)$node->name === $currentMethod;
+            static function ($node) use ($currentMethod) {
+                return $node instanceof ClassMethod && (string) $node->name === $currentMethod;
             }
         );
 
         self::assertCount(1, $methods);
 
-        /* @var $thisMethod \PhpParser\Node\Stmt\ClassMethod */
         $thisMethod = reset($methods);
 
-        self::assertSame($currentMethod, (string)$thisMethod->name);
+        self::assertSame($currentMethod, (string) $thisMethod->name);
     }
 
     /**
      * Check the isDefaultValueConstant edge case.
      */
-    public function testBuildWithDefaultValueConstantParameter()
+    public function testBuildWithDefaultValueConstantParameter(): void
     {
         $classBuilder = new ClassBuilder();
         $testClass    = new ClassWithDefaultValueIsConstantMethod();
         $ast          = $classBuilder->fromReflection(new ReflectionClass($testClass));
 
-        /* @var $namespace \PhpParser\Node\Stmt\Namespace_ */
         $namespace = $ast[0];
-        /* @var $class \PhpParser\Node\Stmt\Class_ */
-        $class     = $namespace->stmts[0];
-        $method    = 'defaultValueIsConstant';
+        assert($namespace instanceof Namespace_);
+        $class = $namespace->stmts[0];
+        assert($class instanceof Class_);
+        $method = 'defaultValueIsConstant';
 
-        /* @var $methods \PhpParser\Node\Stmt\ClassMethod[] */
+        /** @var ClassMethod[] $methods */
         $methods = array_filter(
             $class->stmts,
-            function ($node) use ($method) {
-                return ($node instanceof ClassMethod && (string)$node->name === $method);
+            static function ($node) use ($method) {
+                return $node instanceof ClassMethod && (string) $node->name === $method;
             }
         );
 
         self::assertCount(1, $methods);
 
-        /* @var $thisMethod \PhpParser\Node\Stmt\ClassMethod */
         $thisMethod = reset($methods);
 
-        self::assertSame($method, (string)$thisMethod->name);
+        self::assertSame($method, (string) $thisMethod->name);
     }
 }

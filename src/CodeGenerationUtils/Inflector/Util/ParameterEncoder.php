@@ -20,11 +20,12 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtils\Inflector\Util;
 
+use function base64_encode;
+use function serialize;
+use function str_replace;
+
 /**
  * Encodes parameters into a class-name safe string
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class ParameterEncoder
 {
@@ -32,11 +33,9 @@ class ParameterEncoder
      * Converts the given parameters into a set of characters that are safe to
      * use in a class name
      *
-     * @param array $parameters
-     *
-     * @return string
+     * @param mixed[] $parameters
      */
-    public function encodeParameters(array $parameters) : string
+    public function encodeParameters(array $parameters): string
     {
         return str_replace('+/=', '†‡•', base64_encode(serialize($parameters)));
     }

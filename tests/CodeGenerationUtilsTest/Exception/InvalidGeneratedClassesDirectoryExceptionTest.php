@@ -20,21 +20,18 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtilsTest\Exception;
 
-use PHPUnit\Framework\TestCase;
 use CodeGenerationUtils\Exception\InvalidGeneratedClassesDirectoryException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for {@see \CodeGenerationUtils\Exception\InvalidGeneratedClassesDirectoryException}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class InvalidGeneratedClassesDirectoryExceptionTest extends TestCase
 {
     /**
      * @covers \CodeGenerationUtils\Exception\InvalidGeneratedClassesDirectoryException
      */
-    public function testGeneratedClassesDirectoryNotFound()
+    public function testGeneratedClassesDirectoryNotFound(): void
     {
         $exception = InvalidGeneratedClassesDirectoryException::generatedClassesDirectoryNotFound('foo/bar');
 

@@ -20,30 +20,19 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtilsTest\Inflector;
 
-use PHPUnit\Framework\TestCase;
 use CodeGenerationUtils\Inflector\ClassNameInflector;
 use CodeGenerationUtils\Inflector\ClassNameInflectorInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for {@see \CodeGenerationUtils\Inflector\ClassNameInflector}
  *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
+ * @covers \CodeGenerationUtils\Inflector\ClassNameInflector
  */
 class ClassNameInflectorTest extends TestCase
 {
-    /**
-     * @dataProvider getClassNames
-     *
-     * @covers \CodeGenerationUtils\Inflector\ClassNameInflector::__construct
-     * @covers \CodeGenerationUtils\Inflector\ClassNameInflector::getUserClassName
-     * @covers \CodeGenerationUtils\Inflector\ClassNameInflector::getGeneratedClassName
-     * @covers \CodeGenerationUtils\Inflector\ClassNameInflector::isGeneratedClassName
-     *
-     * @param string $realClassName
-     * @param string $generatedClassName
-     */
-    public function testInflector(string $realClassName, string $generatedClassName)
+    /** @dataProvider getClassNames */
+    public function testInflector(string $realClassName, string $generatedClassName): void
     {
         $inflector = new ClassNameInflector('GeneratedClassNS');
 
@@ -55,63 +44,55 @@ class ClassNameInflectorTest extends TestCase
         self::assertStringMatchesFormat($realClassName, $inflector->getUserClassName($generatedClassName));
     }
 
-    /**
-     * @covers \CodeGenerationUtils\Inflector\ClassNameInflector::getGeneratedClassName
-     */
-    public function testGeneratesSameClassNameWithSameParameters()
+    public function testGeneratesSameClassNameWithSameParameters(): void
     {
         $inflector = new ClassNameInflector('GeneratedClassNS');
 
         self::assertSame($inflector->getGeneratedClassName('Foo\\Bar'), $inflector->getGeneratedClassName('Foo\\Bar'));
         self::assertSame(
-            $inflector->getGeneratedClassName('Foo\\Bar', array('baz' => 'tab')),
-            $inflector->getGeneratedClassName('Foo\\Bar', array('baz' => 'tab'))
+            $inflector->getGeneratedClassName('Foo\\Bar', ['baz' => 'tab']),
+            $inflector->getGeneratedClassName('Foo\\Bar', ['baz' => 'tab'])
         );
         self::assertSame(
-            $inflector->getGeneratedClassName('Foo\\Bar', array('tab' => 'baz')),
-            $inflector->getGeneratedClassName('Foo\\Bar', array('tab' => 'baz'))
+            $inflector->getGeneratedClassName('Foo\\Bar', ['tab' => 'baz']),
+            $inflector->getGeneratedClassName('Foo\\Bar', ['tab' => 'baz'])
         );
     }
 
-    /**
-     * @covers \CodeGenerationUtils\Inflector\ClassNameInflector::getGeneratedClassName
-     */
-    public function testGeneratesDifferentClassNameWithDifferentParameters()
+    public function testGeneratesDifferentClassNameWithDifferentParameters(): void
     {
         $inflector = new ClassNameInflector('GeneratedClassNS');
 
         self::assertNotSame(
             $inflector->getGeneratedClassName('Foo\\Bar'),
-            $inflector->getGeneratedClassName('Foo\\Bar', array('foo' => 'bar'))
+            $inflector->getGeneratedClassName('Foo\\Bar', ['foo' => 'bar'])
         );
         self::assertNotSame(
-            $inflector->getGeneratedClassName('Foo\\Bar', array('baz' => 'tab')),
-            $inflector->getGeneratedClassName('Foo\\Bar', array('tab' => 'baz'))
+            $inflector->getGeneratedClassName('Foo\\Bar', ['baz' => 'tab']),
+            $inflector->getGeneratedClassName('Foo\\Bar', ['tab' => 'baz'])
         );
         self::assertNotSame(
-            $inflector->getGeneratedClassName('Foo\\Bar', array('foo' => 'bar', 'tab' => 'baz')),
-            $inflector->getGeneratedClassName('Foo\\Bar', array('foo' => 'bar'))
+            $inflector->getGeneratedClassName('Foo\\Bar', ['foo' => 'bar', 'tab' => 'baz']),
+            $inflector->getGeneratedClassName('Foo\\Bar', ['foo' => 'bar'])
         );
         self::assertNotSame(
-            $inflector->getGeneratedClassName('Foo\\Bar', array('foo' => 'bar', 'tab' => 'baz')),
-            $inflector->getGeneratedClassName('Foo\\Bar', array('tab' => 'baz', 'foo' => 'bar'))
+            $inflector->getGeneratedClassName('Foo\\Bar', ['foo' => 'bar', 'tab' => 'baz']),
+            $inflector->getGeneratedClassName('Foo\\Bar', ['tab' => 'baz', 'foo' => 'bar'])
         );
     }
 
-    /**
-     * @return array
-     */
-    public function getClassNames()
+    /** @psalm-return non-empty-list<array{string, string}> */
+    public function getClassNames(): array
     {
-        return array(
-            array(
+        return [
+            [
                 'Foo',
-                'GeneratedClassNS\\' . ClassNameInflectorInterface::GENERATED_CLASS_MARKER . '\\Foo\\%s'
-            ),
-            array(
+                'GeneratedClassNS\\' . ClassNameInflectorInterface::GENERATED_CLASS_MARKER . '\\Foo\\%s',
+            ],
+            [
                 'Foo\\Bar',
-                'GeneratedClassNS\\' . ClassNameInflectorInterface::GENERATED_CLASS_MARKER . '\\Foo\\Bar\\%s'
-            ),
-        );
+                'GeneratedClassNS\\' . ClassNameInflectorInterface::GENERATED_CLASS_MARKER . '\\Foo\\Bar\\%s',
+            ],
+        ];
     }
 }

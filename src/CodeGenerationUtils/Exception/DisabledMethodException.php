@@ -22,22 +22,16 @@ namespace CodeGenerationUtils\Exception;
 
 use BadMethodCallException;
 
+use function sprintf;
+
 /**
  * Exception for forcefully disabled methods
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class DisabledMethodException extends BadMethodCallException implements ExceptionInterface
 {
-    const NAME = __CLASS__;
+    public const NAME = self::class;
 
-    /**
-     * @param string $method
-     *
-     * @return self
-     */
-    public static function disabledMethod(string $method) : self
+    public static function disabledMethod(string $method): self
     {
         return new self(sprintf('Method "%s" is forcefully disabled', $method));
     }

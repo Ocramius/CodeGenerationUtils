@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtils\ReflectionBuilder;
 
+use BadMethodCallException;
 use PhpParser\Builder\Method;
 use PhpParser\Builder\Param;
 use PhpParser\Builder\Property;
@@ -37,31 +38,35 @@ use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
 
+use function assert;
+use function explode;
+use function is_array;
+use function is_bool;
+use function is_float;
+use function is_int;
+use function is_string;
+
 /**
  * Rudimentary utility to build an AST from a reflection class
  *
  * @todo should be split into various utilities like this one and eventually replace `Zend\Code\Generator`
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class ClassBuilder
 {
     /**
-     * @param \ReflectionClass $reflectionClass
-     *
-     * @return \PhpParser\Node[]
+     * @return Node[]
      */
-    public function fromReflection(ReflectionClass $reflectionClass) : array
+    public function fromReflection(ReflectionClass $reflectionClass): array
     {
-        $class      = new Class_($reflectionClass->getShortName());
-        $statements = array($class);
+        $class       = new Class_($reflectionClass->getShortName());
+        $statements  = [$class];
+        $parentClass = $reflectionClass->getParentClass();
 
-        if ($parentClass = $reflectionClass->getParentClass()) {
+        if ($parentClass) {
             $class->extends = new FullyQualified($parentClass->getName());
         }
 
-        $interfaces = array();
+        $interfaces = [];
 
         foreach ($reflectionClass->getInterfaces() as $reflectionInterface) {
             $interfaces[] = new FullyQualified($reflectionInterface->getName());
@@ -70,8 +75,9 @@ class ClassBuilder
         $class->implements = $interfaces;
 
         foreach ($reflectionClass->getConstants() as $constant => $value) {
+            assert(is_bool($value) || $value === null || is_int($value) || is_float($value) || is_string($value) || is_array($value));
             $class->stmts[] = new ClassConst(
-                array(new Const_($constant, BuilderHelpers::normalizeValue($value)))
+                [new Const_($constant, BuilderHelpers::normalizeValue($value))]
             );
         }
 
@@ -83,27 +89,26 @@ class ClassBuilder
             $class->stmts[] = $this->buildMethod($reflectionMethod);
         }
 
-        if (! $namespace = $reflectionClass->getNamespaceName()) {
+        $namespace = $reflectionClass->getNamespaceName();
+
+        if ($namespace === '') {
             return $statements;
         }
 
-        return array(new Namespace_(new Name(explode('\\', $namespace)), $statements));
+        return [new Namespace_(new Name(explode('\\', $namespace)), $statements)];
     }
 
     /**
-     * @throws \BadMethodCallException disabled method
-     */
-    public function getNode()
-    {
-        throw new \BadMethodCallException('Disabled');
-    }
-
-    /**
-     * @param ReflectionProperty $reflectionProperty
+     * @throws BadMethodCallException disabled method.
      *
-     * @return Node\Stmt\Property
+     * @psalm-return never-return
      */
-    protected function buildProperty(ReflectionProperty $reflectionProperty) : Node\Stmt\Property
+    public function getNode(): void
+    {
+        throw new BadMethodCallException('Disabled');
+    }
+
+    protected function buildProperty(ReflectionProperty $reflectionProperty): Node\Stmt\Property
     {
         $propertyBuilder = new Property($reflectionProperty->getName());
 
@@ -132,12 +137,7 @@ class ClassBuilder
         return $propertyBuilder->getNode();
     }
 
-    /**
-     * @param ReflectionMethod $reflectionMethod
-     *
-     * @return \PhpParser\Node\Stmt\ClassMethod
-     */
-    protected function buildMethod(ReflectionMethod $reflectionMethod) : Node\Stmt\ClassMethod
+    protected function buildMethod(ReflectionMethod $reflectionMethod): Node\Stmt\ClassMethod
     {
         $methodBuilder = new Method($reflectionMethod->getName());
 
@@ -178,12 +178,7 @@ class ClassBuilder
         return $methodBuilder->getNode();
     }
 
-    /**
-     * @param ReflectionParameter $reflectionParameter
-     *
-     * @return Node\Param
-     */
-    protected function buildParameter(ReflectionParameter $reflectionParameter) : Node\Param
+    protected function buildParameter(ReflectionParameter $reflectionParameter): Node\Param
     {
         $parameterBuilder = new Param($reflectionParameter->getName());
 
@@ -192,26 +187,26 @@ class ClassBuilder
         }
 
         if ($reflectionParameter->isArray()) {
-            $parameterBuilder->setTypeHint('array');
+            $parameterBuilder->setType('array');
         }
 
-        if (method_exists($reflectionParameter, 'isCallable') && $reflectionParameter->isCallable()) {
-            $parameterBuilder->setTypeHint('callable');
+        if ($reflectionParameter->isCallable()) {
+            $parameterBuilder->setType('callable');
         }
 
-        if ($type = $reflectionParameter->getClass()) {
-            $parameterBuilder->setTypeHint($type->getName());
+        $type = $reflectionParameter->getClass();
+
+        if ($type !== null) {
+            $parameterBuilder->setType($type->getName());
         }
 
         if ($reflectionParameter->isDefaultValueAvailable()) {
-            if (method_exists($reflectionParameter, 'isDefaultValueConstant')
-                && $reflectionParameter->isDefaultValueConstant()
-            ) {
-                $parameterBuilder->setDefault(
-                    new ConstFetch(
-                        new Name($reflectionParameter->getDefaultValueConstantName())
-                    )
-                );
+            if ($reflectionParameter->isDefaultValueConstant()) {
+                $constantName = $reflectionParameter->getDefaultValueConstantName();
+
+                assert($constantName !== null);
+
+                $parameterBuilder->setDefault(new ConstFetch(new Name($constantName)));
             } else {
                 $parameterBuilder->setDefault($reflectionParameter->getDefaultValue());
             }

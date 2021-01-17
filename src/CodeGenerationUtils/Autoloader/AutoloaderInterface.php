@@ -22,18 +22,11 @@ namespace CodeGenerationUtils\Autoloader;
 
 /**
  * Basic autoloader utilities required to work with generated classes
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 interface AutoloaderInterface
 {
     /**
      * Callback to allow the object to be handled as autoloader - tries to autoload the given class name
-     *
-     * @param string $className
-     *
-     * @return bool
      */
-    public function __invoke(string $className) : bool;
+    public function __invoke(string $className): bool;
 }

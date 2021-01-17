@@ -9,10 +9,8 @@
     stopOnFailure="false"
     processIsolation="false"
     backupGlobals="false"
-    syntaxCheck="true"
 >
     <testsuite name="CodeGenerationUtils tests">
-        <directory>./tests/GeneratedHydratorTest</directory>
         <directory>./tests/CodeGenerationUtilsTest</directory>
     </testsuite>
     <filter>

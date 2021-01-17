@@ -22,9 +22,6 @@ namespace CodeGenerationUtils\Visitor\Exception;
 
 /**
  * Base exception interface for node visitors
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 interface ExceptionInterface
 {

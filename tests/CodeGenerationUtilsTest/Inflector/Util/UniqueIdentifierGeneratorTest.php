@@ -20,25 +20,19 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtilsTest\Inflector\Util;
 
-use PHPUnit\Framework\TestCase;
 use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for {@see \CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class UniqueIdentifierGeneratorTest extends TestCase
 {
     /**
      * @dataProvider getBaseIdentifierNames
-     *
      * @covers \CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator::getIdentifier
-     *
-     * @param string $name
      */
-    public function testGeneratesUniqueIdentifiers(string $name)
+    public function testGeneratesUniqueIdentifiers(string $name): void
     {
         self::assertNotSame(
             UniqueIdentifierGenerator::getIdentifier($name),
@@ -48,14 +42,11 @@ class UniqueIdentifierGeneratorTest extends TestCase
 
     /**
      * @dataProvider getBaseIdentifierNames
-     *
      * @covers \CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator::getIdentifier
-     *
-     * @param string $name
      */
-    public function testGeneratesValidIdentifiers(string $name)
+    public function testGeneratesValidIdentifiers(string $name): void
     {
-        self::assertRegExp(
+        self::assertMatchesRegularExpression(
             '/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]+$/',
             UniqueIdentifierGenerator::getIdentifier($name)
         );
@@ -66,16 +57,16 @@ class UniqueIdentifierGeneratorTest extends TestCase
      *
      * @return string[][]
      */
-    public function getBaseIdentifierNames() : array
+    public function getBaseIdentifierNames(): array
     {
-        return array(
-            array(''),
-            array('1'),
-            array('foo'),
-            array('Foo'),
-            array('bar'),
-            array('Bar'),
-            array('foo_bar'),
-        );
+        return [
+            [''],
+            ['1'],
+            ['foo'],
+            ['Foo'],
+            ['bar'],
+            ['Bar'],
+            ['foo_bar'],
+        ];
     }
 }

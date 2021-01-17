@@ -1,7 +1,6 @@
 .idea
 vendor
-composer.lock
-composer.phar
 phpunit.xml
+.phpunit.result.cache
 phpmd.xml
 phpdox.xml

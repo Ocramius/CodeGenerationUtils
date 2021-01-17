@@ -24,9 +24,6 @@ use UnexpectedValueException as BaseUnexpectedValueException;
 
 /**
  * Unexpected value exception for node visitors
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class UnexpectedValueException extends BaseUnexpectedValueException implements ExceptionInterface
 {

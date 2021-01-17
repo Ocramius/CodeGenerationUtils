@@ -29,36 +29,35 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for {@see \CodeGenerationUtils\Visitor\ClassClonerVisitor}
  *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
- *
  * @covers \CodeGenerationUtils\Visitor\ClassExtensionVisitor
  */
 class ClassExtensionVisitorTest extends TestCase
 {
-    public function testRenamesNodesOnMatchingClass()
+    public function testRenamesNodesOnMatchingClass(): void
     {
         $visitor   = new ClassExtensionVisitor('Foo\\Bar', 'Baz\\Tab');
         $class     = new Class_('Bar');
         $namespace = new Namespace_(new Name('Foo'));
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertSame($namespace, $visitor->enterNode($namespace));
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
         self::assertNull($visitor->leaveNode($namespace));
 
-        self::assertNotNull($class->extends);
-        self::assertSame('Baz\\Tab', $class->extends->toString());
+        $extends = $class->extends;
+
+        self::assertNotNull($extends);
+        self::assertSame('Baz\\Tab', $extends->toString());
     }
 
-    public function testIgnoresNodesOnNonMatchingClass()
+    public function testIgnoresNodesOnNonMatchingClass(): void
     {
         $visitor   = new ClassExtensionVisitor('Foo\\Bar', 'Baz\\Tab');
         $class     = new Class_('Tab');
         $namespace = new Namespace_(new Name('Foo'));
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertSame($namespace, $visitor->enterNode($namespace));
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
@@ -67,13 +66,13 @@ class ClassExtensionVisitorTest extends TestCase
         self::assertNull($class->extends);
     }
 
-    public function testIgnoresNodesOnNonMatchingNamespace()
+    public function testIgnoresNodesOnNonMatchingNamespace(): void
     {
         $visitor   = new ClassExtensionVisitor('Foo\\Bar', 'Baz\\Tab');
         $class     = new Class_('Bar');
         $namespace = new Namespace_(new Name('Tab'));
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertSame($namespace, $visitor->enterNode($namespace));
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
@@ -82,16 +81,18 @@ class ClassExtensionVisitorTest extends TestCase
         self::assertNull($class->extends);
     }
 
-    public function testMatchOnEmptyNamespace()
+    public function testMatchOnEmptyNamespace(): void
     {
-        $visitor   = new ClassExtensionVisitor('Foo', 'Baz\\Tab');
-        $class     = new Class_('Foo');
+        $visitor = new ClassExtensionVisitor('Foo', 'Baz\\Tab');
+        $class   = new Class_('Foo');
 
-        $visitor->beforeTraverse(array());
+        $visitor->beforeTraverse([]);
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
 
-        self::assertNotNull($class->extends);
-        self::assertSame('Baz\\Tab', $class->extends->toString());
+        $extends = $class->extends;
+
+        self::assertNotNull($extends);
+        self::assertSame('Baz\\Tab', $extends->toString());
     }
 }

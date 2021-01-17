@@ -21,43 +21,45 @@ declare(strict_types=1);
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\ClassClonerVisitor;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Declare_;
+use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
+use function end;
+use function implode;
+
 /**
  * Tests for {@see \CodeGenerationUtils\Visitor\ClassClonerVisitor}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  *
  * @covers \CodeGenerationUtils\Visitor\ClassClonerVisitor
  */
 class ClassClonerVisitorTest extends TestCase
 {
-    public function testClonesClassIntoEmptyNodeList()
+    public function testClonesClassIntoEmptyNodeList(): void
     {
-        $reflectionClass = new ReflectionClass(__CLASS__);
+        $reflectionClass = new ReflectionClass(self::class);
 
         $visitor = new ClassClonerVisitor($reflectionClass);
 
-        $nodes = $visitor->beforeTraverse(array());
+        $nodes = $visitor->beforeTraverse([]);
 
-        self::assertInstanceOf('PhpParser\Node\Stmt\Declare_', $nodes[0]);
-        self::assertInstanceOf('PhpParser\Node\Stmt\Namespace_', $nodes[1]);
+        self::assertInstanceOf(Declare_::class, $nodes[0]);
+        self::assertInstanceOf(Namespace_::class, $nodes[1]);
 
-        /* @var $node \PhpParser\Node\Stmt\Namespace_ */
-        $node = $nodes[1];
+        $nodeName = $nodes[1]->name;
 
-        self::assertSame(__NAMESPACE__, implode('\\', $node->name->parts));
+        self::assertNotNull($nodeName);
+        self::assertSame(__NAMESPACE__, implode('\\', $nodeName->parts));
 
-        /* @var $class \PhpParser\Node\Stmt\Class_ */
-        $class = end($node->stmts);
+        $class = end($nodes[1]->stmts);
 
-        self::assertInstanceOf('PhpParser\Node\Stmt\Class_', $class);
-        self::assertSame('ClassClonerVisitorTest', (string)$class->name);
+        self::assertInstanceOf(Class_::class, $class);
+        self::assertSame('ClassClonerVisitorTest', (string) $class->name);
     }
 
-    public function testClonesClassIntoNonEmptyNodeList()
+    public function testClonesClassIntoNonEmptyNodeList(): void
     {
         self::markTestIncomplete('Still not clear thoughts on this...');
     }

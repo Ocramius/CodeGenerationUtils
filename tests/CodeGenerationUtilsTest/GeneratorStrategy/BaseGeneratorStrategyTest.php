@@ -26,22 +26,21 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\PrettyPrinterAbstract;
 use PHPUnit\Framework\TestCase;
 
+use function strpos;
+
 /**
  * Tests for {@see \CodeGenerationUtils\GeneratorStrategy\BaseGeneratorStrategy}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class BaseGeneratorStrategyTest extends TestCase
 {
     /**
      * @covers \CodeGenerationUtils\GeneratorStrategy\BaseGeneratorStrategy::generate
      */
-    public function testGenerate()
+    public function testGenerate(): void
     {
-        $strategy       = new BaseGeneratorStrategy();
-        $className      = UniqueIdentifierGenerator::getIdentifier('Foo');
-        $generated      = $strategy->generate(array(new Class_($className)));
+        $strategy  = new BaseGeneratorStrategy();
+        $className = UniqueIdentifierGenerator::getIdentifier('Foo');
+        $generated = $strategy->generate([new Class_($className)]);
 
         self::assertGreaterThan(0, strpos($generated, $className));
     }
@@ -50,21 +49,20 @@ class BaseGeneratorStrategyTest extends TestCase
      * @covers \CodeGenerationUtils\GeneratorStrategy\BaseGeneratorStrategy::setPrettyPrinter
      * @covers \CodeGenerationUtils\GeneratorStrategy\BaseGeneratorStrategy::getPrettyPrinter
      */
-    public function testSetPrettyPrinter()
+    public function testSetPrettyPrinter(): void
     {
         $strategy = new BaseGeneratorStrategy();
 
-        /* @var $prettyPrinter PrettyPrinterAbstract|\PHPUnit_Framework_MockObject_MockObject */
         $prettyPrinter = $this->createMock(PrettyPrinterAbstract::class);
 
         $prettyPrinter
             ->expects(self::once())
             ->method('prettyPrint')
-            ->with(array('bar'))
-            ->will(self::returnValue('foo'));
+            ->with(self::equalTo([new Class_('bar')]))
+            ->willReturn('foo');
 
         $strategy->setPrettyPrinter($prettyPrinter);
 
-        self::assertSame('foo', $strategy->generate(array('bar')));
+        self::assertSame('foo', $strategy->generate([new Class_('bar')]));
     }
 }

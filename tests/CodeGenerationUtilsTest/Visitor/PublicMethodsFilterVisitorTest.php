@@ -22,7 +22,6 @@ namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\PublicMethodsFilterVisitor;
 use PhpParser\Node;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPUnit\Framework\TestCase;
@@ -30,51 +29,48 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for {@see \CodeGenerationUtils\Visitor\ClassClonerVisitor}
  *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
- *
  * @covers \CodeGenerationUtils\Visitor\PublicMethodsFilterVisitor
  */
 class PublicMethodsFilterVisitorTest extends TestCase
 {
     /**
-     * @dataProvider nodeProvider
+     * @param false|null $expected
      *
-     * @param \PhpParser\Node $node
-     * @param mixed          $expected
+     * @dataProvider nodeProvider
      */
-    public function testRemovesOnlyPrivateMethods(Node $node, $expected)
+    public function testRemovesOnlyPrivateMethods(Node $node, ?bool $expected): void
     {
         $visitor = new PublicMethodsFilterVisitor();
 
         self::assertSame($expected, $visitor->leaveNode($node));
     }
 
-    public function nodeProvider()
+    /** @psalm-return non-empty-list<array{ClassMethod|Class_, false|null}> */
+    public function nodeProvider(): array
     {
-        return array(
-            array(
+        return [
+            [
                 new ClassMethod(
                     'foo',
-                    array('type' => Class_::MODIFIER_PUBLIC)
+                    ['type' => Class_::MODIFIER_PUBLIC]
                 ),
                 null,
-            ),
-            array(
+            ],
+            [
                 new ClassMethod(
                     'foo',
-                    array('type' => Class_::MODIFIER_PROTECTED)
+                    ['type' => Class_::MODIFIER_PROTECTED]
                 ),
                 false,
-            ),
-            array(
+            ],
+            [
                 new ClassMethod(
                     'foo',
-                    array('type' => Class_::MODIFIER_PRIVATE)
+                    ['type' => Class_::MODIFIER_PRIVATE]
                 ),
                 false,
-            ),
-            array(new Class_('foo'), null,),
-        );
+            ],
+            [new Class_('foo'), null],
+        ];
     }
 }

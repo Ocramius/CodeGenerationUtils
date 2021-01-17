@@ -20,34 +20,31 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtils\Inflector\Util;
 
+use function preg_match;
+use function str_replace;
+use function uniqid;
+
 /**
  * Utility class capable of generating unique
  * valid class/property/method identifiers
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 abstract class UniqueIdentifierGenerator
 {
-    const VALID_IDENTIFIER_FORMAT = '/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]+$/';
-    const DEFAULT_IDENTIFIER = 'g';
+    public const VALID_IDENTIFIER_FORMAT = '/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]+$/';
+    public const DEFAULT_IDENTIFIER      = 'g';
 
     /**
      * Generates a valid unique identifier from the given name
-     *
-     * @param string $name
-     *
-     * @return string
      */
-    public static function getIdentifier(string $name) : string
+    public static function getIdentifier(string $name): string
     {
         return str_replace(
             '.',
             '',
             uniqid(
-                preg_match(static::VALID_IDENTIFIER_FORMAT, $name)
+                preg_match(self::VALID_IDENTIFIER_FORMAT, $name)
                 ? $name
-                : static::DEFAULT_IDENTIFIER,
+                : self::DEFAULT_IDENTIFIER,
                 true
             )
         );

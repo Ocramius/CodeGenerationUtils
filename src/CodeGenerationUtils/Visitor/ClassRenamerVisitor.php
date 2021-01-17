@@ -27,44 +27,29 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeVisitorAbstract;
 use ReflectionClass;
 
+use function array_slice;
+use function assert;
+use function end;
+use function explode;
+use function implode;
+
 /**
  * Renames a matched class to a new name.
  * Removes the namespace if the class is in the global namespace.
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
  */
 class ClassRenamerVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var ReflectionClass
-     */
-    private $reflectedClass;
+    private ReflectionClass $reflectedClass;
 
-    /**
-     * @var string
-     */
-    private $newName;
+    private string $newName;
 
-    /**
-     * @var string
-     */
-    private $newNamespace;
+    private string $newNamespace;
 
-    /**
-     * @var \PhpParser\Node\Stmt\Namespace_|null
-     */
-    private $currentNamespace;
+    private ?Namespace_ $currentNamespace = null;
 
-    /**
-     * @var \PhpParser\Node\Stmt\Class_|null the currently detected class in this namespace
-     */
-    private $replacedInNamespace;
+    /** @var Class_|null the currently detected class in this namespace */
+    private ?Class_ $replacedInNamespace = null;
 
-    /**
-     * @param ReflectionClass $reflectedClass
-     * @param string          $newFQCN
-     */
     public function __construct(ReflectionClass $reflectedClass, string $newFQCN)
     {
         $this->reflectedClass = $reflectedClass;
@@ -73,26 +58,16 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
         $this->newName        = end($fqcnParts);
     }
 
-    /**
-     * Cleanup internal state
-     *
-     * @param array $nodes
-     *
-     * @return null
-     */
+    /** {@inheritDoc} */
     public function beforeTraverse(array $nodes)
     {
-        // reset state
         $this->currentNamespace    = null;
         $this->replacedInNamespace = null;
+
+        return null;
     }
 
-    /**
-     * @param \PhpParser\Node $node
-     *
-     * @return \PhpParser\Node\Stmt\Namespace_|null
-     */
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): ?Namespace_
     {
         if ($node instanceof Namespace_) {
             return $this->currentNamespace = $node;
@@ -104,11 +79,11 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
     /**
      * Replaces (if matching) the given node to comply with the new given name
      *
-     * @param \PhpParser\Node $node
+     * @return Class_[]|Class_|Namespace_|null
+     *
+     * @psalm-return array{Class_}|Class_|Namespace_|null
      *
      * @todo can be abstracted away into a visitor that allows to modify the matched node via a callback
-     *
-     * @return array|null|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Namespace_|null
      */
     public function leaveNode(Node $node)
     {
@@ -121,28 +96,36 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
             if ($namespace && $replacedInNamespace) {
                 if (! $this->newNamespace) {
                     // @todo what happens to other classes in here?
-                    return array($replacedInNamespace);
+                    return [$replacedInNamespace];
                 }
 
-                $namespace->name->parts = explode('\\', $this->newNamespace);
+                $namespaceName = $namespace->name;
+                /** @psalm-var non-empty-list<non-empty-string> $newParts leap of faith, especially the fact that each bit is non-empty! */
+                $newParts = explode('\\', $this->newNamespace);
+
+                assert($namespaceName !== null);
+
+                $namespaceName->parts = $newParts;
+                $namespace->name      = $namespaceName;
 
                 return $namespace;
             }
         }
 
-        if ($node instanceof Class_
+        if (
+            $node instanceof Class_
             && $this->namespaceMatches()
-            && ($this->reflectedClass->getShortName() === (string)$node->name)
+            && ($this->reflectedClass->getShortName() === (string) $node->name)
         ) {
-            $node->name = $this->newName;
+            $node->name = new Node\Identifier($this->newName);
 
             // @todo too simplistic (assumes single class per namespace right now)
             if ($this->currentNamespace) {
-                $this->replacedInNamespace = $node;
-                $this->currentNamespace->stmts = array($node);
+                $this->replacedInNamespace     = $node;
+                $this->currentNamespace->stmts = [$node];
             } elseif ($this->newNamespace) {
                 // wrap in namespace if no previous namespace exists
-                return new Namespace_(new Name($this->newNamespace), array($node));
+                return new Namespace_(new Name($this->newNamespace), [$node]);
             }
 
             return $node;
@@ -153,15 +136,19 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
 
     /**
      * Checks if the current namespace matches with the one provided with the reflection class
-     *
-     * @return bool
      */
-    private function namespaceMatches() : bool
+    private function namespaceMatches(): bool
     {
-        $currentNamespace = ($this->currentNamespace && is_array($this->currentNamespace->name->parts))
-            ? $this->currentNamespace->name->toString()
-            : '';
+        if ($this->currentNamespace === null) {
+            return $this->reflectedClass->getNamespaceName() === '';
+        }
 
-        return $currentNamespace === $this->reflectedClass->getNamespaceName();
+        $currentNamespaceName = $this->currentNamespace->name;
+
+        if ($currentNamespaceName === null) {
+            return $this->reflectedClass->getNamespaceName() === '';
+        }
+
+        return $currentNamespaceName->toString() === $this->reflectedClass->getNamespaceName();
     }
 }

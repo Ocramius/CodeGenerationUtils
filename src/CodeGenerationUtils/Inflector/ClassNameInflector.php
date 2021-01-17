@@ -22,65 +22,53 @@ namespace CodeGenerationUtils\Inflector;
 
 use CodeGenerationUtils\Inflector\Util\ParameterEncoder;
 
-/**
- * {@inheritDoc}
- *
- * @author Marco Pivetta <ocramius@gmail.com>
- * @license MIT
- */
+use function assert;
+use function is_int;
+use function strlen;
+use function strrpos;
+use function substr;
+
 class ClassNameInflector implements ClassNameInflectorInterface
 {
-    /**
-     * @var string
-     */
-    protected $generatedClassesNamespace;
+    protected string $generatedClassesNamespace;
 
-    /**
-     * @var int
-     */
-    private $generatedClassMarkerLength;
+    private int $generatedClassMarkerLength;
 
-    /**
-     * @var string
-     */
-    private $generatedClassMarker;
+    private string $generatedClassMarker;
 
-    /**
-     * @var \CodeGenerationUtils\Inflector\Util\ParameterEncoder
-     */
-    private $parameterEncoder;
+    private ParameterEncoder $parameterEncoder;
 
-    /**
-     * @param string $generatedClassesNamespace
-     */
     public function __construct(string $generatedClassesNamespace)
     {
         $this->generatedClassesNamespace  = $generatedClassesNamespace;
-        $this->generatedClassMarker       = '\\' . static::GENERATED_CLASS_MARKER . '\\';
+        $this->generatedClassMarker       = '\\' . self::GENERATED_CLASS_MARKER . '\\';
         $this->generatedClassMarkerLength = strlen($this->generatedClassMarker);
         $this->parameterEncoder           = new ParameterEncoder();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getUserClassName(string $className) : string
+    public function getUserClassName(string $className): string
     {
-        if (false === $position = strrpos($className, $this->generatedClassMarker)) {
+        $position = strrpos($className, $this->generatedClassMarker);
+
+        if ($position === false) {
             return $className;
         }
+
+        $lastNamespaceDelimiter = strrpos($className, '\\');
+
+        assert(is_int($lastNamespaceDelimiter));
 
         return substr(
             $className,
             $this->generatedClassMarkerLength + $position,
-            strrpos($className, '\\') - ($position + $this->generatedClassMarkerLength)
+            $lastNamespaceDelimiter - ($position + $this->generatedClassMarkerLength)
         );
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getGeneratedClassName(string $className, array $options = array()) : string
+    public function getGeneratedClassName(string $className, array $options = []): string
     {
         return $this->generatedClassesNamespace
             . $this->generatedClassMarker
@@ -88,11 +76,8 @@ class ClassNameInflector implements ClassNameInflectorInterface
             . '\\' . $this->parameterEncoder->encodeParameters($options);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function isGeneratedClassName(string $className) : bool
+    public function isGeneratedClassName(string $className): bool
     {
-        return false !== strrpos($className, $this->generatedClassMarker);
+        return strrpos($className, $this->generatedClassMarker) !== false;
     }
 }
