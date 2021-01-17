@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "php":                       "^7.4 || ^8.0",
+        "php":                       "^8.0",
         "nikic/php-parser":          "^4.10.4"
     },
     "require-dev": {
@@ -39,11 +39,6 @@
         "psr-4": {
             "CodeGenerationUtilsTests\\":     "tests/CodeGenerationUtilsTest",
             "CodeGenerationUtilsTestAsset\\": "tests/CodeGenerationUtilsTestAsset"
-        }
-    },
-    "config": {
-        "platform": {
-            "php": "7.4.7"
         }
     },
     "extra": {

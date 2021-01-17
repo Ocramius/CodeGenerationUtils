@@ -59,7 +59,7 @@ class MethodDisablerVisitor extends NodeVisitorAbstract
      *
      * @psalm-return NodeTraverser::REMOVE_NODE|ClassMethod|null
      */
-    public function leaveNode(Node $node)
+    public function leaveNode(Node $node): int | ClassMethod | null
     {
         $filter = $this->filter;
 
