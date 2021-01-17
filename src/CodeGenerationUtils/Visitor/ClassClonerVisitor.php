@@ -66,16 +66,19 @@ class ClassClonerVisitor implements NodeVisitor
         return $nodes;
     }
 
+    /** @inheritDoc */
     public function enterNode(Node $node)
     {
         return null;
     }
 
+    /** @inheritDoc */
     public function leaveNode(Node $node)
     {
         return null;
     }
 
+    /** @inheritDoc */
     public function afterTraverse(array $nodes)
     {
         return null;
