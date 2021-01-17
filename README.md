@@ -13,9 +13,9 @@ It will be stabilized together with [GeneratedHydrator](https://github.com/Ocram
 and [ProxyManager](https://github.com/Ocramius/ProxyManager) when these two both have
 reached at least version `1.0.0`.
 
-| Tests | Releases | Downloads |
-| ----- | -------- | ------- |
-|[![Build Status](https://travis-ci.org/Ocramius/CodeGenerationUtils.png?branch=master)](https://travis-ci.org/Ocramius/CodeGenerationUtils) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Ocramius/CodeGenerationUtils/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Ocramius/CodeGenerationUtils/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/Ocramius/CodeGenerationUtils/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Ocramius/CodeGenerationUtils/?branch=master)|[![Latest Stable Version](https://poser.pugx.org/ocramius/code-generator-utils/v/stable.png)](https://packagist.org/packages/ocramius/code-generator-utils) [![Latest Unstable Version](https://poser.pugx.org/ocramius/code-generator-utils/v/unstable.png)](https://packagist.org/packages/ocramius/code-generator-utils)|[![Total Downloads](https://poser.pugx.org/ocramius/code-generator-utils/downloads.png)](https://packagist.org/packages/ocramius/code-generator-utils)|
+Releases | Downloads |
+-------- | ------- |
+[![Latest Stable Version](https://poser.pugx.org/ocramius/code-generator-utils/v/stable.png)](https://packagist.org/packages/ocramius/code-generator-utils) [![Latest Unstable Version](https://poser.pugx.org/ocramius/code-generator-utils/v/unstable.png)](https://packagist.org/packages/ocramius/code-generator-utils)|[![Total Downloads](https://poser.pugx.org/ocramius/code-generator-utils/downloads.png)](https://packagist.org/packages/ocramius/code-generator-utils)|
 
 ## Installation
 
