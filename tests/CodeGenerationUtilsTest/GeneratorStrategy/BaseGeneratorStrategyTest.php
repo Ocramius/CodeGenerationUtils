@@ -37,7 +37,7 @@ class BaseGeneratorStrategyTest extends TestCase
     /**
      * @covers \CodeGenerationUtils\GeneratorStrategy\BaseGeneratorStrategy::generate
      */
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $strategy       = new BaseGeneratorStrategy();
         $className      = UniqueIdentifierGenerator::getIdentifier('Foo');
@@ -50,7 +50,7 @@ class BaseGeneratorStrategyTest extends TestCase
      * @covers \CodeGenerationUtils\GeneratorStrategy\BaseGeneratorStrategy::setPrettyPrinter
      * @covers \CodeGenerationUtils\GeneratorStrategy\BaseGeneratorStrategy::getPrettyPrinter
      */
-    public function testSetPrettyPrinter()
+    public function testSetPrettyPrinter(): void
     {
         $strategy = new BaseGeneratorStrategy();
 
@@ -61,7 +61,7 @@ class BaseGeneratorStrategyTest extends TestCase
             ->expects(self::once())
             ->method('prettyPrint')
             ->with(array('bar'))
-            ->will(self::returnValue('foo'));
+            ->willReturn('foo');
 
         $strategy->setPrettyPrinter($prettyPrinter);
 

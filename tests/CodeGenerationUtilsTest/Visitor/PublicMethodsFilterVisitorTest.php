@@ -22,7 +22,6 @@ namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\PublicMethodsFilterVisitor;
 use PhpParser\Node;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPUnit\Framework\TestCase;
@@ -43,14 +42,14 @@ class PublicMethodsFilterVisitorTest extends TestCase
      * @param \PhpParser\Node $node
      * @param mixed          $expected
      */
-    public function testRemovesOnlyPrivateMethods(Node $node, $expected)
+    public function testRemovesOnlyPrivateMethods(Node $node, $expected): void
     {
         $visitor = new PublicMethodsFilterVisitor();
 
         self::assertSame($expected, $visitor->leaveNode($node));
     }
 
-    public function nodeProvider()
+    public function nodeProvider(): array
     {
         return array(
             array(

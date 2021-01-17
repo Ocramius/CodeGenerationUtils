@@ -34,7 +34,7 @@ class DisabledMethodExceptionTest extends TestCase
     /**
      * @covers \CodeGenerationUtils\Exception\DisabledMethodException::disabledMethod
      */
-    public function testDisabledMethod()
+    public function testDisabledMethod(): void
     {
         $exception = DisabledMethodException::disabledMethod('foo::bar');
 

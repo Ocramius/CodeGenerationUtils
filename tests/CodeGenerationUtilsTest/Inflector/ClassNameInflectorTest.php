@@ -43,7 +43,7 @@ class ClassNameInflectorTest extends TestCase
      * @param string $realClassName
      * @param string $generatedClassName
      */
-    public function testInflector(string $realClassName, string $generatedClassName)
+    public function testInflector(string $realClassName, string $generatedClassName): void
     {
         $inflector = new ClassNameInflector('GeneratedClassNS');
 
@@ -58,7 +58,7 @@ class ClassNameInflectorTest extends TestCase
     /**
      * @covers \CodeGenerationUtils\Inflector\ClassNameInflector::getGeneratedClassName
      */
-    public function testGeneratesSameClassNameWithSameParameters()
+    public function testGeneratesSameClassNameWithSameParameters(): void
     {
         $inflector = new ClassNameInflector('GeneratedClassNS');
 
@@ -76,7 +76,7 @@ class ClassNameInflectorTest extends TestCase
     /**
      * @covers \CodeGenerationUtils\Inflector\ClassNameInflector::getGeneratedClassName
      */
-    public function testGeneratesDifferentClassNameWithDifferentParameters()
+    public function testGeneratesDifferentClassNameWithDifferentParameters(): void
     {
         $inflector = new ClassNameInflector('GeneratedClassNS');
 
@@ -101,7 +101,7 @@ class ClassNameInflectorTest extends TestCase
     /**
      * @return array
      */
-    public function getClassNames()
+    public function getClassNames(): array
     {
         return array(
             array(

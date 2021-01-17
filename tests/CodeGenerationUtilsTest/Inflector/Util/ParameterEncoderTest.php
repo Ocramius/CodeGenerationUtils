@@ -38,7 +38,7 @@ class ParameterEncoderTest extends TestCase
      *
      * @param array $parameters
      */
-    public function testGeneratesValidClassName(array $parameters)
+    public function testGeneratesValidClassName(array $parameters): void
     {
         $encoder = new ParameterEncoder();
 
@@ -52,7 +52,7 @@ class ParameterEncoderTest extends TestCase
     /**
      * @return array
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return array(
             array(array()),

@@ -53,7 +53,7 @@ class FileWriterGeneratorStrategyTest extends TestCase
             ->expects(self::any())
             ->method('getGeneratedClassFileName')
             ->with($fqcn)
-            ->will(self::returnValue($tmpFile));
+            ->willReturn($tmpFile);
 
         $class     = new Class_($className);
         $namespace = new Namespace_(new Name('Foo'), array($class));
@@ -61,7 +61,7 @@ class FileWriterGeneratorStrategyTest extends TestCase
 
         self::assertGreaterThan(0, strpos($body, $className));
         self::assertFalse(class_exists($fqcn, false));
-        self::assertTrue(file_exists($tmpFile));
+        self::assertFileExists($tmpFile);
 
         require $tmpFile;
 

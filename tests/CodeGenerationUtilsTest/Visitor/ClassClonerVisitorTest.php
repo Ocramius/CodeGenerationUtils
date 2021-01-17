@@ -21,8 +21,11 @@ declare(strict_types=1);
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\ClassClonerVisitor;
+use PhpParser\Node\Stmt\Class_;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use PhpParser\Node\Stmt\Declare_;
+use PhpParser\Node\Stmt\Namespace_;
 
 /**
  * Tests for {@see \CodeGenerationUtils\Visitor\ClassClonerVisitor}
@@ -34,7 +37,7 @@ use ReflectionClass;
  */
 class ClassClonerVisitorTest extends TestCase
 {
-    public function testClonesClassIntoEmptyNodeList()
+    public function testClonesClassIntoEmptyNodeList(): void
     {
         $reflectionClass = new ReflectionClass(__CLASS__);
 
@@ -42,22 +45,22 @@ class ClassClonerVisitorTest extends TestCase
 
         $nodes = $visitor->beforeTraverse(array());
 
-        self::assertInstanceOf('PhpParser\Node\Stmt\Declare_', $nodes[0]);
-        self::assertInstanceOf('PhpParser\Node\Stmt\Namespace_', $nodes[1]);
+        self::assertInstanceOf(Declare_::class, $nodes[0]);
+        self::assertInstanceOf(Namespace_::class, $nodes[1]);
 
-        /* @var $node \PhpParser\Node\Stmt\Namespace_ */
+        /* @var $node Namespace_ */
         $node = $nodes[1];
 
         self::assertSame(__NAMESPACE__, implode('\\', $node->name->parts));
 
-        /* @var $class \PhpParser\Node\Stmt\Class_ */
+        /* @var $class Class_ */
         $class = end($node->stmts);
 
-        self::assertInstanceOf('PhpParser\Node\Stmt\Class_', $class);
+        self::assertInstanceOf(Class_::class, $class);
         self::assertSame('ClassClonerVisitorTest', (string)$class->name);
     }
 
-    public function testClonesClassIntoNonEmptyNodeList()
+    public function testClonesClassIntoNonEmptyNodeList(): void
     {
         self::markTestIncomplete('Still not clear thoughts on this...');
     }

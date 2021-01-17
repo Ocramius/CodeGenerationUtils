@@ -38,7 +38,7 @@ class UniqueIdentifierGeneratorTest extends TestCase
      *
      * @param string $name
      */
-    public function testGeneratesUniqueIdentifiers(string $name)
+    public function testGeneratesUniqueIdentifiers(string $name): void
     {
         self::assertNotSame(
             UniqueIdentifierGenerator::getIdentifier($name),

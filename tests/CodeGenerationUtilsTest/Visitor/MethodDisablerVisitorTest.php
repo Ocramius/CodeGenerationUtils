@@ -21,7 +21,6 @@ declare(strict_types=1);
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\MethodDisablerVisitor;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPUnit\Framework\TestCase;
@@ -36,7 +35,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MethodDisablerVisitorTest extends TestCase
 {
-    public function testDisablesMethod()
+    public function testDisablesMethod(): void
     {
         $method = new ClassMethod('test');
         /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */
@@ -50,7 +49,7 @@ class MethodDisablerVisitorTest extends TestCase
         self::assertInstanceOf('PhpParser\Node\Stmt\Throw_', reset($method->stmts));
     }
 
-    public function testSkipsOnFailedFiltering()
+    public function testSkipsOnFailedFiltering(): void
     {
         $method = new ClassMethod('test');
         /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */
@@ -63,7 +62,7 @@ class MethodDisablerVisitorTest extends TestCase
         self::assertSame(false, $visitor->leaveNode($method));
     }
 
-    public function testSkipsOnIgnoreFiltering()
+    public function testSkipsOnIgnoreFiltering(): void
     {
         $method = new ClassMethod('test');
         /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */
@@ -76,7 +75,7 @@ class MethodDisablerVisitorTest extends TestCase
         self::assertNull($visitor->leaveNode($method));
     }
 
-    public function testSkipsOnNodeTypeMismatch()
+    public function testSkipsOnNodeTypeMismatch(): void
     {
         $class  = new Class_('test');
         /* @var $filter \PHPUnit_Framework_MockObject_MockObject|callable */

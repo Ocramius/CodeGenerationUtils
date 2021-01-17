@@ -23,6 +23,8 @@ namespace CodeGenerationUtilsTest\Autoloader;
 use PHPUnit\Framework\TestCase;
 use CodeGenerationUtils\Autoloader\Autoloader;
 use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
+use CodeGenerationUtils\FileLocator\FileLocatorInterface;
+use CodeGenerationUtils\Inflector\ClassNameInflectorInterface;
 
 /**
  * Tests for {@see \CodeGenerationUtils\Autoloader\Autoloader}
@@ -50,10 +52,10 @@ class AutoloaderTest extends TestCase
     /**
      * @covers \CodeGenerationUtils\Autoloader\Autoloader::__construct
      */
-    public function setUp()
+    public function setUp(): void
     {
-        $this->fileLocator        = $this->createMock('CodeGenerationUtils\\FileLocator\\FileLocatorInterface');
-        $this->classNameInflector = $this->createMock('CodeGenerationUtils\\Inflector\\ClassNameInflectorInterface');
+        $this->fileLocator        = $this->createMock(FileLocatorInterface::class);
+        $this->classNameInflector = $this->createMock(ClassNameInflectorInterface::class);
         $this->autoloader         = new Autoloader($this->fileLocator, $this->classNameInflector);
     }
 
@@ -68,7 +70,7 @@ class AutoloaderTest extends TestCase
             ->expects(self::once())
             ->method('isGeneratedClassName')
             ->with($className)
-            ->will(self::returnValue(false));
+            ->willReturn(false);
 
         self::assertFalse($this->autoloader->__invoke($className));
     }
@@ -79,17 +81,19 @@ class AutoloaderTest extends TestCase
     public function testWillNotAutoloadNonExistingClass()
     {
         $className = 'Foo\\' . UniqueIdentifierGenerator::getIdentifier('Bar');
+
         $this
             ->classNameInflector
             ->expects(self::once())
             ->method('isGeneratedClassName')
             ->with($className)
-            ->will(self::returnValue(true));
+            ->willReturn(true);
+
         $this
             ->fileLocator
             ->expects(self::once())
             ->method('getGeneratedClassFileName')
-            ->will(self::returnValue(__DIR__ . '/non-existing'));
+            ->willReturn(__DIR__ . '/non-existing');
 
         self::assertFalse($this->autoloader->__invoke($className));
     }
@@ -119,12 +123,13 @@ class AutoloaderTest extends TestCase
             ->expects(self::once())
             ->method('isGeneratedClassName')
             ->with($fqcn)
-            ->will(self::returnValue(true));
+            ->willReturn(true);
+
         $this
             ->fileLocator
             ->expects(self::once())
             ->method('getGeneratedClassFileName')
-            ->will(self::returnValue($fileName));
+            ->willReturn($fileName);
 
         self::assertTrue($this->autoloader->__invoke($fqcn));
         self::assertTrue(class_exists($fqcn, false));

@@ -21,7 +21,7 @@ declare(strict_types=1);
 namespace CodeGenerationUtilsTestAsset;
 
 /**
- * Class to use for testing the ReflectionBuilder {@see \CodeGenerationUtilsTest\Visitor\ClassBuilderTest}
+ * Class to use for testing the ReflectionBuilder {@see \CodeGenerationUtilsTest\ReflectionBuilder\ClassBuilderTest}
  *
  * @author Samuel Parkinson <sam@graze.com>
  * @license MIT
