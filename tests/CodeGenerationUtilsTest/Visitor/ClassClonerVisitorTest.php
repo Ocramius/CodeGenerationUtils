@@ -27,7 +27,6 @@ use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
-use function assert;
 use function end;
 use function implode;
 
@@ -49,13 +48,12 @@ class ClassClonerVisitorTest extends TestCase
         self::assertInstanceOf(Declare_::class, $nodes[0]);
         self::assertInstanceOf(Namespace_::class, $nodes[1]);
 
-        $node = $nodes[1];
-        assert($node instanceof Namespace_);
+        $nodeName = $nodes[1]->name;
 
-        self::assertSame(__NAMESPACE__, implode('\\', $node->name->parts));
+        self::assertNotNull($nodeName);
+        self::assertSame(__NAMESPACE__, implode('\\', $nodeName->parts));
 
-        $class = end($node->stmts);
-        assert($class instanceof Class_);
+        $class = end($nodes[1]->stmts);
 
         self::assertInstanceOf(Class_::class, $class);
         self::assertSame('ClassClonerVisitorTest', (string) $class->name);

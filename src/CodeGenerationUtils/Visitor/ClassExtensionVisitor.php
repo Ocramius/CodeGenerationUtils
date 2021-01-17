@@ -27,7 +27,6 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeVisitorAbstract;
 
 use function implode;
-use function is_array;
 use function trim;
 
 /**
@@ -89,7 +88,7 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
         }
 
         if ($node instanceof Class_) {
-            $namespace = $this->currentNamespace && is_array($this->currentNamespace->name->parts)
+            $namespace = $this->currentNamespace && $this->currentNamespace->name !== null
                 ? implode('\\', $this->currentNamespace->name->parts)
                 : '';
 

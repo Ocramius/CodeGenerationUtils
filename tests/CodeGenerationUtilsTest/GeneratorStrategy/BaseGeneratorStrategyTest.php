@@ -25,9 +25,7 @@ use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\PrettyPrinterAbstract;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 
-use function assert;
 use function strpos;
 
 /**
@@ -56,16 +54,15 @@ class BaseGeneratorStrategyTest extends TestCase
         $strategy = new BaseGeneratorStrategy();
 
         $prettyPrinter = $this->createMock(PrettyPrinterAbstract::class);
-        assert($prettyPrinter instanceof PrettyPrinterAbstract || $prettyPrinter instanceof PHPUnit_Framework_MockObject_MockObject);
 
         $prettyPrinter
             ->expects(self::once())
             ->method('prettyPrint')
-            ->with(['bar'])
+            ->with(self::equalTo([new Class_('bar')]))
             ->willReturn('foo');
 
         $strategy->setPrettyPrinter($prettyPrinter);
 
-        self::assertSame('foo', $strategy->generate(['bar']));
+        self::assertSame('foo', $strategy->generate([new Class_('bar')]));
     }
 }

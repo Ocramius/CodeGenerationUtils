@@ -24,8 +24,8 @@ use CodeGenerationUtils\Autoloader\Autoloader;
 use CodeGenerationUtils\FileLocator\FileLocatorInterface;
 use CodeGenerationUtils\Inflector\ClassNameInflectorInterface;
 use CodeGenerationUtils\Inflector\Util\UniqueIdentifierGenerator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 
 use function class_exists;
 use function file_put_contents;
@@ -39,10 +39,10 @@ class AutoloaderTest extends TestCase
 {
     protected Autoloader $autoloader;
 
-    /** @var FileLocatorInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var FileLocatorInterface&MockObject */
     protected $fileLocator;
 
-    /** @var ClassNameInflectorInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var ClassNameInflectorInterface&MockObject */
     protected $classNameInflector;
 
     /**

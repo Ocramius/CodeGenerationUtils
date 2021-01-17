@@ -45,7 +45,7 @@ class PublicMethodsFilterVisitorTest extends TestCase
         self::assertSame($expected, $visitor->leaveNode($node));
     }
 
-    /** @psalm-return non-empty-list<array{ClassMethod, (false|null)}> */
+    /** @psalm-return non-empty-list<array{ClassMethod|Class_, false|null}> */
     public function nodeProvider(): array
     {
         return [

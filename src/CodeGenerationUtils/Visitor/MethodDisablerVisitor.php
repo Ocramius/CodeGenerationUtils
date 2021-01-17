@@ -27,6 +27,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Throw_;
+use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
 /**
@@ -46,7 +47,7 @@ class MethodDisablerVisitor extends NodeVisitorAbstract
      *                         type {@see \PhpParser\Node} and returns null|true|false to
      *                         respectively ignore, remove or replace it.
      *
-     * @psalm-param callable(\PhpParser\Node): ?bool
+     * @psalm-param callable(Node ): ?bool $filter
      */
     public function __construct(callable $filter)
     {
@@ -56,7 +57,7 @@ class MethodDisablerVisitor extends NodeVisitorAbstract
     /**
      * Replaces the given node if it is a class method and matches according to the given callback
      *
-     * @return bool|ClassMethod|null
+     * @psalm-return NodeTraverser::REMOVE_NODE|ClassMethod|null
      */
     public function leaveNode(Node $node)
     {
@@ -68,8 +69,12 @@ class MethodDisablerVisitor extends NodeVisitorAbstract
 
         $filterResult = $filter($node);
 
-        if (! $filterResult) {
-            return $filterResult;
+        if ($filterResult === false) {
+            return NodeTraverser::REMOVE_NODE;
+        }
+
+        if ($filterResult === null) {
+            return null;
         }
 
         $node->stmts = [

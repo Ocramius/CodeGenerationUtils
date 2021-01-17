@@ -81,7 +81,7 @@ class ClassNameInflectorTest extends TestCase
         );
     }
 
-    /** @psalm-return non-empty-list<array<string, string>> */
+    /** @psalm-return non-empty-list<array{string, string}> */
     public function getClassNames(): array
     {
         return [

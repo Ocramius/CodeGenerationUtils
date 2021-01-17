@@ -55,6 +55,7 @@ class EvaluatingGeneratorStrategy extends BaseGeneratorStrategy
             $fileName = sys_get_temp_dir() . '/EvaluatingGeneratorStrategy.php.tmp.' . uniqid('', true);
 
             file_put_contents($fileName, "<?php\n" . $code);
+            /** @psalm-suppress UnresolvableInclude we're doing `eval()` here! There's no going back! */
             require $fileName;
             unlink($fileName);
 

@@ -63,7 +63,7 @@ class ClassFQCNResolverVisitor extends NodeVisitorAbstract
         }
 
         if (! ($node instanceof Class_)) {
-            return;
+            return null;
         }
 
         if ($this->class) {
@@ -71,6 +71,8 @@ class ClassFQCNResolverVisitor extends NodeVisitorAbstract
         }
 
         $this->class = $node;
+
+        return null;
     }
 
     /**
@@ -92,6 +94,8 @@ class ClassFQCNResolverVisitor extends NodeVisitorAbstract
      */
     public function getNamespace(): string
     {
-        return $this->namespace ? $this->namespace->name->toString() : '';
+        return $this->namespace && $this->namespace->name !== null
+            ? $this->namespace->name->toString()
+            : '';
     }
 }

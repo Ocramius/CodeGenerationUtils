@@ -22,6 +22,8 @@ namespace CodeGenerationUtils\Inflector;
 
 use CodeGenerationUtils\Inflector\Util\ParameterEncoder;
 
+use function assert;
+use function is_int;
 use function strlen;
 use function strrpos;
 use function substr;
@@ -52,10 +54,14 @@ class ClassNameInflector implements ClassNameInflectorInterface
             return $className;
         }
 
+        $lastNamespaceDelimiter = strrpos($className, '\\');
+
+        assert(is_int($lastNamespaceDelimiter));
+
         return substr(
             $className,
             $this->generatedClassMarkerLength + $position,
-            strrpos($className, '\\') - ($position + $this->generatedClassMarkerLength)
+            $lastNamespaceDelimiter - ($position + $this->generatedClassMarkerLength)
         );
     }
 

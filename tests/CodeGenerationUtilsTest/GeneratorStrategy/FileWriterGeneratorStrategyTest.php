@@ -27,9 +27,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 
-use function assert;
 use function class_exists;
 use function strpos;
 use function sys_get_temp_dir;
@@ -46,8 +44,7 @@ class FileWriterGeneratorStrategyTest extends TestCase
      */
     public function testGenerate(): void
     {
-        $locator = $this->createMock(FileLocatorInterface::class);
-        assert($locator instanceof PHPUnit_Framework_MockObject_MockObject || $locator instanceof FileLocatorInterface);
+        $locator   = $this->createMock(FileLocatorInterface::class);
         $generator = new FileWriterGeneratorStrategy($locator);
         $tmpFile   = sys_get_temp_dir() . '/FileWriterGeneratorStrategyTest' . uniqid('', true) . '.php';
         $className = UniqueIdentifierGenerator::getIdentifier('Bar');
@@ -67,6 +64,7 @@ class FileWriterGeneratorStrategyTest extends TestCase
         self::assertFalse(class_exists($fqcn, false));
         self::assertFileExists($tmpFile);
 
+        /** @psalm-suppress UnresolvableInclude we are doing some runtime evaluation on purpose */
         require $tmpFile;
 
         self::assertTrue(class_exists($fqcn, false));

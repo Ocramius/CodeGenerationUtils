@@ -45,8 +45,10 @@ class ClassExtensionVisitorTest extends TestCase
         self::assertSame($class, $visitor->leaveNode($class));
         self::assertNull($visitor->leaveNode($namespace));
 
-        self::assertNotNull($class->extends);
-        self::assertSame('Baz\\Tab', $class->extends->toString());
+        $extends = $class->extends;
+
+        self::assertNotNull($extends);
+        self::assertSame('Baz\\Tab', $extends->toString());
     }
 
     public function testIgnoresNodesOnNonMatchingClass(): void
@@ -88,7 +90,9 @@ class ClassExtensionVisitorTest extends TestCase
         self::assertNull($visitor->enterNode($class));
         self::assertSame($class, $visitor->leaveNode($class));
 
-        self::assertNotNull($class->extends);
-        self::assertSame('Baz\\Tab', $class->extends->toString());
+        $extends = $class->extends;
+
+        self::assertNotNull($extends);
+        self::assertSame('Baz\\Tab', $extends->toString());
     }
 }

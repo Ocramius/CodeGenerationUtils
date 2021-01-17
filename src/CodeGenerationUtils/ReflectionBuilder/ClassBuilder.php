@@ -38,8 +38,13 @@ use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionProperty;
 
+use function assert;
 use function explode;
-use function method_exists;
+use function is_array;
+use function is_bool;
+use function is_float;
+use function is_int;
+use function is_string;
 
 /**
  * Rudimentary utility to build an AST from a reflection class
@@ -70,6 +75,7 @@ class ClassBuilder
         $class->implements = $interfaces;
 
         foreach ($reflectionClass->getConstants() as $constant => $value) {
+            assert(is_bool($value) || $value === null || is_int($value) || is_float($value) || is_string($value) || is_array($value));
             $class->stmts[] = new ClassConst(
                 [new Const_($constant, BuilderHelpers::normalizeValue($value))]
             );
@@ -181,26 +187,26 @@ class ClassBuilder
         }
 
         if ($reflectionParameter->isArray()) {
-            $parameterBuilder->setTypeHint('array');
+            $parameterBuilder->setType('array');
         }
 
-        if (method_exists($reflectionParameter, 'isCallable') && $reflectionParameter->isCallable()) {
-            $parameterBuilder->setTypeHint('callable');
+        if ($reflectionParameter->isCallable()) {
+            $parameterBuilder->setType('callable');
         }
 
         $type = $reflectionParameter->getClass();
 
         if ($type !== null) {
-            $parameterBuilder->setTypeHint($type->getName());
+            $parameterBuilder->setType($type->getName());
         }
 
         if ($reflectionParameter->isDefaultValueAvailable()) {
             if ($reflectionParameter->isDefaultValueConstant()) {
-                $parameterBuilder->setDefault(
-                    new ConstFetch(
-                        new Name($reflectionParameter->getDefaultValueConstantName())
-                    )
-                );
+                $constantName = $reflectionParameter->getDefaultValueConstantName();
+
+                assert($constantName !== null);
+
+                $parameterBuilder->setDefault(new ConstFetch(new Name($constantName)));
             } else {
                 $parameterBuilder->setDefault($reflectionParameter->getDefaultValue());
             }

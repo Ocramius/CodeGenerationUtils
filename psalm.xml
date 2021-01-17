@@ -13,4 +13,21 @@
             <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
+
+    <issueHandlers>
+        <InternalClass>
+            <errorLevel type="suppress">
+                <referencedClass name="PhpParser\BuilderHelpers"/>
+            </errorLevel>
+        </InternalClass>
+        <InternalMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="PhpParser\BuilderHelpers::normalizeValue"/>
+            </errorLevel>
+        </InternalMethod>
+    </issueHandlers>
+
+    <plugins>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+    </plugins>
 </psalm>

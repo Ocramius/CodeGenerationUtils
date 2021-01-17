@@ -38,14 +38,14 @@ class ParameterEncoderTest extends TestCase
     {
         $encoder = new ParameterEncoder();
 
-        self::assertRegExp(
+        self::assertMatchesRegularExpression(
             '/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]+/',
             $encoder->encodeParameters($parameters),
             'Encoded string is a valid class identifier'
         );
     }
 
-    /** @psalm-return non-empty`-list<array{array<mixed>}> */
+    /** @psalm-return non-empty-list<array{array<mixed>}> */
     public function getParameters(): array
     {
         return [

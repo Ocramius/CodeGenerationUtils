@@ -20,10 +20,12 @@ declare(strict_types=1);
 
 namespace CodeGenerationUtils\Visitor;
 
-use PhpParser\NodeVisitorAbstract;
+use PhpParser\Node;
+use PhpParser\NodeVisitor;
 use PhpParser\ParserFactory;
 use ReflectionClass;
 
+use function assert;
 use function file_get_contents;
 
 /**
@@ -32,7 +34,7 @@ use function file_get_contents;
  * @todo doesn't work with evaluated code (file must exist)
  * @todo simply skips if the AST is not empty - should instead be extended to decide what to do
  */
-class ClassClonerVisitor extends NodeVisitorAbstract
+class ClassClonerVisitor implements NodeVisitor
 {
     private ReflectionClass $reflectedClass;
 
@@ -44,19 +46,38 @@ class ClassClonerVisitor extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      *
-     * @param array $nodes
+     * @param Node[] $nodes
      *
      * @return Node[]
      */
     public function beforeTraverse(array $nodes): array
     {
         // quick fix - if the list is empty, replace it it
-        if (! $nodes) {
-            return (new ParserFactory())
+        if ($nodes === []) {
+            $parsed = (new ParserFactory())
                 ->create(ParserFactory::PREFER_PHP7)
                 ->parse(file_get_contents($this->reflectedClass->getFileName()));
+
+            assert($parsed !== null); // leap of faith again - should always parse
+
+            return $parsed;
         }
 
         return $nodes;
+    }
+
+    public function enterNode(Node $node)
+    {
+        return null;
+    }
+
+    public function leaveNode(Node $node)
+    {
+        return null;
+    }
+
+    public function afterTraverse(array $nodes)
+    {
+        return null;
     }
 }

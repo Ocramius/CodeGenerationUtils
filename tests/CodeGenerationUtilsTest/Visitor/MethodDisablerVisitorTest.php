@@ -21,13 +21,13 @@ declare(strict_types=1);
 namespace CodeGenerationUtilsTest\Visitor;
 
 use CodeGenerationUtils\Visitor\MethodDisablerVisitor;
+use CodeGenerationUtilsTestAsset\CallableFilterStub;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Throw_;
+use PhpParser\NodeTraverser;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 
-use function assert;
-use function is_callable;
 use function reset;
 
 /**
@@ -40,38 +40,42 @@ class MethodDisablerVisitorTest extends TestCase
     public function testDisablesMethod(): void
     {
         $method = new ClassMethod('test');
-        $filter = $this->getMockBuilder('stdClass')->setMethods(['__invoke'])->getMock();
-        assert($filter instanceof PHPUnit_Framework_MockObject_MockObject || is_callable($filter));
+        $filter = $this->createMock(CallableFilterStub::class);
 
         $filter->expects(self::once())->method('__invoke')->with($method)->will(self::returnValue(true));
 
+        /** @psalm-suppress InvalidArgument $visitor callable is correctly typed here */
         $visitor = new MethodDisablerVisitor($filter);
 
         self::assertSame($method, $visitor->leaveNode($method));
-        self::assertInstanceOf('PhpParser\Node\Stmt\Throw_', reset($method->stmts));
+
+        $statements = $method->stmts;
+
+        self::assertIsArray($statements);
+        self::assertInstanceOf(Throw_::class, reset($statements));
     }
 
     public function testSkipsOnFailedFiltering(): void
     {
         $method = new ClassMethod('test');
-        $filter = $this->getMockBuilder('stdClass')->setMethods(['__invoke'])->getMock();
-        assert($filter instanceof PHPUnit_Framework_MockObject_MockObject || is_callable($filter));
+        $filter = $this->createMock(CallableFilterStub::class);
 
         $filter->expects(self::once())->method('__invoke')->with($method)->will(self::returnValue(false));
 
+        /** @psalm-suppress InvalidArgument $visitor callable is correctly typed here */
         $visitor = new MethodDisablerVisitor($filter);
 
-        self::assertSame(false, $visitor->leaveNode($method));
+        self::assertSame(NodeTraverser::REMOVE_NODE, $visitor->leaveNode($method));
     }
 
     public function testSkipsOnIgnoreFiltering(): void
     {
         $method = new ClassMethod('test');
-        $filter = $this->getMockBuilder('stdClass')->setMethods(['__invoke'])->getMock();
-        assert($filter instanceof PHPUnit_Framework_MockObject_MockObject || is_callable($filter));
+        $filter = $this->createMock(CallableFilterStub::class);
 
         $filter->expects(self::once())->method('__invoke')->with($method)->will(self::returnValue(null));
 
+        /** @psalm-suppress InvalidArgument $visitor callable is correctly typed here */
         $visitor = new MethodDisablerVisitor($filter);
 
         self::assertNull($visitor->leaveNode($method));
@@ -80,11 +84,11 @@ class MethodDisablerVisitorTest extends TestCase
     public function testSkipsOnNodeTypeMismatch(): void
     {
         $class  = new Class_('test');
-        $filter = $this->getMockBuilder('stdClass')->setMethods(['__invoke'])->getMock();
-        assert($filter instanceof PHPUnit_Framework_MockObject_MockObject || is_callable($filter));
+        $filter = $this->createMock(CallableFilterStub::class);
 
         $filter->expects(self::never())->method('__invoke');
 
+        /** @psalm-suppress InvalidArgument $visitor callable is correctly typed here */
         $visitor = new MethodDisablerVisitor($filter);
 
         self::assertNull($visitor->leaveNode($class));

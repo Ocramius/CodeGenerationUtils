@@ -28,10 +28,10 @@ use PhpParser\NodeVisitorAbstract;
 use ReflectionClass;
 
 use function array_slice;
+use function assert;
 use function end;
 use function explode;
 use function implode;
-use function is_array;
 
 /**
  * Renames a matched class to a new name.
@@ -81,7 +81,7 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
      *
      * @return Class_[]|Class_|Namespace_|null
      *
-     * @psalm-return array{Namespace_}|Class_|Namespace_|null
+     * @psalm-return array{Class_}|Class_|Namespace_|null
      *
      * @todo can be abstracted away into a visitor that allows to modify the matched node via a callback
      */
@@ -99,7 +99,14 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
                     return [$replacedInNamespace];
                 }
 
-                $namespace->name->parts = explode('\\', $this->newNamespace);
+                $namespaceName = $namespace->name;
+                /** @psalm-var non-empty-list<non-empty-string> $newParts leap of faith, especially the fact that each bit is non-empty! */
+                $newParts = explode('\\', $this->newNamespace);
+
+                assert($namespaceName !== null);
+
+                $namespaceName->parts = $newParts;
+                $namespace->name      = $namespaceName;
 
                 return $namespace;
             }
@@ -110,7 +117,7 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
             && $this->namespaceMatches()
             && ($this->reflectedClass->getShortName() === (string) $node->name)
         ) {
-            $node->name = $this->newName;
+            $node->name = new Node\Identifier($this->newName);
 
             // @todo too simplistic (assumes single class per namespace right now)
             if ($this->currentNamespace) {
@@ -132,10 +139,16 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
      */
     private function namespaceMatches(): bool
     {
-        $currentNamespace = $this->currentNamespace && is_array($this->currentNamespace->name->parts)
-            ? $this->currentNamespace->name->toString()
-            : '';
+        if ($this->currentNamespace === null) {
+            return $this->reflectedClass->getNamespaceName() === '';
+        }
 
-        return $currentNamespace === $this->reflectedClass->getNamespaceName();
+        $currentNamespaceName = $this->currentNamespace->name;
+
+        if ($currentNamespaceName === null) {
+            return $this->reflectedClass->getNamespaceName() === '';
+        }
+
+        return $currentNamespaceName->toString() === $this->reflectedClass->getNamespaceName();
     }
 }

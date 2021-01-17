@@ -29,7 +29,6 @@ use PhpParser\NodeVisitorAbstract;
 
 use function array_map;
 use function implode;
-use function is_array;
 use function trim;
 
 /**
@@ -94,7 +93,7 @@ class ClassImplementorVisitor extends NodeVisitorAbstract
         }
 
         if ($node instanceof Class_) {
-            $namespace = $this->currentNamespace && is_array($this->currentNamespace->name->parts)
+            $namespace = $this->currentNamespace && $this->currentNamespace->name !== null
                 ? implode('\\', $this->currentNamespace->name->parts)
                 : '';
 

@@ -50,7 +50,11 @@ class ClassBuilderTest extends TestCase
         assert($namespace instanceof Namespace_);
 
         self::assertInstanceOf(Namespace_::class, $namespace);
-        self::assertSame(__NAMESPACE__, $namespace->name->toString());
+
+        $namespaceName = $namespace->name;
+
+        self::assertNotNull($namespaceName);
+        self::assertSame(__NAMESPACE__, $namespaceName->toString());
 
         $class = $namespace->stmts[0];
         assert($class instanceof Class_);
