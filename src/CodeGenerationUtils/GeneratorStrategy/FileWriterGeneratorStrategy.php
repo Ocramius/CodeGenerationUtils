@@ -79,6 +79,7 @@ class FileWriterGeneratorStrategy extends BaseGeneratorStrategy
         // in a short time period
         file_put_contents($tmpFileName, "<?php\n\n" . $generatedCode);
         rename($tmpFileName, $fileName);
+        chmod($fileName, 0666);
 
         return $generatedCode;
     }
