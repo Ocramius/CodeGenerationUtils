@@ -23,6 +23,7 @@ namespace CodeGenerationUtils\GeneratorStrategy;
 use CodeGenerationUtils\FileLocator\FileLocatorInterface;
 use CodeGenerationUtils\Visitor\ClassFQCNResolverVisitor;
 use PhpParser\NodeTraverser;
+use chmod;
 
 /**
  * Generator strategy that writes the generated classes to disk while generating them
