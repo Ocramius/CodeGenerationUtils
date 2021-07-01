@@ -23,7 +23,7 @@
         "nikic/php-parser":          "^4.10.4"
     },
     "require-dev": {
-        "doctrine/coding-standard":               "^8.2.0",
+        "doctrine/coding-standard":               "^9.0.0",
         "phpunit/phpunit":                        "^9.5.6",
         "psalm/plugin-phpunit":                   "^0.16.1",
         "roave/infection-static-analysis-plugin": "^1.8",
