@@ -99,9 +99,9 @@ class ClassBuilder
     }
 
     /**
-     * @throws BadMethodCallException disabled method.
-     *
      * @psalm-return never-return
+     *
+     * @throws BadMethodCallException disabled method.
      */
     public function getNode(): void
     {
@@ -186,18 +186,10 @@ class ClassBuilder
             $parameterBuilder->makeByRef();
         }
 
-        if ($reflectionParameter->isArray()) {
-            $parameterBuilder->setType('array');
-        }
-
-        if ($reflectionParameter->isCallable()) {
-            $parameterBuilder->setType('callable');
-        }
-
-        $type = $reflectionParameter->getClass();
+        $type = $reflectionParameter->getType();
 
         if ($type !== null) {
-            $parameterBuilder->setType($type->getName());
+            $parameterBuilder->setType($type->__toString());
         }
 
         if ($reflectionParameter->isDefaultValueAvailable()) {

@@ -46,7 +46,6 @@ class MethodDisablerVisitor extends NodeVisitorAbstract
      * @param callable $filter a filter method that accepts a single parameter of
      *                         type {@see \PhpParser\Node} and returns null|true|false to
      *                         respectively ignore, remove or replace it.
-     *
      * @psalm-param callable(Node ): ?bool $filter
      */
     public function __construct(callable $filter)

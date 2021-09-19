@@ -24,6 +24,7 @@ use CodeGenerationUtils\Visitor\PublicMethodsFilterVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\NodeTraverser;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,18 +35,16 @@ use PHPUnit\Framework\TestCase;
 class PublicMethodsFilterVisitorTest extends TestCase
 {
     /**
-     * @param false|null $expected
-     *
      * @dataProvider nodeProvider
      */
-    public function testRemovesOnlyPrivateMethods(Node $node, ?bool $expected): void
+    public function testRemovesOnlyPrivateMethods(Node $node, ?int $expected): void
     {
         $visitor = new PublicMethodsFilterVisitor();
 
         self::assertSame($expected, $visitor->leaveNode($node));
     }
 
-    /** @psalm-return non-empty-list<array{ClassMethod|Class_, false|null}> */
+    /** @psalm-return non-empty-list<array{ClassMethod|Class_, int|null}> */
     public function nodeProvider(): array
     {
         return [
@@ -61,14 +60,14 @@ class PublicMethodsFilterVisitorTest extends TestCase
                     'foo',
                     ['type' => Class_::MODIFIER_PROTECTED]
                 ),
-                false,
+                NodeTraverser::REMOVE_NODE,
             ],
             [
                 new ClassMethod(
                     'foo',
                     ['type' => Class_::MODIFIER_PRIVATE]
                 ),
-                false,
+                NodeTraverser::REMOVE_NODE,
             ],
             [new Class_('foo'), null],
         ];
