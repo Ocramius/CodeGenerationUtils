@@ -1,21 +1,17 @@
 <?xml version="1.0"?>
 <phpunit
-    bootstrap="./vendor/autoload.php"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     colors="true"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
+    convertDeprecationsToExceptions="true"
     verbose="true"
-    stopOnFailure="false"
-    processIsolation="false"
-    backupGlobals="false"
 >
     <testsuite name="CodeGenerationUtils tests">
         <directory>./tests/CodeGenerationUtilsTest</directory>
     </testsuite>
-    <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
+    <coverage>
+        <include>
             <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
+        </include>
+    </coverage>
 </phpunit>
