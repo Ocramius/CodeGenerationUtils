@@ -10,7 +10,7 @@
         <directory>./tests/CodeGenerationUtilsTest</directory>
     </testsuite>
     <coverage>
-        <include addUncoveredFilesFromWhitelist="true">
+        <include>
             <directory suffix=".php">./src</directory>
         </include>
     </coverage>
