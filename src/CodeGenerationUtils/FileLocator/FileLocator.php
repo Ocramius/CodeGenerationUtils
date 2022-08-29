@@ -32,9 +32,7 @@ class FileLocator implements FileLocatorInterface
 {
     protected string $generatedClassesDirectory;
 
-    /**
-     * @throws InvalidDirectory
-     */
+    /** @throws InvalidDirectory */
     public function __construct(string $generatedClassesDirectory)
     {
         $realPath = realpath($generatedClassesDirectory);

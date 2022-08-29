@@ -45,8 +45,8 @@ abstract class UniqueIdentifierGenerator
                 preg_match(self::VALID_IDENTIFIER_FORMAT, $name)
                 ? $name
                 : self::DEFAULT_IDENTIFIER,
-                true
-            )
+                true,
+            ),
         );
     }
 }

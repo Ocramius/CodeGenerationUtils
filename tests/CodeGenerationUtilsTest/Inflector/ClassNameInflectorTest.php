@@ -51,11 +51,11 @@ class ClassNameInflectorTest extends TestCase
         self::assertSame($inflector->getGeneratedClassName('Foo\\Bar'), $inflector->getGeneratedClassName('Foo\\Bar'));
         self::assertSame(
             $inflector->getGeneratedClassName('Foo\\Bar', ['baz' => 'tab']),
-            $inflector->getGeneratedClassName('Foo\\Bar', ['baz' => 'tab'])
+            $inflector->getGeneratedClassName('Foo\\Bar', ['baz' => 'tab']),
         );
         self::assertSame(
             $inflector->getGeneratedClassName('Foo\\Bar', ['tab' => 'baz']),
-            $inflector->getGeneratedClassName('Foo\\Bar', ['tab' => 'baz'])
+            $inflector->getGeneratedClassName('Foo\\Bar', ['tab' => 'baz']),
         );
     }
 
@@ -65,19 +65,19 @@ class ClassNameInflectorTest extends TestCase
 
         self::assertNotSame(
             $inflector->getGeneratedClassName('Foo\\Bar'),
-            $inflector->getGeneratedClassName('Foo\\Bar', ['foo' => 'bar'])
+            $inflector->getGeneratedClassName('Foo\\Bar', ['foo' => 'bar']),
         );
         self::assertNotSame(
             $inflector->getGeneratedClassName('Foo\\Bar', ['baz' => 'tab']),
-            $inflector->getGeneratedClassName('Foo\\Bar', ['tab' => 'baz'])
+            $inflector->getGeneratedClassName('Foo\\Bar', ['tab' => 'baz']),
         );
         self::assertNotSame(
             $inflector->getGeneratedClassName('Foo\\Bar', ['foo' => 'bar', 'tab' => 'baz']),
-            $inflector->getGeneratedClassName('Foo\\Bar', ['foo' => 'bar'])
+            $inflector->getGeneratedClassName('Foo\\Bar', ['foo' => 'bar']),
         );
         self::assertNotSame(
             $inflector->getGeneratedClassName('Foo\\Bar', ['foo' => 'bar', 'tab' => 'baz']),
-            $inflector->getGeneratedClassName('Foo\\Bar', ['tab' => 'baz', 'foo' => 'bar'])
+            $inflector->getGeneratedClassName('Foo\\Bar', ['tab' => 'baz', 'foo' => 'bar']),
         );
     }
 

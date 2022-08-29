@@ -28,7 +28,7 @@ use PhpParser\PrettyPrinterAbstract;
  */
 class BaseGeneratorStrategy implements GeneratorStrategyInterface
 {
-    private ?PrettyPrinterAbstract $prettyPrinter = null;
+    private PrettyPrinterAbstract|null $prettyPrinter = null;
 
     /**
      * {@inheritDoc}

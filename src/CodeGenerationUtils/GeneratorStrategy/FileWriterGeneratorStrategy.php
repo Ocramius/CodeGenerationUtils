@@ -38,15 +38,13 @@ use function uniqid;
  */
 class FileWriterGeneratorStrategy extends BaseGeneratorStrategy
 {
-    protected FileLocatorInterface $fileLocator;
     private NodeTraverserInterface $traverser;
     private ClassFQCNResolverVisitor $visitor;
 
-    public function __construct(FileLocatorInterface $fileLocator)
+    public function __construct(protected FileLocatorInterface $fileLocator)
     {
-        $this->fileLocator = $fileLocator;
-        $this->traverser   = new NodeTraverser();
-        $this->visitor     = new ClassFQCNResolverVisitor();
+        $this->traverser = new NodeTraverser();
+        $this->visitor   = new ClassFQCNResolverVisitor();
 
         $this->traverser->addVisitor($this->visitor);
     }

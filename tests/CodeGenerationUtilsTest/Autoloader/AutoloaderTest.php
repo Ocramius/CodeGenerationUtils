@@ -45,9 +45,7 @@ class AutoloaderTest extends TestCase
     /** @var ClassNameInflectorInterface&MockObject */
     protected $classNameInflector;
 
-    /**
-     * @covers \CodeGenerationUtils\Autoloader\Autoloader::__construct
-     */
+    /** @covers \CodeGenerationUtils\Autoloader\Autoloader::__construct */
     public function setUp(): void
     {
         $this->fileLocator        = $this->createMock(FileLocatorInterface::class);
@@ -55,9 +53,7 @@ class AutoloaderTest extends TestCase
         $this->autoloader         = new Autoloader($this->fileLocator, $this->classNameInflector);
     }
 
-    /**
-     * @covers \CodeGenerationUtils\Autoloader\Autoloader::__invoke
-     */
+    /** @covers \CodeGenerationUtils\Autoloader\Autoloader::__invoke */
     public function testWillNotAutoloadUserClasses(): void
     {
         $className = 'Foo\\' . UniqueIdentifierGenerator::getIdentifier('Bar');
@@ -71,9 +67,7 @@ class AutoloaderTest extends TestCase
         self::assertFalse($this->autoloader->__invoke($className));
     }
 
-    /**
-     * @covers \CodeGenerationUtils\Autoloader\Autoloader::__invoke
-     */
+    /** @covers \CodeGenerationUtils\Autoloader\Autoloader::__invoke */
     public function testWillNotAutoloadNonExistingClass(): void
     {
         $className = 'Foo\\' . UniqueIdentifierGenerator::getIdentifier('Bar');
@@ -94,17 +88,13 @@ class AutoloaderTest extends TestCase
         self::assertFalse($this->autoloader->__invoke($className));
     }
 
-    /**
-     * @covers \CodeGenerationUtils\Autoloader\Autoloader::__invoke
-     */
+    /** @covers \CodeGenerationUtils\Autoloader\Autoloader::__invoke */
     public function testWillNotAutoloadExistingClass(): void
     {
         self::assertFalse($this->autoloader->__invoke(self::class));
     }
 
-    /**
-     * @covers \CodeGenerationUtils\Autoloader\Autoloader::__invoke
-     */
+    /** @covers \CodeGenerationUtils\Autoloader\Autoloader::__invoke */
     public function testWillAutoloadExistingFile(): void
     {
         $namespace = 'Foo';

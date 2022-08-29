@@ -34,10 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PublicMethodsFilterVisitorTest extends TestCase
 {
-    /**
-     * @dataProvider nodeProvider
-     */
-    public function testRemovesOnlyPrivateMethods(Node $node, ?int $expected): void
+    /** @dataProvider nodeProvider */
+    public function testRemovesOnlyPrivateMethods(Node $node, int|null $expected): void
     {
         $visitor = new PublicMethodsFilterVisitor();
 
@@ -51,21 +49,21 @@ class PublicMethodsFilterVisitorTest extends TestCase
             [
                 new ClassMethod(
                     'foo',
-                    ['type' => Class_::MODIFIER_PUBLIC]
+                    ['type' => Class_::MODIFIER_PUBLIC],
                 ),
                 null,
             ],
             [
                 new ClassMethod(
                     'foo',
-                    ['type' => Class_::MODIFIER_PROTECTED]
+                    ['type' => Class_::MODIFIER_PROTECTED],
                 ),
                 NodeTraverser::REMOVE_NODE,
             ],
             [
                 new ClassMethod(
                     'foo',
-                    ['type' => Class_::MODIFIER_PRIVATE]
+                    ['type' => Class_::MODIFIER_PRIVATE],
                 ),
                 NodeTraverser::REMOVE_NODE,
             ],

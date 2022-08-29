@@ -28,9 +28,7 @@ use PHPUnit\Framework\TestCase;
  */
 class InvalidGeneratedClassesDirectoryExceptionTest extends TestCase
 {
-    /**
-     * @covers \CodeGenerationUtils\Exception\InvalidGeneratedClassesDirectoryException
-     */
+    /** @covers \CodeGenerationUtils\Exception\InvalidGeneratedClassesDirectoryException */
     public function testGeneratedClassesDirectoryNotFound(): void
     {
         $exception = InvalidGeneratedClassesDirectoryException::generatedClassesDirectoryNotFound('foo/bar');

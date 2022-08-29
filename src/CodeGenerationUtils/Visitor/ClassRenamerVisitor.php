@@ -39,23 +39,20 @@ use function implode;
  */
 class ClassRenamerVisitor extends NodeVisitorAbstract
 {
-    private ReflectionClass $reflectedClass;
-
     private string $newName;
 
     private string $newNamespace;
 
-    private ?Namespace_ $currentNamespace = null;
+    private Namespace_|null $currentNamespace = null;
 
     /** @var Class_|null the currently detected class in this namespace */
-    private ?Class_ $replacedInNamespace = null;
+    private Class_|null $replacedInNamespace = null;
 
-    public function __construct(ReflectionClass $reflectedClass, string $newFQCN)
+    public function __construct(private ReflectionClass $reflectedClass, string $newFQCN)
     {
-        $this->reflectedClass = $reflectedClass;
-        $fqcnParts            = explode('\\', $newFQCN);
-        $this->newNamespace   = implode('\\', array_slice($fqcnParts, 0, -1));
-        $this->newName        = end($fqcnParts);
+        $fqcnParts          = explode('\\', $newFQCN);
+        $this->newNamespace = implode('\\', array_slice($fqcnParts, 0, -1));
+        $this->newName      = end($fqcnParts);
     }
 
     /** {@inheritDoc} */
@@ -67,7 +64,7 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
         return null;
     }
 
-    public function enterNode(Node $node): ?Namespace_
+    public function enterNode(Node $node): Namespace_|null
     {
         if ($node instanceof Namespace_) {
             return $this->currentNamespace = $node;
@@ -83,7 +80,7 @@ class ClassRenamerVisitor extends NodeVisitorAbstract
      *
      * @todo can be abstracted away into a visitor that allows to modify the matched node via a callback
      */
-    public function leaveNode(Node $node): array | Class_ | Namespace_ | null
+    public function leaveNode(Node $node): array|Class_|Namespace_|null
     {
         if ($node instanceof Namespace_) {
             $namespace                 = $this->currentNamespace;

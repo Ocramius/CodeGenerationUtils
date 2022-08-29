@@ -36,11 +36,8 @@ use function file_get_contents;
  */
 class ClassClonerVisitor implements NodeVisitor
 {
-    private ReflectionClass $reflectedClass;
-
-    public function __construct(ReflectionClass $reflectedClass)
+    public function __construct(private ReflectionClass $reflectedClass)
     {
-        $this->reflectedClass = $reflectedClass;
     }
 
     /**

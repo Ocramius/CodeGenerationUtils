@@ -36,7 +36,7 @@ class UniqueIdentifierGeneratorTest extends TestCase
     {
         self::assertNotSame(
             UniqueIdentifierGenerator::getIdentifier($name),
-            UniqueIdentifierGenerator::getIdentifier($name)
+            UniqueIdentifierGenerator::getIdentifier($name),
         );
     }
 
@@ -48,7 +48,7 @@ class UniqueIdentifierGeneratorTest extends TestCase
     {
         self::assertMatchesRegularExpression(
             '/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]+$/',
-            UniqueIdentifierGenerator::getIdentifier($name)
+            UniqueIdentifierGenerator::getIdentifier($name),
         );
     }
 

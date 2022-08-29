@@ -40,7 +40,7 @@ class ClassRenamerVisitorTest extends TestCase
         $visitor   = new ClassRenamerVisitor(new ReflectionClass(self::class), 'Foo\\Bar\\Baz');
         $class     = new Class_('ClassRenamerVisitorTest');
         $namespace = new Namespace_(
-            new Name(['CodeGenerationUtilsTest', 'Visitor'])
+            new Name(['CodeGenerationUtilsTest', 'Visitor']),
         );
 
         $visitor->beforeTraverse([]);
@@ -63,7 +63,7 @@ class ClassRenamerVisitorTest extends TestCase
         $visitor   = new ClassRenamerVisitor(new ReflectionClass(self::class), 'Foo\\Bar\\Baz');
         $class     = new Class_('Wrong');
         $namespace = new Namespace_(
-            new Name(['CodeGenerationUtilsTest', 'Visitor'])
+            new Name(['CodeGenerationUtilsTest', 'Visitor']),
         );
 
         $visitor->beforeTraverse([]);
@@ -85,7 +85,7 @@ class ClassRenamerVisitorTest extends TestCase
         $visitor   = new ClassRenamerVisitor(new ReflectionClass(self::class), 'Foo\\Bar\\Baz');
         $class     = new Class_('ClassRenamerVisitorTest');
         $namespace = new Namespace_(
-            new Name(['Wrong', 'Namespace', 'Here'])
+            new Name(['Wrong', 'Namespace', 'Here']),
         );
 
         $visitor->beforeTraverse([]);
@@ -119,7 +119,7 @@ class ClassRenamerVisitorTest extends TestCase
         $visitor   = new ClassRenamerVisitor(new ReflectionClass(self::class), 'Baz');
         $class     = new Class_('ClassRenamerVisitorTest');
         $namespace = new Namespace_(
-            new Name(['CodeGenerationUtilsTest', 'Visitor'])
+            new Name(['CodeGenerationUtilsTest', 'Visitor']),
         );
 
         $visitor->beforeTraverse([]);
@@ -154,7 +154,7 @@ class ClassRenamerVisitorTest extends TestCase
         $visitor   = new ClassRenamerVisitor(new ReflectionClass(stdClass::class), 'Baz');
         $class     = new Class_('stdClass');
         $namespace = new Namespace_(
-            new Name(['Wrong', 'Namespace', 'Here'])
+            new Name(['Wrong', 'Namespace', 'Here']),
         );
 
         $visitor->beforeTraverse([]);

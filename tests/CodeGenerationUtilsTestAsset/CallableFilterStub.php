@@ -27,5 +27,5 @@ use PhpParser\Node;
  */
 interface CallableFilterStub
 {
-    public function __invoke(Node $node): ?bool;
+    public function __invoke(Node $node): bool|null;
 }
