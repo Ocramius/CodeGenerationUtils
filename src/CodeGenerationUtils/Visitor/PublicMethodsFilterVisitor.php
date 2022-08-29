@@ -33,7 +33,7 @@ class PublicMethodsFilterVisitor extends NodeVisitorAbstract
     /**
      * Removes the node if it is a non-public method
      */
-    public function leaveNode(Node $node): ?int
+    public function leaveNode(Node $node): int|null
     {
         return $node instanceof ClassMethod && ! $node->isPublic() ? NodeTraverser::REMOVE_NODE : null;
     }

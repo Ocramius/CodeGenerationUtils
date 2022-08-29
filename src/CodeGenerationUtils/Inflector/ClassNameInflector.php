@@ -30,17 +30,14 @@ use function substr;
 
 class ClassNameInflector implements ClassNameInflectorInterface
 {
-    protected string $generatedClassesNamespace;
-
     private int $generatedClassMarkerLength;
 
     private string $generatedClassMarker;
 
     private ParameterEncoder $parameterEncoder;
 
-    public function __construct(string $generatedClassesNamespace)
+    public function __construct(protected string $generatedClassesNamespace)
     {
-        $this->generatedClassesNamespace  = $generatedClassesNamespace;
         $this->generatedClassMarker       = '\\' . self::GENERATED_CLASS_MARKER . '\\';
         $this->generatedClassMarkerLength = strlen($this->generatedClassMarker);
         $this->parameterEncoder           = new ParameterEncoder();
@@ -61,7 +58,7 @@ class ClassNameInflector implements ClassNameInflectorInterface
         return substr(
             $className,
             $this->generatedClassMarkerLength + $position,
-            $lastNamespaceDelimiter - ($position + $this->generatedClassMarkerLength)
+            $lastNamespaceDelimiter - ($position + $this->generatedClassMarkerLength),
         );
     }
 

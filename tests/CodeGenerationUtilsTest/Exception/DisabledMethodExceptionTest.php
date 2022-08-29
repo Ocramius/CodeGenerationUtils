@@ -28,9 +28,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DisabledMethodExceptionTest extends TestCase
 {
-    /**
-     * @covers \CodeGenerationUtils\Exception\DisabledMethodException::disabledMethod
-     */
+    /** @covers \CodeGenerationUtils\Exception\DisabledMethodException::disabledMethod */
     public function testDisabledMethod(): void
     {
         $exception = DisabledMethodException::disabledMethod('foo::bar');

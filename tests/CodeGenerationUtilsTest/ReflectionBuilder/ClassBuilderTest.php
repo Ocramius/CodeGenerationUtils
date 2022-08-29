@@ -68,7 +68,7 @@ class ClassBuilderTest extends TestCase
             $class->stmts,
             static function ($node) use ($currentMethod) {
                 return $node instanceof ClassMethod && (string) $node->name === $currentMethod;
-            }
+            },
         );
 
         self::assertCount(1, $methods);
@@ -98,7 +98,7 @@ class ClassBuilderTest extends TestCase
             $class->stmts,
             static function ($node) use ($method) {
                 return $node instanceof ClassMethod && (string) $node->name === $method;
-            }
+            },
         );
 
         self::assertCount(1, $methods);

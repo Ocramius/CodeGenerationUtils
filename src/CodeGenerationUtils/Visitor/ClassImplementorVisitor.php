@@ -36,24 +36,19 @@ use function trim;
  */
 class ClassImplementorVisitor extends NodeVisitorAbstract
 {
-    private string $matchedClassFQCN;
-
     /** @var Name[] */
     private array $interfaces;
 
-    private ?Namespace_ $currentNamespace = null;
+    private Namespace_|null $currentNamespace = null;
 
-    /**
-     * @param string[] $interfaces
-     */
-    public function __construct(string $matchedClassFQCN, array $interfaces)
+    /** @param string[] $interfaces */
+    public function __construct(private string $matchedClassFQCN, array $interfaces)
     {
-        $this->matchedClassFQCN = $matchedClassFQCN;
-        $this->interfaces       = array_map(
+        $this->interfaces = array_map(
             static function ($interfaceName) {
                 return new FullyQualified($interfaceName);
             },
-            $interfaces
+            $interfaces,
         );
     }
 
@@ -69,7 +64,7 @@ class ClassImplementorVisitor extends NodeVisitorAbstract
         return null;
     }
 
-    public function enterNode(Node $node): ?Namespace_
+    public function enterNode(Node $node): Namespace_|null
     {
         if ($node instanceof Namespace_) {
             $this->currentNamespace = $node;
@@ -86,7 +81,7 @@ class ClassImplementorVisitor extends NodeVisitorAbstract
      *
      * @todo can be abstracted away into a visitor that allows to modify the matched node via a callback
      */
-    public function leaveNode(Node $node): ?Class_
+    public function leaveNode(Node $node): Class_|null
     {
         if ($node instanceof Namespace_) {
             $this->currentNamespace = null;

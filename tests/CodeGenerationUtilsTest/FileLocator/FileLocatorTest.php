@@ -41,17 +41,15 @@ class FileLocatorTest extends TestCase
 
         self::assertSame(
             __DIR__ . DIRECTORY_SEPARATOR . 'FooBarBaz.php',
-            $locator->getGeneratedClassFileName('Foo\\Bar\\Baz')
+            $locator->getGeneratedClassFileName('Foo\\Bar\\Baz'),
         );
         self::assertSame(
             __DIR__ . DIRECTORY_SEPARATOR . 'Foo_Bar_Baz.php',
-            $locator->getGeneratedClassFileName('Foo_Bar_Baz')
+            $locator->getGeneratedClassFileName('Foo_Bar_Baz'),
         );
     }
 
-    /**
-     * @covers \CodeGenerationUtils\FileLocator\FileLocator::__construct
-     */
+    /** @covers \CodeGenerationUtils\FileLocator\FileLocator::__construct */
     public function testRejectsNonExistingDirectory(): void
     {
         $this->expectException(InvalidGeneratedClassesDirectoryException::class);

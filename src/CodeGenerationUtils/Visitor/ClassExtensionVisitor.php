@@ -34,16 +34,10 @@ use function trim;
  */
 class ClassExtensionVisitor extends NodeVisitorAbstract
 {
-    private string $matchedClassFQCN;
+    private Namespace_|null $currentNamespace = null;
 
-    private string $newParentClassFQCN;
-
-    private ?Namespace_ $currentNamespace = null;
-
-    public function __construct(string $matchedClassFQCN, string $newParentClassFQCN)
+    public function __construct(private string $matchedClassFQCN, private string $newParentClassFQCN)
     {
-        $this->matchedClassFQCN   = $matchedClassFQCN;
-        $this->newParentClassFQCN = $newParentClassFQCN;
     }
 
     /**
@@ -58,7 +52,7 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
         $this->currentNamespace = null;
     }
 
-    public function enterNode(Node $node): ?Namespace_
+    public function enterNode(Node $node): Namespace_|null
     {
         if ($node instanceof Namespace_) {
             $this->currentNamespace = $node;
@@ -79,7 +73,7 @@ class ClassExtensionVisitor extends NodeVisitorAbstract
      *
      * @todo can be abstracted away into a visitor that allows to modify the node via a callback
      */
-    public function leaveNode(Node $node): ?Class_
+    public function leaveNode(Node $node): Class_|null
     {
         if ($node instanceof Namespace_) {
             $this->currentNamespace = null;

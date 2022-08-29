@@ -58,7 +58,7 @@ class MethodDisablerVisitor extends NodeVisitorAbstract
      *
      * @psalm-return NodeTraverser::REMOVE_NODE|ClassMethod|null
      */
-    public function leaveNode(Node $node): int | ClassMethod | null
+    public function leaveNode(Node $node): int|ClassMethod|null
     {
         $filter = $this->filter;
 
@@ -80,8 +80,8 @@ class MethodDisablerVisitor extends NodeVisitorAbstract
             new Throw_(
                 new New_(
                     new FullyQualified('BadMethodCallException'),
-                    [new Arg(new String_('Method is disabled'))]
-                )
+                    [new Arg(new String_('Method is disabled'))],
+                ),
             ),
         ];
 

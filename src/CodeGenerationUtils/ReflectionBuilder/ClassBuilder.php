@@ -53,9 +53,7 @@ use function is_string;
  */
 class ClassBuilder
 {
-    /**
-     * @return Node[]
-     */
+    /** @return Node[] */
     public function fromReflection(ReflectionClass $reflectionClass): array
     {
         $class       = new Class_($reflectionClass->getShortName());
@@ -77,7 +75,7 @@ class ClassBuilder
         foreach ($reflectionClass->getConstants() as $constant => $value) {
             assert(is_bool($value) || $value === null || is_int($value) || is_float($value) || is_string($value) || is_array($value));
             $class->stmts[] = new ClassConst(
-                [new Const_($constant, BuilderHelpers::normalizeValue($value))]
+                [new Const_($constant, BuilderHelpers::normalizeValue($value))],
             );
         }
 

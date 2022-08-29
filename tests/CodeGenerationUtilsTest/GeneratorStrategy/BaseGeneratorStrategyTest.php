@@ -33,9 +33,7 @@ use function strpos;
  */
 class BaseGeneratorStrategyTest extends TestCase
 {
-    /**
-     * @covers \CodeGenerationUtils\GeneratorStrategy\BaseGeneratorStrategy::generate
-     */
+    /** @covers \CodeGenerationUtils\GeneratorStrategy\BaseGeneratorStrategy::generate */
     public function testGenerate(): void
     {
         $strategy  = new BaseGeneratorStrategy();

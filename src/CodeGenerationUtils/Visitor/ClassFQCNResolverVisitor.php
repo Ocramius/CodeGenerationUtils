@@ -32,9 +32,9 @@ use PhpParser\NodeVisitorAbstract;
  */
 class ClassFQCNResolverVisitor extends NodeVisitorAbstract
 {
-    private ?Namespace_ $namespace = null;
+    private Namespace_|null $namespace = null;
 
-    private ?Class_ $class = null;
+    private Class_|null $class = null;
 
     /**
      * {@inheritDoc}
@@ -89,9 +89,7 @@ class ClassFQCNResolverVisitor extends NodeVisitorAbstract
         return (string) $this->class->name;
     }
 
-    /**
-     * @return string the namespace name of the discovered class
-     */
+    /** @return string the namespace name of the discovered class */
     public function getNamespace(): string
     {
         return $this->namespace && $this->namespace->name !== null
