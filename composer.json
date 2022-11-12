@@ -20,7 +20,7 @@
     ],
     "require": {
         "php":                       "~8.0.0 || ~8.1.0",
-        "nikic/php-parser":          "^4.15.1"
+        "nikic/php-parser":          "^4.15.2"
     },
     "require-dev": {
         "doctrine/coding-standard":               "^10.0.0",
