@@ -35,15 +35,13 @@ use function uniqid;
 /**
  * Tests for {@see \CodeGenerationUtils\Autoloader\Autoloader}
  */
-class AutoloaderTest extends TestCase
+final class AutoloaderTest extends TestCase
 {
-    protected Autoloader $autoloader;
-
+    private Autoloader $autoloader;
     /** @var FileLocatorInterface&MockObject */
-    protected $fileLocator;
-
+    private FileLocatorInterface $fileLocator;
     /** @var ClassNameInflectorInterface&MockObject */
-    protected $classNameInflector;
+    private ClassNameInflectorInterface $classNameInflector;
 
     /** @covers \CodeGenerationUtils\Autoloader\Autoloader::__construct */
     public function setUp(): void
