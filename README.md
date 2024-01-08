@@ -22,7 +22,7 @@ Releases | Downloads |
 Supported installation method is via composer:
 
 ```sh
-$ php composer.phar require ocramius/code-generator-utils
+php composer.phar require ocramius/code-generator-utils
 ```
 
 ## Provided components
