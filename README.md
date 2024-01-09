@@ -29,39 +29,39 @@ php composer.phar require ocramius/code-generator-utils
 
 The provided components are generally related with code generation and related problems.
 
-#### `CodeGenerationUtils\Autoloader`
+### `CodeGenerationUtils\Autoloader`
 
 This is a small callback-based autoloader component - it should be used when trying to autoload
 generated classes.
 
-#### `CodeGenerationUtils\FileLocator`
+### `CodeGenerationUtils\FileLocator`
 
 The FileLocator basically represents a map of generated class names to files where those classes
 should be read from or written to. This component can be useful for non-PSR-0-compliant generated code.
 
-#### `CodeGenerationUtils\GeneratorStrategy`
+### `CodeGenerationUtils\GeneratorStrategy`
 
 Provides logic to serialize a PHP-Parser AST to a class. Current strategies allow to:
 
- * Serialize an AST to a string
- * Serialize an AST to a string and evaluate it (via `eval()`) at runtime
- * Serialize an AST to a string and save it to a file (via `CodeGenerationUtils\FileLocator`)
+* Serialize an AST to a string
+* Serialize an AST to a string and evaluate it (via `eval()`) at runtime
+* Serialize an AST to a string and save it to a file (via `CodeGenerationUtils\FileLocator`)
 
-#### `CodeGenerationUtils\Inflector`
+### `CodeGenerationUtils\Inflector`
 
 Provides various utilities to:
 
- * Convert a generated code's [FQCN](http://php.net/manual/en/language.namespaces.rules.php)
-   to the FQCN of the class from which it was generated
- * Generate the FQCN of a generated class given an original class name and some arbitrary
-   parameters to be encoded (allows multiple generated classes per origin class)
- * Generate unique valid identifier names
+* Convert a generated code's [FQCN](http://php.net/manual/en/language.namespaces.rules.php)
+  to the FQCN of the class from which it was generated
+* Generate the FQCN of a generated class given an original class name and some arbitrary
+  parameters to be encoded (allows multiple generated classes per origin class)
+* Generate unique valid identifier names
 
-#### `CodeGenerationUtils\ReflectionBuilder`
+### `CodeGenerationUtils\ReflectionBuilder`
 
 Very rudimentary converter that builds PHP-Parser AST nodes from Reflection objects (still WIP)
 
-#### `CodeGenerationUtils\Visitor`
+### `CodeGenerationUtils\Visitor`
 
 Various visitors used to manipulate classes, methods and properties in a given PHP-Parser AST
 
