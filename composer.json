@@ -24,7 +24,7 @@
     },
     "require-dev": {
         "doctrine/coding-standard":               "^12.0.0",
-        "phpunit/phpunit":                        "^9.5.28",
+        "phpunit/phpunit":                        "^10.5.9",
         "psalm/plugin-phpunit":                   "^0.18.4",
         "roave/infection-static-analysis-plugin": "^1.28.0",
         "vimeo/psalm":                            "^5.4.0"
